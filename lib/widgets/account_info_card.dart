@@ -49,7 +49,7 @@ class AccountInfoCard extends StatelessWidget {
                     width: 3,
                   ),
                   Container(
-                    width: width / 2 - 65,
+                    width: width / 2 - 70,
                     child: Text(
                       "Account Information",
                       maxLines: 3,

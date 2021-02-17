@@ -21,3 +21,5 @@ const kGradient = LinearGradient(
   end: Alignment.bottomCenter,
   stops: [0.1, 1.0],
 );
+
+const kCustomBlueGrey = Color(0xff455A64);

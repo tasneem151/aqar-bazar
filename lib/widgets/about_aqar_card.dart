@@ -1,3 +1,5 @@
+import 'package:aqar_bazar/screens/about_us.dart';
+import 'package:aqar_bazar/screens/contact_us.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -59,15 +61,21 @@ class AboutAqarCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(top: 20, left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/icons/information.svg'),
-                SizedBox(
-                  width: 5,
-                ),
-                Text('About Us'),
-              ],
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AboutUs();
+              })),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/icons/information.svg'),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text('About Us'),
+                ],
+              ),
             ),
           ),
           Divider(
@@ -78,15 +86,21 @@ class AboutAqarCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(top: 5, left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/icons/contact-us.svg'),
-                SizedBox(
-                  width: 5,
-                ),
-                Text('Contact US'),
-              ],
+            child: GestureDetector(
+              onTap: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ContactUs();
+              })),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/icons/contact-us.svg'),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text('Contact US'),
+                ],
+              ),
             ),
           ),
           Divider(

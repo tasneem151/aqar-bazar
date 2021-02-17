@@ -1,4 +1,5 @@
 import 'package:aqar_bazar/screens/account_info.dart';
+import 'package:aqar_bazar/screens/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/widgets/account_info_card.dart';
 import 'package:aqar_bazar/widgets/app_settings_card.dart';
@@ -86,7 +87,17 @@ class Profile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        AppSettingsCard(width: width, height: height),
+                        InkWell(
+                            onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return AppSettings();
+                                    },
+                                  ),
+                                ),
+                            child:
+                                AppSettingsCard(width: width, height: height)),
                       ],
                     ),
                   ),

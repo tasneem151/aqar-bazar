@@ -7,12 +7,15 @@ class BuyRentSwitch extends StatelessWidget {
   final bool isBuySelected;
   final Function onBuySwitch;
   final Function onRentSwitch;
+  final BoxShadow shadow;
 
-  const BuyRentSwitch(
-      {@required this.isRentSelected,
-      @required this.isBuySelected,
-      @required this.onBuySwitch,
-      @required this.onRentSwitch});
+  const BuyRentSwitch({
+    @required this.isRentSelected,
+    @required this.isBuySelected,
+    @required this.onBuySwitch,
+    @required this.onRentSwitch,
+    this.shadow = kBoxShadow,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class BuyRentSwitch extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
         color: Color(0xffD8D8D8),
-        boxShadow: [kBoxShadow],
+        boxShadow: [shadow],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

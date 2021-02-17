@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/screens/buy_details.dart';
 import 'package:aqar_bazar/constants.dart';
+import 'package:aqar_bazar/screens/search.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -127,30 +128,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Container(
-                    width: width - 20,
-                    height: height / 15,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
-                      color: Color(0xffD8D8D8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Where you want to go?',
-                            style: TextStyle(
-                              fontSize: 20,
+                  child: InkWell(
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Search();
+                    })),
+                    child: Container(
+                      width: width - 20,
+                      height: height / 15,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Color(0xffD8D8D8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Where you want to go?',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Color(0xff707070),
+                              ),
+                            ),
+                            Icon(
+                              CupertinoIcons.search,
                               color: Color(0xff707070),
                             ),
-                          ),
-                          Icon(
-                            CupertinoIcons.search,
-                            color: Color(0xff707070),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -159,8 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 20,
                 ),
                 Container(
-                  //color: Colors.blue,
-                  height: width / 2.7,
+                  height: width / 3,
                   width: width,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -190,7 +196,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Builder(
                       builder: (BuildContext context) {
                         return InkWell(
-                          child: FeatureCard(),
+                          child: FeatureCard(
+                            width: width,
+                            shadow: BoxShadow(
+                              color: Colors.grey[500],
+                              offset: Offset(2.0, 2.0), //(x,y)
+                              blurRadius: 6.0,
+                            ),
+                          ),
                           onTap: () {
                             if (isRentSelected)
                               Navigator.push(
@@ -237,7 +250,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Builder(
                       builder: (BuildContext context) {
                         return InkWell(
-                          child: FeatureCard(),
+                          child: FeatureCard(
+                            width: width,
+                            shadow: BoxShadow(
+                              color: Colors.grey[500],
+                              offset: Offset(2.0, 2.0), //(x,y)
+                              blurRadius: 6.0,
+                            ),
+                          ),
                           onTap: () {
                             if (isRentSelected)
                               Navigator.push(

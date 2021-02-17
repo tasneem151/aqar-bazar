@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FeatureCard extends StatelessWidget {
-  final double width;
-  final BoxShadow shadow;
-
-  const FeatureCard({Key key, this.width, this.shadow}) : super(key: key);
+class SearchResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,8 +11,7 @@ class FeatureCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  width: width,
-                  //MediaQuery.of(context).size.width / 2.4,
+                  width: MediaQuery.of(context).size.width,
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Stack(
@@ -56,17 +51,22 @@ class FeatureCard extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
+              Center(
                 child: Text(
                   " Villa Sehr gros",
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 18),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Text("Im Hamburg "),
+              SizedBox(
+                height: 5,
               ),
+              Center(
+                  child: Text(
+                "10000 LE",
+                style: TextStyle(color: Theme.of(context).accentColor),
+                overflow: TextOverflow.ellipsis,
+              )),
               SizedBox(
                 height: 20,
               )
@@ -78,12 +78,11 @@ class FeatureCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
-              shadow
-              /* BoxShadow(
+              BoxShadow(
                 color: Colors.grey[200],
-                offset: Offset(2.0, 2.0), //(x,y)
+                offset: Offset(2.0, 2.0),
                 blurRadius: 10.0,
-              ) */
+              )
             ],
           )),
     );
