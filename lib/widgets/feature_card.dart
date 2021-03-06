@@ -1,10 +1,13 @@
+import 'package:aqar_bazar/Models/featured.dart';
 import 'package:flutter/material.dart';
 
 class FeatureCard extends StatelessWidget {
   final double width;
   final BoxShadow shadow;
+  final Featured property;
 
-  const FeatureCard({Key key, this.width, this.shadow}) : super(key: key);
+  const FeatureCard({Key key, this.width, this.shadow, this.property})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,21 +57,25 @@ class FeatureCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 2,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Text(
-                  " Villa Sehr gros",
+                  property.title,
                   style: TextStyle(fontSize: 18),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Text("Im Hamburg "),
+                padding: const EdgeInsets.only(top: 3, left: 20, right: 20),
+                child: Text(
+                  property.location,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               )
             ],
           ),

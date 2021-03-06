@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
+  final Function onChanged;
+  final TextEditingController controller;
+  final String initValue;
+  final bool isPassword;
+
+  const CustomTextField(
+      {Key key,
+      this.onChanged,
+      this.controller,
+      this.initValue,
+      this.isPassword = false})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,8 +32,15 @@ class CustomTextField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
-        controller: TextEditingController(),
+        initialValue: initValue,
+        style: TextStyle(color: Colors.black),
+        //onChanged: onChanged,
+        onSaved: onChanged,
+        controller: controller,
+        obscureText: isPassword,
+        obscuringCharacter: '*',
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
           ),

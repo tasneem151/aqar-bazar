@@ -31,7 +31,6 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _value = widget.min.toDouble();
   }

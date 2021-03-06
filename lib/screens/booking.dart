@@ -1,13 +1,8 @@
-import 'package:aqar_bazar/screens/home_screen.dart';
-import 'package:aqar_bazar/screens/rent_details.dart';
-import 'package:aqar_bazar/themes/themes.dart';
 import 'package:aqar_bazar/widgets/date_card.dart';
 import 'package:aqar_bazar/widgets/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 
 class Booking extends StatefulWidget {
   @override

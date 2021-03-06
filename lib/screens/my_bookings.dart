@@ -63,12 +63,15 @@ class _MyBookingsState extends State<MyBookings> {
               SizedBox(
                 height: 30,
               ),
-              Container(
+              Center(
+                child: Text('No bookings yet!'),
+              ),
+              /* Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 3.8,
                 color: Colors.white,
                 child: BookedItem(),
-              ),
+              ), */
             ],
           ),
         ),

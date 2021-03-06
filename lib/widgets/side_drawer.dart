@@ -59,7 +59,7 @@ class SideDrawer extends StatelessWidget {
                 'About us',
                 style: TextStyle(color: kCustomBlueGrey),
               ),
-              trailing: SvgPicture.asset('assets/icons/information.svg'),
+              trailing: SvgPicture.asset('assets/icons/information-25.svg'),
             ),
             Divider(
               height: 2,
@@ -75,7 +75,7 @@ class SideDrawer extends StatelessWidget {
                 'Contact us',
                 style: TextStyle(color: kCustomBlueGrey),
               ),
-              trailing: SvgPicture.asset('assets/icons/contact-us.svg'),
+              trailing: SvgPicture.asset('assets/icons/contact-25.svg'),
             ),
             Divider(
               height: 2,

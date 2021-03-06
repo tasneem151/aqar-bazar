@@ -1,12 +1,31 @@
+import 'package:aqar_bazar/Models/profile_form_model.dart';
 import 'package:aqar_bazar/screens/account_info.dart';
 import 'package:aqar_bazar/screens/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/widgets/account_info_card.dart';
 import 'package:aqar_bazar/widgets/app_settings_card.dart';
 import 'package:aqar_bazar/widgets/about_aqar_card.dart';
-import 'package:aqar_bazar/constants.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  ProfileFormModel myModel = ProfileFormModel();
+
+  void updateUI(ProfileFormModel model) {
+    setState(() {
+      myModel = model;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //updateUI(typedName)
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -77,15 +96,20 @@ class Profile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         InkWell(
-                          child: AccountInfoCard(width: width, height: height),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return AccountInfo();
-                              },
-                            ),
+                          child: AccountInfoCard(
+                            width: width,
+                            height: height,
+                            model: myModel,
                           ),
+                          onTap: () async {
+                            var model = await Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return AccountInfo(
+                                accountInfo: myModel,
+                              );
+                            }));
+                            if (model != null) updateUI(model);
+                          },
                         ),
                         InkWell(
                             onTap: () => Navigator.push(

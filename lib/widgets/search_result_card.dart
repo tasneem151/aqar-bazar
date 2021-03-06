@@ -1,6 +1,11 @@
+import 'package:aqar_bazar/Models/search_model.dart';
 import 'package:flutter/material.dart';
 
 class SearchResultCard extends StatelessWidget {
+  final PropertyData propertyData;
+  final bool buy;
+
+  const SearchResultCard({this.propertyData, this.buy});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,9 +56,10 @@ class SearchResultCard extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Center(
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  " Villa Sehr gros",
+                  propertyData.title,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 18),
                 ),
@@ -63,7 +69,9 @@ class SearchResultCard extends StatelessWidget {
               ),
               Center(
                   child: Text(
-                "10000 LE",
+                buy
+                    ? propertyData.purchasePrice + " LE"
+                    : propertyData.rentPrice + " LE",
                 style: TextStyle(color: Theme.of(context).accentColor),
                 overflow: TextOverflow.ellipsis,
               )),

@@ -1,3 +1,7 @@
+import 'package:aqar_bazar/Models/for_purchase.dart';
+import 'package:aqar_bazar/Models/for_rent.dart';
+import 'package:aqar_bazar/Models/property_type.dart';
+import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/screens/profile.dart';
 import 'package:aqar_bazar/screens/rent_details.dart';
 import 'package:aqar_bazar/widgets/feature_card.dart';
@@ -9,8 +13,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/screens/buy_details.dart';
-import 'package:aqar_bazar/constants.dart';
 import 'package:aqar_bazar/screens/search.dart';
+import 'package:aqar_bazar/Manager/manager.dart';
+import 'package:provider/provider.dart';
+import 'package:aqar_bazar/Provider/modelsProvider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isBuySelected = true;
   bool isRentSelected = false;
+
   void onBuySwitchCallback() {
     setState(() {
       isBuySelected = true;
@@ -32,6 +39,80 @@ class _HomeScreenState extends State<HomeScreen> {
       isBuySelected = false;
       isRentSelected = true;
     });
+  }
+
+  List<Widget> buildItems(double width, Iterable<dynamic> t) {
+    return t.map((i) {
+      return Builder(
+        builder: (BuildContext context) {
+          return InkWell(
+            child: FeatureCard(
+              property: i,
+              width: width,
+              shadow: BoxShadow(
+                color: Colors.grey[500],
+                offset: Offset(2.0, 2.0), //(x,y)
+                blurRadius: 6.0,
+              ),
+            ),
+            onTap: () {
+              if (isRentSelected)
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return RentDetails(
+                        id: i.id,
+                      );
+                    },
+                  ),
+                );
+              if (isBuySelected)
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return BuyDetails(
+                        id: i.id,
+                      );
+                    },
+                  ),
+                );
+            },
+          );
+        },
+      );
+    }).toList();
+  }
+
+  bool isLoading;
+  ForPurchase forPurchaseProp;
+  ForRent forRentProp;
+  List<PropertyType> propType;
+
+  @override
+  void initState() {
+    super.initState();
+    isLoading = true;
+    Services.getPropertyType(context).then((value) => {
+          if (mounted)
+            {
+              setState(() => {propType = value}),
+            },
+          Services.getForPurchase(context).then((value) => {
+                if (mounted)
+                  {
+                    setState(() => {forPurchaseProp = value}),
+                  },
+                Services.getForRent(context).then((value) => {
+                      if (mounted)
+                        {
+                          setState(
+                              () => {forRentProp = value, isLoading = false}),
+                        }
+                    })
+              })
+        });
   }
 
   @override
@@ -106,187 +187,133 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text('Find your location &'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'Explore',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: InkWell(
-                    onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return Search();
-                    })),
-                    child: Container(
-                      width: width - 20,
-                      height: height / 15,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22),
-                        color: Color(0xffD8D8D8),
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text('Find your location &'),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Where you want to go?',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Color(0xff707070),
-                              ),
-                            ),
-                            Icon(
-                              CupertinoIcons.search,
-                              color: Color(0xff707070),
-                            ),
-                          ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text(
+                          'Explore',
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: width / 3,
-                  width: width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ExploreCard();
-                    },
-                    itemCount: 5,
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: 25, bottom: 10, left: 20, right: 20),
-                  child: Text(
-                    'Featured Properties',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-                  ),
-                ),
-                CarouselSlider(
-                  options: CarouselOptions(
-                      enableInfiniteScroll: true,
-                      pageSnapping: false,
-                      viewportFraction: 0.6,
-                      enlargeCenterPage: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                      height: MediaQuery.of(context).size.height / 3),
-                  items: [1, 2, 3, 4, 5].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return InkWell(
-                          child: FeatureCard(
-                            width: width,
-                            shadow: BoxShadow(
-                              color: Colors.grey[500],
-                              offset: Offset(2.0, 2.0), //(x,y)
-                              blurRadius: 6.0,
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: InkWell(
+                          onTap: () => Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return Search(
+                              propType: propType,
+                            );
+                          })),
+                          child: Container(
+                            width: width - 20,
+                            height: height / 15,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(22),
+                              color: Color(0xffD8D8D8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Where you want to go?',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color(0xff707070),
+                                    ),
+                                  ),
+                                  Icon(
+                                    CupertinoIcons.search,
+                                    color: Color(0xff707070),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          onTap: () {
-                            if (isRentSelected)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return RentDetails();
-                                  },
-                                ),
-                              );
-                            if (isBuySelected)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BuyDetails();
-                                  },
-                                ),
-                              );
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: width / 3,
+                        width: width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ExploreCard(
+                              typeProperty: propType[index],
+                            );
                           },
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: 25, bottom: 10, left: 20, right: 20),
-                  child: Text(
-                    'Latest Properties',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                          itemCount: propType.length,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 25, bottom: 10, left: 20, right: 20),
+                        child: Text(
+                          'Featured Properties',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 20),
+                        ),
+                      ),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                            enableInfiniteScroll: true,
+                            pageSnapping: false,
+                            viewportFraction: 0.6,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                            height: MediaQuery.of(context).size.height / 3),
+                        items: isBuySelected
+                            ? buildItems(width, forPurchaseProp.featured)
+                            : buildItems(width, forRentProp.featured),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 25, bottom: 10, left: 20, right: 20),
+                        child: Text(
+                          'Latest Properties',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 20),
+                        ),
+                      ),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                            pageSnapping: false,
+                            enableInfiniteScroll: true,
+                            viewportFraction: 0.6,
+                            enlargeCenterPage: true,
+                            //disableCenter: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                            height: MediaQuery.of(context).size.height / 3),
+                        items: isBuySelected
+                            ? buildItems(width, forPurchaseProp.latest)
+                            : buildItems(width, forRentProp.latest),
+                      ),
+                    ],
                   ),
                 ),
-                CarouselSlider(
-                  options: CarouselOptions(
-                      pageSnapping: false,
-                      enableInfiniteScroll: true,
-                      viewportFraction: 0.6,
-                      enlargeCenterPage: true,
-                      //disableCenter: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                      height: MediaQuery.of(context).size.height / 3),
-                  items: [1, 2, 3, 4, 5].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return InkWell(
-                          child: FeatureCard(
-                            width: width,
-                            shadow: BoxShadow(
-                              color: Colors.grey[500],
-                              offset: Offset(2.0, 2.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ),
-                          onTap: () {
-                            if (isRentSelected)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return RentDetails();
-                                  },
-                                ),
-                              );
-                            if (isBuySelected)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return BuyDetails();
-                                  },
-                                ),
-                              );
-                          },
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }
