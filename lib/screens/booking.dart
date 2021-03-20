@@ -3,6 +3,7 @@ import 'package:aqar_bazar/widgets/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
 
 class Booking extends StatefulWidget {
   @override

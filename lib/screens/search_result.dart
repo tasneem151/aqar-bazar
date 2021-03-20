@@ -78,19 +78,13 @@ class _SearchResultState extends State<SearchResult> {
                     itemBuilder: (BuildContext context, index) {
                       return InkWell(
                         onTap: () {
-                          widget.buy
-                              ? Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                  return BuyDetails(
-                                    id: widget.searchResponse.data[index].id,
-                                  );
-                                }))
-                              : Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                  return RentDetails(
-                                    id: widget.searchResponse.data[index].id,
-                                  );
-                                }));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return BuyDetails(
+                              id: widget.searchResponse.data[index].id,
+                              buy: widget.buy,
+                            );
+                          }));
                         },
                         child: SearchResultCard(
                           propertyData: widget.searchResponse.data[index],

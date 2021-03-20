@@ -1,18 +1,18 @@
-import 'package:aqar_bazar/Models/profile_form_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/constants.dart';
+import 'package:aqar_bazar/Models/profile_info.dart';
 
 class AccountInfoCard extends StatelessWidget {
   const AccountInfoCard({
     @required this.width,
     @required this.height,
-    this.model,
+    this.userInfo,
   });
 
   final double width;
   final double height;
-  final ProfileFormModel model;
+  final ProfileInfo userInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,9 @@ class AccountInfoCard extends StatelessWidget {
                 Container(
                   width: 70,
                   child: Text(
-                    model.name,
+                    userInfo == null
+                        ? "-"
+                        : userInfo.firstName + " " + userInfo.lastName,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -111,7 +113,7 @@ class AccountInfoCard extends StatelessWidget {
                 Container(
                   width: 80,
                   child: Text(
-                    model.email,
+                    userInfo == null ? "-" : userInfo.email,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -141,7 +143,7 @@ class AccountInfoCard extends StatelessWidget {
                 Container(
                   width: 70,
                   child: Text(
-                    model.phoneNumber,
+                    userInfo == null ? "-" : userInfo.phone,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

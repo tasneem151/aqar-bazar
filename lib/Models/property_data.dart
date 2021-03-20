@@ -1,5 +1,5 @@
-class Featured {
-  Featured({
+class PropertyData {
+  PropertyData({
     this.id,
     this.ownerId,
     this.agentId,
@@ -51,7 +51,7 @@ class Featured {
   String description;
   Map<String, int> props;
 
-  factory Featured.fromJson(Map<String, dynamic> json) => Featured(
+  factory PropertyData.fromJson(Map<String, dynamic> json) => PropertyData(
         id: json["id"],
         ownerId: json["owner_id"],
         agentId: json["agent_id"],
@@ -115,9 +115,29 @@ enum MainImageUrl { NO_IMAGE }
 
 final mainImageUrlValues = EnumValues({"no_image": MainImageUrl.NO_IMAGE});
 
-/* enum PayCycle { MONTH }
+class Link {
+  Link({
+    this.url,
+    this.label,
+    this.active,
+  });
 
-final payCycleValues = EnumValues({"month": PayCycle.MONTH}); */
+  String url;
+  dynamic label;
+  bool active;
+
+  factory Link.fromJson(Map<String, dynamic> json) => Link(
+        url: json["url"] == null ? null : json["url"],
+        label: json["label"],
+        active: json["active"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "url": url == null ? null : url,
+        "label": label,
+        "active": active,
+      };
+}
 
 class EnumValues<T> {
   Map<String, T> map;

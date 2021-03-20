@@ -69,7 +69,9 @@ class FeatureCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 3, left: 20, right: 20),
                 child: Text(
-                  property.location,
+                  property.location == null
+                      ? "Couldn't find location"
+                      : property.location,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

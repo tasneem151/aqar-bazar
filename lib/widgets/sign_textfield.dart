@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SignTextField extends StatelessWidget {
+  final double width;
   final Color outShadow;
   final Color inShadow;
   final String hint;
@@ -17,12 +18,13 @@ class SignTextField extends StatelessWidget {
     this.onSaved,
     this.isPassword = false,
     this.isEmail = false,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 1.2,
+      width: width == null ? MediaQuery.of(context).size.width / 1.2 : width,
       //height: MediaQuery.of(context).size.height / 19,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

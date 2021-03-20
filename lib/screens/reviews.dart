@@ -2,8 +2,43 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:aqar_bazar/Models/comment.dart';
+import 'package:aqar_bazar/Models/show_property.dart';
+import 'package:aqar_bazar/networking/services.dart';
 
-class Reviews extends StatelessWidget {
+class Reviews extends StatefulWidget {
+  final ShowProperty prop;
+
+  const Reviews({Key key, this.prop}) : super(key: key);
+  @override
+  _ReviewsState createState() => _ReviewsState();
+}
+
+class _ReviewsState extends State<Reviews> {
+  String comment;
+  List<Comment> commentsList;
+  bool loading;
+  TextEditingController controller = TextEditingController();
+
+  void updateUI() {
+    loading = true;
+    Services.getComments(widget.prop.id, context).then((value) => {
+          if (mounted)
+            {
+              setState(() => {
+                    commentsList = value,
+                    loading = false,
+                  }),
+            }
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -32,7 +67,7 @@ class Reviews extends StatelessWidget {
                     style: TextStyle(fontSize: 22),
                   ),
                   Text(
-                    'Property name',
+                    widget.prop.title,
                     style: TextStyle(fontSize: 22),
                   ),
                 ],
@@ -78,17 +113,40 @@ class Reviews extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return CommentCard();
-                    }),
+                child: loading
+                    ? Center(
+                        child: LinearProgressIndicator(),
+                      )
+                    : commentsList.length == 0
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                              top: height / 3,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "No Comments Yet.",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: commentsList.length == null
+                                ? 0
+                                : commentsList.length,
+                            itemBuilder: (context, index) {
+                              return CommentCard(
+                                comment: commentsList[
+                                    (commentsList.length - 1) - index],
+                              );
+                            }),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 3,),
+              padding: const EdgeInsets.only(
+                top: 3,
+              ),
               child: Row(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,16 +156,26 @@ class Reviews extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
-                        BoxShadow(color: Colors.grey[300], offset: Offset(0,0), blurRadius: 10.0),
+                        BoxShadow(
+                            color: Colors.grey[300],
+                            offset: Offset(0, 0),
+                            blurRadius: 10.0),
                       ],
                       color: Colors.white,
                     ),
                     //padding: EdgeInsets.only(top: 10, left: 5),
                     child: TextFormField(
+                      controller: controller,
+                      onChanged: (value) {
+                        comment = value;
+                      },
                       style: TextStyle(color: Theme.of(context).primaryColor),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(top: 15),
-                        prefixIcon: SvgPicture.asset('assets/icons/testimonial.svg', fit: BoxFit.scaleDown,),
+                        prefixIcon: SvgPicture.asset(
+                          'assets/icons/testimonial.svg',
+                          fit: BoxFit.scaleDown,
+                        ),
                         hintText: 'Leave a comment',
                         hintStyle: TextStyle(
                           color: Colors.grey[400],
@@ -119,24 +187,46 @@ class Reviews extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 5,),
-                  Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Theme.of(context).accentColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[400],
-                          offset: Offset(0,2),
-                          blurRadius: 8,
-                        ),
-                      ],
+                  SizedBox(
+                    width: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (comment != null) {
+                        Services.writeComment(
+                                widget.prop.id.toString(), comment, context)
+                            .then((value) => {
+                                  setState(() {
+                                    updateUI();
+                                  }),
+                                });
+                        setState(() {
+                          loading = true;
+                          controller.clear();
+                        });
+                      }
+                    },
+                    child: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Theme.of(context).accentColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[400],
+                            offset: Offset(0, 2),
+                            blurRadius: 8,
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 10, top: 10),
+                          child: FaIcon(
+                            FontAwesomeIcons.telegramPlane,
+                            color: Colors.white,
+                          )),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10, top: 10),
-                        child: FaIcon(FontAwesomeIcons.telegramPlane, color: Colors.white,)),
                   ),
                 ],
               ),
@@ -149,9 +239,9 @@ class Reviews extends StatelessWidget {
 }
 
 class CommentCard extends StatelessWidget {
-  const CommentCard({
-    Key key,
-  }) : super(key: key);
+  final Comment comment;
+
+  const CommentCard({Key key, this.comment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -160,13 +250,15 @@ class CommentCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 70,
-            height: 70,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.grey,
-              image: DecorationImage(image: AssetImage('assets/temp/user.png')),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Color(0xff21d8a2),
+            child: Text(
+              comment.client.firstName == null
+                  ? ""
+                  : comment.client.firstName[0].toUpperCase() +
+                      comment.client.lastName[0].toUpperCase(),
+              style: TextStyle(color: Colors.white, fontSize: 30),
             ),
           ),
           SizedBox(width: 10),
@@ -194,18 +286,25 @@ class CommentCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Username',
+                        comment.client.firstName[0].toUpperCase() +
+                            comment.client.firstName.substring(1) +
+                            " " +
+                            comment.client.lastName[0].toUpperCase() +
+                            comment.client.lastName.substring(1),
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        'Feb 06,2021',
+                        comment.createdAt.day.toString() +
+                            "-" +
+                            comment.createdAt.month.toString() +
+                            "-" +
+                            comment.createdAt.year.toString(),
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],
                   ),
                 ),
-                Text(
-                    'Very peaceful area really unique Rick formations. Some famous Westerns were filmed here including The Lone Ranger and Bonanza.'),
+                Text(comment.comment),
               ],
             ),
           ),

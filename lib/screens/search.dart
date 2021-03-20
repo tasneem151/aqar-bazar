@@ -23,6 +23,8 @@ class _SearchState extends State<Search> {
   String maxPrice = "";
   int space;
   bool loading;
+  int selsectedIndex;
+  int catId = 0;
 
   List<String> dropDownItems = [
     "Purchase",
@@ -108,8 +110,22 @@ class _SearchState extends State<Search> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        return SearchCardFilter(
-                          typeProperty: widget.propType[index],
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (selsectedIndex != index) {
+                                selsectedIndex = index;
+                                catId = widget.propType[selsectedIndex].id;
+                              } else {
+                                selsectedIndex = null;
+                                catId = 0;
+                              }
+                            });
+                          },
+                          child: SearchCardFilter(
+                            typeProperty: widget.propType[index],
+                            isChecked: selsectedIndex == index ? true : false,
+                          ),
                         );
                       },
                       itemCount: widget.propType.length,
@@ -355,28 +371,28 @@ class _SearchState extends State<Search> {
                                   loading = true;
                                 });
                                 Services.getSearchResponse(
-                                        context,
-                                        selectedItem.toLowerCase(),
-                                        title,
-                                        minPrice,
-                                        maxPrice,
-                                        space)
-                                    .then((value) => {
-                                          print(value.data.length),
-                                          setState(() {
-                                            loading = false;
-                                          }),
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return SearchResult(
-                                              searchResponse: value,
-                                              buy: selectedItem == "Purchase"
-                                                  ? true
-                                                  : false,
-                                            );
-                                          })),
-                                        });
+                                  context,
+                                  selectedItem.toLowerCase(),
+                                  title,
+                                  catId,
+                                  minPrice,
+                                  maxPrice,
+                                  space,
+                                ).then((value) => {
+                                      print(value.data.length),
+                                      setState(() {
+                                        loading = false;
+                                      }),
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return SearchResult(
+                                          searchResponse: value,
+                                          buy: selectedItem == "Purchase"
+                                              ? true
+                                              : false,
+                                        );
+                                      })),
+                                    });
                               }
                             },
                             child: Container(

@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final Function onChanged;
-  final TextEditingController controller;
   final String initValue;
+  final String hint;
   final bool isPassword;
+  final Function validator;
+  final Function onSaved;
+  final bool isEmail;
 
   const CustomTextField(
       {Key key,
-      this.onChanged,
-      this.controller,
       this.initValue,
-      this.isPassword = false})
+      this.isPassword = false,
+      this.validator,
+      this.onSaved,
+      this.isEmail = false,
+      this.hint = ""})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.2,
-      height: MediaQuery.of(context).size.height / 19,
+      //height: MediaQuery.of(context).size.height / 19,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
@@ -35,11 +39,13 @@ class CustomTextField extends StatelessWidget {
         initialValue: initValue,
         style: TextStyle(color: Colors.black),
         //onChanged: onChanged,
-        onSaved: onChanged,
-        controller: controller,
-        obscureText: isPassword,
+        obscureText: isPassword ? true : false,
+        validator: validator,
+        onSaved: onSaved,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         obscuringCharacter: '*',
         decoration: InputDecoration(
+          hintText: hint,
           contentPadding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
           border: OutlineInputBorder(
             borderSide: BorderSide.none,

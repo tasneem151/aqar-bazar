@@ -4,6 +4,8 @@ import 'package:aqar_bazar/screens/contact_us.dart';
 import 'package:aqar_bazar/screens/my_bookings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:aqar_bazar/screens/wishlist.dart';
 
 class SideDrawer extends StatelessWidget {
   @override
@@ -44,6 +46,25 @@ class SideDrawer extends StatelessWidget {
                 style: TextStyle(color: kCustomBlueGrey),
               ),
               trailing: SvgPicture.asset('assets/icons/booking.svg'),
+            ),
+            Divider(
+              height: 2,
+              thickness: 0.5,
+              color: kCustomBlueGrey,
+            ),
+            ListTile(
+              onTap: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Wishlist();
+              })),
+              title: Text(
+                'Wishlist',
+                style: TextStyle(color: kCustomBlueGrey),
+              ),
+              trailing: Icon(
+                FontAwesomeIcons.solidHeart,
+                color: Theme.of(context).accentColor,
+              ),
             ),
             Divider(
               height: 2,

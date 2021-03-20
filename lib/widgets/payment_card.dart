@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
 
 import '../constants.dart';
 
@@ -23,33 +24,71 @@ class _PaymentCardState extends State<PaymentCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Card Number', style: TextStyle(color: Theme.of(context).primaryColor),),
-          SizedBox(height: 10,),
-          TxtField(hint: 'Enter Your Credit Card Number', width: width / 1.2, height: height / 19,),
+          Text(
+            'Card Number',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TxtField(
+            hint: 'Enter Your Credit Card Number',
+            width: width / 1.2,
+            height: height / 19,
+          ),
           SizedBox(height: 40),
-          Text('Card Holder', style: TextStyle(color: Theme.of(context).primaryColor),),
-          SizedBox(height: 10,),
-          TxtField(hint: 'Your Legal First And Last Name', width: width / 1.2, height: height / 19,),
+          Text(
+            'Card Holder',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TxtField(
+            hint: 'Your Legal First And Last Name',
+            width: width / 1.2,
+            height: height / 19,
+          ),
           SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Text('CVV', style: TextStyle(color: Theme.of(context).primaryColor),),
-              SizedBox(height: 10,),
-              TxtField(hint: '* * a', width: width / 3, height: height / 19,),
-            ],),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Valid Until', style: TextStyle(color: Theme.of(context).primaryColor),),
-                SizedBox(height: 10,),
-                TxtField(hint: 'Month / Year', width: width / 3, height: height / 19,),
-              ],),
-          ],),
-
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'CVV',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TxtField(
+                    hint: '* * a',
+                    width: width / 3,
+                    height: height / 19,
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Valid Until',
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TxtField(
+                    hint: 'Month / Year',
+                    width: width / 3,
+                    height: height / 19,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -61,7 +100,8 @@ class TxtField extends StatelessWidget {
   final double width;
   final double height;
 
-  const TxtField({Key key, this.hint, this.height, this.width}) : super(key: key);
+  const TxtField({Key key, this.hint, this.height, this.width})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,12 +110,14 @@ class TxtField extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(color: Colors.grey[300], offset: Offset(0,0), blurRadius: 10.0),
+          BoxShadow(
+              color: Colors.grey[300], offset: Offset(0, 0), blurRadius: 10.0),
         ],
         color: Colors.white,
       ),
       padding: EdgeInsets.only(top: 10, left: 5),
       child: TextFormField(
+        onChanged: (value) {},
         style: TextStyle(color: Theme.of(context).primaryColor),
         decoration: InputDecoration(
           hintText: hint,

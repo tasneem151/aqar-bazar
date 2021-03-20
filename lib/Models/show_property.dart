@@ -3,6 +3,7 @@
 //     final showProperty = showPropertyFromJson(jsonString);
 
 import 'dart:convert';
+import 'package:aqar_bazar/Models/comment.dart';
 
 ShowProperty showPropertyFromJson(String str) =>
     ShowProperty.fromJson(json.decode(str));
@@ -29,9 +30,11 @@ class ShowProperty {
     this.createdAt,
     this.updatedAt,
     this.featured,
+    this.lat,
+    this.lng,
+    this.location,
     this.title,
     this.description,
-    this.location,
     this.props,
     this.images,
     this.agent,
@@ -56,13 +59,15 @@ class ShowProperty {
   DateTime createdAt;
   DateTime updatedAt;
   int featured;
+  dynamic lat;
+  dynamic lng;
+  dynamic location;
   String title;
   String description;
-  String location;
   Map<String, int> props;
   List<dynamic> images;
   dynamic agent;
-  List<dynamic> comments;
+  List<Comment> comments;
 
   factory ShowProperty.fromJson(Map<String, dynamic> json) => ShowProperty(
         id: json["id"],
@@ -83,14 +88,17 @@ class ShowProperty {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         featured: json["featured"],
+        lat: json["lat"],
+        lng: json["lng"],
+        location: json["location"],
         title: json["title"],
         description: json["description"],
-        location: json["location"],
         props:
             Map.from(json["props"]).map((k, v) => MapEntry<String, int>(k, v)),
         images: List<dynamic>.from(json["images"].map((x) => x)),
         agent: json["agent"],
-        comments: List<dynamic>.from(json["comments"].map((x) => x)),
+        comments: List<Comment>.from(
+            json["comments"].map((x) => Comment.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -112,12 +120,14 @@ class ShowProperty {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "featured": featured,
+        "lat": lat,
+        "lng": lng,
+        "location": location,
         "title": title,
         "description": description,
-        "location": location,
         "props": Map.from(props).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "images": List<dynamic>.from(images.map((x) => x)),
         "agent": agent,
-        "comments": List<dynamic>.from(comments.map((x) => x)),
+        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
       };
 }

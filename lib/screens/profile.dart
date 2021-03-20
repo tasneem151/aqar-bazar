@@ -1,25 +1,20 @@
-import 'package:aqar_bazar/Models/profile_form_model.dart';
 import 'package:aqar_bazar/screens/account_info.dart';
 import 'package:aqar_bazar/screens/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/widgets/account_info_card.dart';
 import 'package:aqar_bazar/widgets/app_settings_card.dart';
 import 'package:aqar_bazar/widgets/about_aqar_card.dart';
+import 'package:aqar_bazar/Models/profile_info.dart';
 
 class Profile extends StatefulWidget {
+  final ProfileInfo user;
+
+  const Profile({Key key, this.user}) : super(key: key);
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  ProfileFormModel myModel = ProfileFormModel();
-
-  void updateUI(ProfileFormModel model) {
-    setState(() {
-      myModel = model;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -50,7 +45,21 @@ class _ProfileState extends State<Profile> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Color(0xff21d8a2),
+                    child: Text(
+                      widget.user == null
+                          ? ""
+                          : widget.user.firstName[0].toUpperCase() +
+                              widget.user.lastName[0].toUpperCase(),
+                      style: TextStyle(color: Colors.white, fontSize: 50),
+                    ),
+                  ),
+                  /* Container(
                     width: width / 3,
                     height: width / 3,
                     decoration: BoxDecoration(
@@ -82,11 +91,15 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                  ),
+                  ), */
                   Padding(
-                    padding: EdgeInsets.only(top: 20, bottom: 10),
+                    padding: EdgeInsets.only(top: 10, bottom: 30),
                     child: Text(
-                      'Username',
+                      widget.user.firstName[0].toUpperCase() +
+                          widget.user.firstName.substring(1) +
+                          " " +
+                          widget.user.lastName[0].toUpperCase() +
+                          widget.user.lastName.substring(1),
                       style: TextStyle(fontSize: 25),
                     ),
                   ),
@@ -99,16 +112,16 @@ class _ProfileState extends State<Profile> {
                           child: AccountInfoCard(
                             width: width,
                             height: height,
-                            model: myModel,
+                            userInfo: widget.user,
                           ),
                           onTap: () async {
-                            var model = await Navigator.push(context,
+                            var val = await Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return AccountInfo(
-                                accountInfo: myModel,
+                                accountInfo: widget.user,
                               );
                             }));
-                            if (model != null) updateUI(model);
+                            if (val) setState(() {});
                           },
                         ),
                         InkWell(

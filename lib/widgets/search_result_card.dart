@@ -1,11 +1,14 @@
-import 'package:aqar_bazar/Models/search_model.dart';
+import 'package:aqar_bazar/Models/property_data.dart';
 import 'package:flutter/material.dart';
 
 class SearchResultCard extends StatelessWidget {
   final PropertyData propertyData;
   final bool buy;
+  final bool wishlistItem;
+  final Function onDelete;
 
-  const SearchResultCard({this.propertyData, this.buy});
+  const SearchResultCard(
+      {this.propertyData, this.buy, this.wishlistItem = false, this.onDelete});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -67,14 +70,30 @@ class SearchResultCard extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Center(
-                  child: Text(
-                buy
-                    ? propertyData.purchasePrice + " LE"
-                    : propertyData.rentPrice + " LE",
-                style: TextStyle(color: Theme.of(context).accentColor),
-                overflow: TextOverflow.ellipsis,
-              )),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      buy
+                          ? propertyData.purchasePrice + " LE"
+                          : propertyData.rentPrice + " LE",
+                      style: TextStyle(color: Theme.of(context).accentColor),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    wishlistItem
+                        ? InkWell(
+                            onTap: onDelete,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
               SizedBox(
                 height: 20,
               )

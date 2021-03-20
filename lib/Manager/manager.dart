@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class Manager {
   static Future<void> setAuthToken(String authToken, context) async {
@@ -57,7 +58,7 @@ class Manager {
             Icon(
               Icons.wifi_off,
               size: 100,
-              color: Theme.of(context).primaryColor,
+              color: Color(0xff21d8a2),
             ),
             Text("No Internet Access")
           ],
@@ -73,7 +74,7 @@ class Manager {
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 2,
+        timeInSecForIosWeb: 4,
         textColor: Colors.red,
         backgroundColor: color,
         fontSize: 16.0);

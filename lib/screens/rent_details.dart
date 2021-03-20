@@ -28,13 +28,14 @@ class _RentDetailsState extends State<RentDetails> {
   String cctv;
   String view;
   String cleaning;
+  bool noWifi;
 
   void open(BuildContext context, final int index) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => GalleryPhotoViewWrapper(
-          galleryItems: galleryItems,
+          galleryItems: propDetails.images,
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
           ),

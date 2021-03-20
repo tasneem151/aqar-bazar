@@ -1,5 +1,6 @@
 import 'package:aqar_bazar/Models/for_purchase.dart';
 import 'package:aqar_bazar/Models/for_rent.dart';
+import 'package:aqar_bazar/Models/profile_info.dart';
 import 'package:aqar_bazar/Models/property_type.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/screens/profile.dart';
@@ -56,28 +57,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             onTap: () {
-              if (isRentSelected)
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return RentDetails(
-                        id: i.id,
-                      );
-                    },
-                  ),
-                );
-              if (isBuySelected)
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return BuyDetails(
-                        id: i.id,
-                      );
-                    },
-                  ),
-                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return BuyDetails(
+                      id: i.id,
+                      buy: isBuySelected,
+                    );
+                  },
+                ),
+              );
             },
           );
         },
@@ -89,30 +79,47 @@ class _HomeScreenState extends State<HomeScreen> {
   ForPurchase forPurchaseProp;
   ForRent forRentProp;
   List<PropertyType> propType;
+  bool noWifi;
+  ProfileInfo user;
+
+  void updateUI() {
+    isLoading = true;
+    noWifi = false;
+    Services.getUserInfo(context).then((value) => {
+          if (mounted)
+            {
+              setState(() => {user = value}),
+            },
+          Services.getPropertyType(context).then((value) => {
+                if (mounted)
+                  {
+                    setState(() => {propType = value}),
+                  },
+                Services.getForPurchase(context).then((value) => {
+                      if (mounted)
+                        {
+                          setState(() => {forPurchaseProp = value}),
+                        },
+                      Services.getForRent(context).then((value) => {
+                            if (mounted)
+                              {
+                                setState(() => {
+                                      forRentProp = value,
+                                      forRentProp == null
+                                          ? noWifi = true
+                                          : isLoading = false
+                                    }),
+                              }
+                          })
+                    })
+              })
+        });
+  }
 
   @override
   void initState() {
     super.initState();
-    isLoading = true;
-    Services.getPropertyType(context).then((value) => {
-          if (mounted)
-            {
-              setState(() => {propType = value}),
-            },
-          Services.getForPurchase(context).then((value) => {
-                if (mounted)
-                  {
-                    setState(() => {forPurchaseProp = value}),
-                  },
-                Services.getForRent(context).then((value) => {
-                      if (mounted)
-                        {
-                          setState(
-                              () => {forRentProp = value, isLoading = false}),
-                        }
-                    })
-              })
-        });
+    updateUI();
   }
 
   @override
@@ -150,36 +157,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 InkWell(
                   onTap: () => Navigator.push(context,
                       MaterialPageRoute(builder: (context) {
-                    return Profile();
+                    return Profile(
+                      user: user,
+                    );
                   })),
                   child: Container(
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage('assets/temp/user.png'),
-                        ),
-                        Positioned(
-                          bottom: 5,
-                          right: 0,
-                          child: Container(
-                            height: 15,
-                            width: 15,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 5,
-                          child: Icon(
-                            Icons.circle,
-                            color: Colors.red,
-                            size: 15,
-                          ),
-                        )
-                      ],
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Color(0xff21d8a2),
+                      child: Text(
+                        user == null
+                            ? ""
+                            : user.firstName[0].toUpperCase() +
+                                user.lastName[0].toUpperCase(),
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ),
                   ),
                 ),
@@ -187,133 +179,152 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        body: isLoading
+        body: noWifi
             ? Center(
-                child: CircularProgressIndicator(),
+                child: IconButton(
+                    padding: EdgeInsets.all(0),
+                    icon: Icon(
+                      Icons.refresh,
+                      size: 50,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        updateUI();
+                      });
+                    }),
               )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text('Find your location &'),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(
-                          'Explore',
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: InkWell(
-                          onTap: () => Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return Search(
-                              propType: propType,
-                            );
-                          })),
-                          child: Container(
-                            width: width - 20,
-                            height: height / 15,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(22),
-                              color: Color(0xffD8D8D8),
+            : isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text('Find your location &'),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              'Explore',
+                              style: TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.bold),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Where you want to go?',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Color(0xff707070),
-                                    ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: InkWell(
+                              onTap: () => Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return Search(
+                                  propType: propType,
+                                );
+                              })),
+                              child: Container(
+                                width: width - 20,
+                                height: height / 15,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(22),
+                                  color: Color(0xffD8D8D8),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Where you want to go?',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color(0xff707070),
+                                        ),
+                                      ),
+                                      Icon(
+                                        CupertinoIcons.search,
+                                        color: Color(0xff707070),
+                                      ),
+                                    ],
                                   ),
-                                  Icon(
-                                    CupertinoIcons.search,
-                                    color: Color(0xff707070),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            height: width / 3,
+                            width: width,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ExploreCard(
+                                  typeProperty: propType[index],
+                                );
+                              },
+                              itemCount: propType.length,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 25, bottom: 10, left: 20, right: 20),
+                            child: Text(
+                              'Featured Properties',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 20),
+                            ),
+                          ),
+                          CarouselSlider(
+                            options: CarouselOptions(
+                                enableInfiniteScroll: true,
+                                pageSnapping: false,
+                                viewportFraction: 0.6,
+                                enlargeCenterPage: true,
+                                enlargeStrategy:
+                                    CenterPageEnlargeStrategy.scale,
+                                height: MediaQuery.of(context).size.height / 3),
+                            items: isBuySelected
+                                ? buildItems(width, forPurchaseProp.featured)
+                                : buildItems(width, forRentProp.featured),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 25, bottom: 10, left: 20, right: 20),
+                            child: Text(
+                              'Latest Properties',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 20),
+                            ),
+                          ),
+                          CarouselSlider(
+                            options: CarouselOptions(
+                                pageSnapping: false,
+                                enableInfiniteScroll: true,
+                                viewportFraction: 0.6,
+                                enlargeCenterPage: true,
+                                //disableCenter: true,
+                                enlargeStrategy:
+                                    CenterPageEnlargeStrategy.scale,
+                                height: MediaQuery.of(context).size.height / 3),
+                            items: isBuySelected
+                                ? buildItems(width, forPurchaseProp.latest)
+                                : buildItems(width, forRentProp.latest),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: width / 3,
-                        width: width,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ExploreCard(
-                              typeProperty: propType[index],
-                            );
-                          },
-                          itemCount: propType.length,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 25, bottom: 10, left: 20, right: 20),
-                        child: Text(
-                          'Featured Properties',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 20),
-                        ),
-                      ),
-                      CarouselSlider(
-                        options: CarouselOptions(
-                            enableInfiniteScroll: true,
-                            pageSnapping: false,
-                            viewportFraction: 0.6,
-                            enlargeCenterPage: true,
-                            enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                            height: MediaQuery.of(context).size.height / 3),
-                        items: isBuySelected
-                            ? buildItems(width, forPurchaseProp.featured)
-                            : buildItems(width, forRentProp.featured),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 25, bottom: 10, left: 20, right: 20),
-                        child: Text(
-                          'Latest Properties',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 20),
-                        ),
-                      ),
-                      CarouselSlider(
-                        options: CarouselOptions(
-                            pageSnapping: false,
-                            enableInfiniteScroll: true,
-                            viewportFraction: 0.6,
-                            enlargeCenterPage: true,
-                            //disableCenter: true,
-                            enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                            height: MediaQuery.of(context).size.height / 3),
-                        items: isBuySelected
-                            ? buildItems(width, forPurchaseProp.latest)
-                            : buildItems(width, forRentProp.latest),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
       ),
     );
   }
