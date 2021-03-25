@@ -74,7 +74,7 @@ class _BookingState extends State<Booking> {
 
   List<Widget> disabled = [
     SvgPicture.asset('assets/icons/credit-card colored.svg'),
-    SvgPicture.asset('assets/icons/calendar-uncolored.svg'),
+    SvgPicture.asset('assets/icons/calendar-uncolored2.svg'),
     SvgPicture.asset('assets/icons/key.svg'),
   ];
 

@@ -36,6 +36,62 @@ class _MyBookingsState extends State<MyBookings> {
         });
   }
 
+  void showAlert(int id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actionsPadding: EdgeInsets.only(right: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          title: Text("Cancel Reservation",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).primaryColor)),
+          content: Text("Are You Sure You Want to Cancel Your Reservation?",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).accentColor)),
+          actions: <Widget>[
+            Container(
+                height: 50,
+                width: 280,
+                child: Row(children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        cancel(id);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Yes"),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor)),
+                    ),
+                  )),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("No"),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor)),
+                    ),
+                  )),
+                ]))
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -98,7 +154,7 @@ class _MyBookingsState extends State<MyBookings> {
                       itemBuilder: (BuildContext context, int index) {
                         return BookedItem(
                           onCancel: () {
-                            cancel(bookList[index].id);
+                            showAlert(bookList[index].id);
                           },
                           item: bookList[index],
                         );
