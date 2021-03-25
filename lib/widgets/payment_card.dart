@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:credit_card_type_detector/credit_card_type_detector.dart';
+import 'package:provider/provider.dart';
+import 'package:aqar_bazar/Provider/date_provider.dart';
 
 import '../constants.dart';
 
@@ -9,8 +10,13 @@ class PaymentCard extends StatefulWidget {
 }
 
 class _PaymentCardState extends State<PaymentCard> {
+  String ccNumber, cvc, month, year;
   @override
   Widget build(BuildContext context) {
+    ccNumber = Provider.of<DateProvider>(context).getCCNumber();
+    cvc = Provider.of<DateProvider>(context).getCVCNumber();
+    month = Provider.of<DateProvider>(context).getMonth();
+    year = Provider.of<DateProvider>(context).getYear();
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Container(
@@ -32,61 +38,69 @@ class _PaymentCardState extends State<PaymentCard> {
             height: 10,
           ),
           TxtField(
+            initial: ccNumber == null ? "" : ccNumber,
             hint: 'Enter Your Credit Card Number',
             width: width / 1.2,
-            height: height / 19,
+            height: height / 16,
+            onChanged: (value) {
+              Provider.of<DateProvider>(context, listen: false)
+                  .setCCNumber(value);
+            },
           ),
           SizedBox(height: 40),
           Text(
-            'Card Holder',
+            'CVC',
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           SizedBox(
             height: 10,
           ),
           TxtField(
-            hint: 'Your Legal First And Last Name',
+            initial: cvc == null ? "" : cvc,
+            obsecure: true,
+            hint: '* * 3',
             width: width / 1.2,
-            height: height / 19,
+            height: height / 16,
+            onChanged: (value) {
+              Provider.of<DateProvider>(context, listen: false)
+                  .setCVCNumber(value);
+            },
           ),
           SizedBox(height: 40),
+          Text(
+            'Valid Until',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'CVV',
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TxtField(
-                    hint: '* * a',
-                    width: width / 3,
-                    height: height / 19,
-                  ),
-                ],
+              TxtField(
+                initial: month == null ? "" : month,
+                hint: 'month e.g.: 01',
+                width: width / 3,
+                height: height / 16,
+                onChanged: (value) {
+                  Provider.of<DateProvider>(context, listen: false)
+                      .setMonth(value);
+                },
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Valid Until',
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TxtField(
-                    hint: 'Month / Year',
-                    width: width / 3,
-                    height: height / 19,
-                  ),
-                ],
+              SizedBox(
+                width: 50,
               ),
+              TxtField(
+                initial: year == null ? "" : year,
+                hint: 'year e.g.: 2021',
+                width: width / 3,
+                height: height / 16,
+                onChanged: (value) {
+                  Provider.of<DateProvider>(context, listen: false)
+                      .setYear(value);
+                },
+              ),
+              SizedBox(height: 40),
             ],
           ),
         ],
@@ -99,9 +113,18 @@ class TxtField extends StatelessWidget {
   final String hint;
   final double width;
   final double height;
+  final void Function(String) onChanged;
+  final bool obsecure;
+  final String initial;
 
-  const TxtField({Key key, this.hint, this.height, this.width})
-      : super(key: key);
+  const TxtField({
+    this.hint,
+    this.height,
+    this.width,
+    this.onChanged,
+    this.obsecure = false,
+    this.initial,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,14 +138,18 @@ class TxtField extends StatelessWidget {
         ],
         color: Colors.white,
       ),
-      padding: EdgeInsets.only(top: 10, left: 5),
+      padding: EdgeInsets.only(top: 3),
       child: TextFormField(
-        onChanged: (value) {},
+        initialValue: initial,
+        obscureText: obsecure,
+        obscuringCharacter: "*",
+        onChanged: onChanged,
         style: TextStyle(color: Theme.of(context).primaryColor),
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           hintText: hint,
           hintStyle: TextStyle(
-            color: Color(0xff4e89c7),
+            color: Colors.blueGrey[500],
             fontSize: 15,
           ),
           border: OutlineInputBorder(

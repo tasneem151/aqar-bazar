@@ -16,12 +16,11 @@ class Reviews extends StatefulWidget {
 
 class _ReviewsState extends State<Reviews> {
   String comment;
-  List<Comment> commentsList;
+  List<Comment> commentsList = [];
   bool loading;
   TextEditingController controller = TextEditingController();
 
   void updateUI() {
-    loading = true;
     Services.getComments(widget.prop.id, context).then((value) => {
           if (mounted)
             {
@@ -36,6 +35,7 @@ class _ReviewsState extends State<Reviews> {
   @override
   void initState() {
     super.initState();
+    loading = true;
     updateUI();
   }
 
@@ -113,11 +113,14 @@ class _ReviewsState extends State<Reviews> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: loading
-                    ? Center(
-                        child: LinearProgressIndicator(),
-                      )
-                    : commentsList.length == 0
+                child: Column(
+                  children: [
+                    loading
+                        ? Center(
+                            child: LinearProgressIndicator(),
+                          )
+                        : Container(),
+                    !loading && commentsList.length == 0
                         ? Padding(
                             padding: EdgeInsets.only(
                               top: height / 3,
@@ -141,6 +144,8 @@ class _ReviewsState extends State<Reviews> {
                                     (commentsList.length - 1) - index],
                               );
                             }),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -265,7 +270,7 @@ class CommentCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             width: MediaQuery.of(context).size.width / 1.5,
-            height: MediaQuery.of(context).size.height / 5,
+            //height: MediaQuery.of(context).size.height / 5,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,

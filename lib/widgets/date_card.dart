@@ -1,7 +1,9 @@
+import 'package:aqar_bazar/Provider/modelsProvider.dart';
 import 'package:aqar_bazar/constants.dart';
 import 'package:aqar_bazar/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
+import 'package:provider/provider.dart';
 
 class DateCard extends StatefulWidget {
   @override
@@ -45,6 +47,12 @@ class _DateCardState extends State<DateCard> {
                     ).then((date) {
                       setState(() {
                         startDate = date;
+                        /* Provider.of<ModelsProvider>(context, listen: false)
+                            .setStartDate(startDate.year.toString() +
+                                "-" +
+                                startDate.month.toString() +
+                                "-" +
+                                startDate.day.toString()); */
                       });
                     });
                   },
@@ -122,6 +130,12 @@ class _DateCardState extends State<DateCard> {
                     ).then((date) {
                       setState(() {
                         endDate = date;
+                        /* Provider.of<ModelsProvider>(context, listen: false)
+                            .setEndDate(endDate.year.toString() +
+                                "-" +
+                                endDate.month.toString() +
+                                "-" +
+                                endDate.day.toString()); */
                       });
                     });
                   },

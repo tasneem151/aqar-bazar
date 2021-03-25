@@ -270,6 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
                                 return ExploreCard(
+                                  buy: isBuySelected,
                                   typeProperty: propType[index],
                                 );
                               },

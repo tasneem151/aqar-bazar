@@ -8,6 +8,7 @@ import 'package:aqar_bazar/Models/show_property.dart';
 import 'package:aqar_bazar/Provider/modelsProvider.dart';
 import 'package:aqar_bazar/Models/get_comments.dart';
 import 'package:aqar_bazar/Models/wishlist_model.dart';
+import 'package:aqar_bazar/Models/book_response.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -70,7 +71,12 @@ class Services {
       return null;
     }
     try {
-      var response = await http.get(baseUrl + "property/$id");
+      String token = Provider.of<ModelsProvider>(context, listen: false).token;
+      await Manager.getAuthToken().then((val) => {token = val});
+
+      var response = await http.get(baseUrl + "property/$id", headers: {
+        'Authorization': 'Bearer ' + token,
+      });
       var items = showPropertyFromJson(response.body);
 
       if (response.statusCode == 200) {
@@ -215,6 +221,25 @@ class Services {
     }
   }
 
+  /*  static Future<SearchResponse> nextSearchPage(
+      BuildContext context, String url) async {
+    try {
+      var response = await http.get(url);
+      var items = searchResponseFromJson(response.body);
+
+      if (response.statusCode == 200) {
+        //print(items.data.length);
+        return items;
+      } else {
+        throw Exception('Error' + response.statusCode.toString());
+      }
+
+    } catch (e) {
+      print(e);
+      return SearchResponse();
+    }
+  } */
+
   static Future<SearchResponse> getSearchResponse(
     BuildContext context,
     String operation,
@@ -223,10 +248,11 @@ class Services {
     String minPrice,
     String maxPrice,
     int area,
+    int page,
   ) async {
     try {
       var response = await http.get(baseUrl +
-          "property/search?min_price=$minPrice&max_price=$maxPrice&area=$area&operation=$operation&category=$catId&title=$title");
+          "property/search?min_price=$minPrice&max_price=$maxPrice&area=$area&operation=$operation&category=$catId&title=$title&page=$page");
       var items = searchResponseFromJson(response.body);
 
       if (response.statusCode == 200) {
@@ -521,9 +547,9 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            var body = convert.json.decode(response.body);
-            Manager.setAuthToken(body['token'], context);
-            print(body['token']);
+            var result = convert.json.decode(response.body);
+            Manager.setAuthToken(result['token'], context);
+            Manager.getAuthToken().then((value) => print(value));
             return 200;
           }
         case 422:
@@ -540,6 +566,105 @@ class Services {
     } catch (e) {
       print(e);
       return 0;
+    }
+  }
+
+  static Future<int> addCard(String ccNumber, String expMonth, String expYear,
+      String cvc, BuildContext context) async {
+    if (!Provider.of<ModelsProvider>(context, listen: false).internetAccess) {
+      Manager.noConnectionAlert(context);
+      return null;
+    }
+    try {
+      String token = Provider.of<ModelsProvider>(context, listen: false).token;
+      await Manager.getAuthToken().then((val) => {token = val});
+
+      var response = await http.post(baseUrl + "client/addCard", headers: {
+        'Authorization': 'Bearer ' + token,
+      }, body: {
+        "number": ccNumber,
+        "exp_month": expMonth,
+        "exp_year": expYear,
+        "cvc": cvc,
+      });
+
+      switch (response.statusCode) {
+        case 200:
+          {
+            //Manager.toastMessage('Updated Succesfuly', Colors.white);
+            return 200;
+          }
+        case 422:
+          {
+            Manager.alertDialog("Invalid Credit Card Info",
+                "Please check your Credit Card Information.", context);
+            return 422;
+          }
+        default:
+          {
+            Manager.toastMessage('Something Went Wrong', Colors.white);
+            return 500;
+          }
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  static Future<int> bookProperty(
+      String propId,
+      String startDate,
+      String endDate,
+      String payCycle,
+      String rentPrice,
+      BuildContext context) async {
+    if (!Provider.of<ModelsProvider>(context, listen: false).internetAccess) {
+      Manager.noConnectionAlert(context);
+      return null;
+    }
+    try {
+      String token = Provider.of<ModelsProvider>(context, listen: false).token;
+      await Manager.getAuthToken().then((val) => {token = val});
+
+      var response = await http.post(baseUrl + "client/book", headers: {
+        'Authorization': 'Bearer ' + token,
+      }, body: {
+        "property_id": propId,
+        "from": startDate,
+        "to": endDate,
+        "pay_cycle": payCycle,
+        "rent_price": rentPrice,
+      });
+
+      var result = bookResponseFromJson(response.body);
+
+      switch (response.statusCode) {
+        case 200:
+          {
+            //Manager.toastMessage('Updated Succesfuly', Colors.white);
+            return 200;
+          }
+        case 422:
+          {
+            result.errors == null
+                ? Manager.alertDialog(
+                    "Invalid Date Range", result.message, context)
+                : Manager.alertDialog(
+                    result.message,
+                    result.errors.from.first ??= result.errors.to.first,
+                    context);
+            return 422;
+          }
+        default:
+          {
+            Manager.toastMessage('Something Went Wrong', Colors.white);
+            return 500;
+          }
+      }
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

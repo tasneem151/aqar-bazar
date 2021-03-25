@@ -1,5 +1,6 @@
 import 'package:aqar_bazar/Models/featured.dart';
 import 'package:flutter/material.dart';
+import 'package:aqar_bazar/constants.dart';
 
 class FeatureCard extends StatelessWidget {
   final double width;
@@ -31,7 +32,10 @@ class FeatureCard extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
                               image: DecorationImage(
-                                  image: AssetImage('assets/temp/prop1.png'),
+                                  image: property.mainImageUrl == "no_image"
+                                      ? AssetImage('assets/temp/prop1.png')
+                                      : NetworkImage(
+                                          baseUrl + property.mainImageUrl),
                                   fit: BoxFit.fill)),
                         ),
                         Align(
@@ -66,7 +70,7 @@ class FeatureCard extends StatelessWidget {
                   style: TextStyle(fontSize: 18),
                 ),
               ),
-              Padding(
+              /* Padding(
                 padding: const EdgeInsets.only(top: 3, left: 20, right: 20),
                 child: Text(
                   property.location == null
@@ -75,9 +79,9 @@ class FeatureCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
+              ), */
               SizedBox(
-                height: 10,
+                height: 30,
               )
             ],
           ),

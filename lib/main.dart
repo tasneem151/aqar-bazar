@@ -13,10 +13,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var auth = Manager.getAuthToken();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ModelsProvider>(
@@ -33,7 +31,7 @@ class MyApp extends StatelessWidget {
         ],
         debugShowCheckedModeBanner: false,
         theme: Themes.themeData(context),
-        home: auth == null ? SignUp() : HomeScreen(),
+        home: SignUp(),
       ),
     );
   }

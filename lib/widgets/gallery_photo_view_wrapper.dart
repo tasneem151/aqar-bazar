@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:aqar_bazar/Models/images.dart';
+import 'package:aqar_bazar/constants.dart';
 
 class GalleryPhotoViewWrapper extends StatefulWidget {
   GalleryPhotoViewWrapper({
@@ -19,7 +21,7 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
   final dynamic maxScale;
   final int initialIndex;
   final PageController pageController;
-  final List<String> galleryItems;
+  final List<PropertyImage> galleryItems;
   final Axis scrollDirection;
 
   @override
@@ -82,9 +84,9 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
-    final String item = widget.galleryItems[index];
+    final String item = baseUrl + widget.galleryItems[index].image;
     return PhotoViewGalleryPageOptions(
-      imageProvider: AssetImage(item),
+      imageProvider: NetworkImage(item),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 4.1,

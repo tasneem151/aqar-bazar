@@ -1,11 +1,21 @@
+import 'package:aqar_bazar/Provider/date_provider.dart';
 import 'package:aqar_bazar/widgets/date_card.dart';
 import 'package:aqar_bazar/widgets/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:credit_card_type_detector/credit_card_type_detector.dart';
+import 'package:provider/provider.dart';
+import 'package:aqar_bazar/networking/services.dart';
+import 'package:aqar_bazar/widgets/date_range_card.dart';
 
 class Booking extends StatefulWidget {
+  final String propId;
+  final String payCycle;
+  final String rentPrice;
+
+  const Booking({Key key, this.propId, this.payCycle, this.rentPrice})
+      : super(key: key);
+
   @override
   _BookingState createState() => _BookingState();
 }
@@ -15,8 +25,13 @@ class _BookingState extends State<Booking> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
   bool isActive = true;
-  DateTime startDate;
-  DateTime endDate;
+  String startDate;
+  String endDate;
+  String ccNumber;
+  String cvc;
+  String month;
+  String year;
+  bool loading = false;
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -52,14 +67,14 @@ class _BookingState extends State<Booking> {
   }
 
   List<Widget> enabled = [
-    SvgPicture.asset('assets/icons/calendar.svg'),
     SvgPicture.asset('assets/icons/credit-card colored.svg'),
+    SvgPicture.asset('assets/icons/calendar.svg'),
     SvgPicture.asset('assets/icons/key colored.svg'),
   ];
 
   List<Widget> disabled = [
-    SvgPicture.asset('assets/icons/calendar.svg'),
-    SvgPicture.asset('assets/icons/credit-card.svg'),
+    SvgPicture.asset('assets/icons/credit-card colored.svg'),
+    SvgPicture.asset('assets/icons/calendar-uncolored.svg'),
     SvgPicture.asset('assets/icons/key.svg'),
   ];
 
@@ -73,10 +88,38 @@ class _BookingState extends State<Booking> {
   }
 
   void nextStep() {
-    _pageController.nextPage(
-      duration: Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
+    setState(() {
+      loading = true;
+    });
+    if (_pageController.page == 0) {
+      Services.addCard(ccNumber, month, year, cvc, context).then((value) => {
+            if (value == 200)
+              {
+                _pageController.nextPage(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                ),
+              },
+            setState(() {
+              loading = false;
+            }),
+          });
+    } else if (_pageController.page == 1) {
+      Services.bookProperty(widget.propId, startDate, endDate, widget.payCycle,
+              widget.rentPrice, context)
+          .then((value) => {
+                if (value == 200)
+                  {
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    ),
+                  },
+                setState(() {
+                  loading = false;
+                }),
+              });
+    }
   }
 
   void previousStep() {
@@ -96,6 +139,13 @@ class _BookingState extends State<Booking> {
 
   @override
   Widget build(BuildContext context) {
+    startDate = Provider.of<DateProvider>(context).getStartDate();
+    endDate = Provider.of<DateProvider>(context).getEndDate();
+    ccNumber = Provider.of<DateProvider>(context).getCCNumber();
+    cvc = Provider.of<DateProvider>(context).getCVCNumber();
+    month = Provider.of<DateProvider>(context).getMonth();
+    year = Provider.of<DateProvider>(context).getYear();
+
     return SafeArea(
       child: Scaffold(
         body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -159,25 +209,6 @@ class _BookingState extends State<Booking> {
                           child: Column(
                             children: [
                               Text(
-                                "Pick A Date",
-                                style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 25),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Center(
-                                child: DateCard(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: [
-                              Text(
                                 "Payment",
                                 style: TextStyle(
                                     color: Theme.of(context).accentColor,
@@ -188,6 +219,25 @@ class _BookingState extends State<Booking> {
                               ),
                               Center(
                                 child: PaymentCard(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: [
+                              Text(
+                                "Pick A Date",
+                                style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontSize: 25),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Center(
+                                child: DateRangeCard(),
                               ),
                             ],
                           ),
@@ -258,33 +308,46 @@ class _BookingState extends State<Booking> {
                               SizedBox(
                                 width: 20,
                               ),
-                              InkWell(
-                                onTap: () {
-                                  _currentPage != _numPages - 1
-                                      ? nextStep()
-                                      : backToHome();
-                                },
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 21,
-                                  width: MediaQuery.of(context).size.width / 3,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Theme.of(context).accentColor,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      _currentPage != _numPages - 1
-                                          ? 'Next'
-                                          : 'Back to Home',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18.0,
+                              loading
+                                  ? Container(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              21,
+                                      width:
+                                          MediaQuery.of(context).size.width / 3,
+                                      child: Center(
+                                          child: CircularProgressIndicator()))
+                                  : InkWell(
+                                      onTap: () {
+                                        _currentPage != _numPages - 1
+                                            ? nextStep()
+                                            : backToHome();
+                                      },
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                21,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                3,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          color: Theme.of(context).accentColor,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            _currentPage != _numPages - 1
+                                                ? 'Next'
+                                                : 'Back to Home',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         )

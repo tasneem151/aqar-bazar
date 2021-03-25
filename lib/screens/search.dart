@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:aqar_bazar/Models/search_model.dart';
+import 'package:aqar_bazar/Models/search_request_model.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/screens/search_result.dart';
 import 'package:aqar_bazar/widgets/search_card_filter.dart';
@@ -18,25 +19,28 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  String title = "";
+  /* String title = "";
   String minPrice = "";
   String maxPrice = "";
   int space;
+  int catId = 0;
+  String selectedItem; */
+
+  SearchRequestModel searchParams = SearchRequestModel();
   bool loading;
   int selsectedIndex;
-  int catId = 0;
 
   List<String> dropDownItems = [
     "Purchase",
     "Rent",
   ];
-  String selectedItem;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    selectedItem = dropDownItems[0];
+    searchParams.selectedItem = dropDownItems[0];
     loading = false;
   }
 
@@ -71,7 +75,7 @@ class _SearchState extends State<Search> {
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
                             onSubmitted: (value) {
-                              title = value;
+                              searchParams.title = value;
                               print(value);
                             },
                             decoration: InputDecoration(
@@ -115,10 +119,11 @@ class _SearchState extends State<Search> {
                             setState(() {
                               if (selsectedIndex != index) {
                                 selsectedIndex = index;
-                                catId = widget.propType[selsectedIndex].id;
+                                searchParams.catId =
+                                    widget.propType[selsectedIndex].id;
                               } else {
                                 selsectedIndex = null;
-                                catId = 0;
+                                searchParams.catId = 0;
                               }
                             });
                           },
@@ -171,7 +176,7 @@ class _SearchState extends State<Search> {
                                   return null;
                                 },
                                 onFieldSubmitted: (value) {
-                                  minPrice = value;
+                                  searchParams.minPrice = value;
                                 },
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(0),
@@ -221,7 +226,7 @@ class _SearchState extends State<Search> {
                                   return null;
                                 },
                                 onFieldSubmitted: (value) {
-                                  maxPrice = value;
+                                  searchParams.maxPrice = value;
                                 },
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(0),
@@ -282,8 +287,8 @@ class _SearchState extends State<Search> {
                                   return null;
                                 },
                                 onFieldSubmitted: (value) {
-                                  space = int.parse(value);
-                                  print(space);
+                                  searchParams.space = int.parse(value);
+                                  print(searchParams.space);
                                 },
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(0),
@@ -326,7 +331,7 @@ class _SearchState extends State<Search> {
                                   color: Colors.white),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
-                                  value: selectedItem,
+                                  value: searchParams.selectedItem,
                                   style: TextStyle(
                                     color: Color(0xff015ca7),
                                   ),
@@ -345,8 +350,9 @@ class _SearchState extends State<Search> {
                                   }).toList(),
                                   onChanged: (String newValue) {
                                     setState(() {
-                                      selectedItem = newValue;
-                                      print(selectedItem.toLowerCase());
+                                      searchParams.selectedItem = newValue;
+                                      print(searchParams.selectedItem
+                                          .toLowerCase());
                                     });
                                   },
                                 ),
@@ -367,32 +373,15 @@ class _SearchState extends State<Search> {
                             onTap: () {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
-                                setState(() {
-                                  loading = true;
-                                });
-                                Services.getSearchResponse(
-                                  context,
-                                  selectedItem.toLowerCase(),
-                                  title,
-                                  catId,
-                                  minPrice,
-                                  maxPrice,
-                                  space,
-                                ).then((value) => {
-                                      print(value.data.length),
-                                      setState(() {
-                                        loading = false;
-                                      }),
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return SearchResult(
-                                          searchResponse: value,
-                                          buy: selectedItem == "Purchase"
-                                              ? true
-                                              : false,
-                                        );
-                                      })),
-                                    });
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return SearchResult(
+                                    searchParams: searchParams,
+                                    buy: searchParams.selectedItem == "Purchase"
+                                        ? true
+                                        : false,
+                                  );
+                                }));
                               }
                             },
                             child: Container(

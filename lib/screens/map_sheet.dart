@@ -10,11 +10,23 @@ class MapsSheet {
     final availableMaps = await MapLauncher.installedMaps;
 
     showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       context: context,
       builder: (BuildContext context) {
-        return SafeArea(
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          height: 200,
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "View Via",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(

@@ -12,6 +12,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/Models/show_property.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:aqar_bazar/screens/map_sheet.dart';
+import 'package:aqar_bazar/Models/images.dart';
+import 'package:provider/provider.dart';
+import 'package:aqar_bazar/Provider/date_provider.dart';
 
 class BuyDetails extends StatefulWidget {
   final int id;
@@ -23,7 +26,7 @@ class BuyDetails extends StatefulWidget {
 }
 
 class _BuyDetailsState extends State<BuyDetails> {
-  bool isFav = false;
+  bool isFav;
   ShowProperty propDetails;
   bool isLoading;
   String gates;
@@ -32,21 +35,18 @@ class _BuyDetailsState extends State<BuyDetails> {
   String view;
   String cleaning;
   bool noWifi;
-  String baseUrl = "http://new.aqarbazar.com";
 
-  double latitude = 37.759392;
+/*   double latitude = 37.759392;
   double longitude = -122.5107336;
   String title = 'Ocean Beach';
-  int zoom = 18;
+  int zoom = 18; */
 
   void open(BuildContext context, final int index) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => GalleryPhotoViewWrapper(
-          galleryItems: propDetails.images.length == 0
-              ? ["assets/icons/no-image.png"]
-              : propDetails.images,
+          galleryItems: propDetails.images,
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
           ),
@@ -66,6 +66,7 @@ class _BuyDetailsState extends State<BuyDetails> {
               setState(() => {
                     print(value),
                     propDetails = value,
+                    isFav = propDetails.isFavorite,
                     propDetails != null && propDetails.props['gates'] == 1
                         ? gates = "Gates: Gates are available. \n"
                         : gates = "Gates: No Gates are available. \n",
@@ -89,7 +90,6 @@ class _BuyDetailsState extends State<BuyDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     updateUI();
   }
@@ -149,8 +149,9 @@ class _BuyDetailsState extends State<BuyDetails> {
                                               borderRadius:
                                                   BorderRadius.circular(50),
                                               image: DecorationImage(
-                                                  image: propDetails.mainImageUrl ==
-                                                          null
+                                                  image: propDetails
+                                                              .mainImageUrl ==
+                                                          "no_image"
                                                       ? AssetImage(
                                                           'assets/temp/prop1.png')
                                                       : NetworkImage(baseUrl +
@@ -164,7 +165,9 @@ class _BuyDetailsState extends State<BuyDetails> {
                                         child: Container(
                                           padding: const EdgeInsets.all(20.0),
                                           child: Text(
-                                            "1 / ${propDetails.images.length}",
+                                            propDetails.images.length == 0
+                                                ? "1 / 1"
+                                                : "1 / ${propDetails.images.length}",
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 17.0,
@@ -215,9 +218,12 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                 4,
                                             height: 60,
                                             child: Center(
-                                              child: Icon(isFav
-                                                  ? FontAwesomeIcons.solidHeart
-                                                  : FontAwesomeIcons.heart),
+                                              child: isFav == null
+                                                  ? Container()
+                                                  : Icon(isFav
+                                                      ? FontAwesomeIcons
+                                                          .solidHeart
+                                                      : FontAwesomeIcons.heart),
                                             ),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
@@ -230,10 +236,15 @@ class _BuyDetailsState extends State<BuyDetails> {
                                           onTap: () {
                                             setState(() {
                                               isFav = !isFav;
-                                              Services.addToWishlist(
-                                                  propDetails.id.toString(),
-                                                  widget.buy ? "buy" : "rent",
-                                                  context);
+                                              isFav
+                                                  ? Services.addToWishlist(
+                                                      propDetails.id.toString(),
+                                                      widget.buy
+                                                          ? "buy"
+                                                          : "rent",
+                                                      context)
+                                                  : Services.removeFromWishlist(
+                                                      propDetails.id, context);
                                             });
                                           },
                                         ),
@@ -291,7 +302,7 @@ class _BuyDetailsState extends State<BuyDetails> {
                                         ),
                                       ],
                                     ),
-                                    Row(
+                                    /* Row(
                                       children: [
                                         Icon(
                                           Icons.location_pin,
@@ -307,7 +318,7 @@ class _BuyDetailsState extends State<BuyDetails> {
                                           ),
                                         ),
                                       ],
-                                    )
+                                    ) */
                                   ],
                                 ),
                               ),
@@ -429,10 +440,12 @@ class _BuyDetailsState extends State<BuyDetails> {
                                           context: context,
                                           onMapTap: (map) {
                                             map.showMarker(
-                                              coords:
-                                                  Coords(latitude, longitude),
-                                              title: title,
-                                              zoom: zoom,
+                                              coords: Coords(
+                                                  double.parse(propDetails.lat),
+                                                  double.parse(
+                                                      propDetails.lng)),
+                                              title: propDetails.title,
+                                              zoom: 18,
                                             );
                                           },
                                         );
@@ -493,7 +506,16 @@ class _BuyDetailsState extends State<BuyDetails> {
                           child: GestureDetector(
                             onTap: () => Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return widget.buy ? AgentInfo() : Booking();
+                              return widget.buy
+                                  ? AgentInfo()
+                                  : ChangeNotifierProvider<DateProvider>(
+                                      create: (_) => DateProvider(),
+                                      child: Booking(
+                                        propId: propDetails.id.toString(),
+                                        payCycle: propDetails.payCycle,
+                                        rentPrice: propDetails.rentPrice,
+                                      ),
+                                    );
                             })),
                             child: Container(
                               width: MediaQuery.of(context).size.width / 2.5,

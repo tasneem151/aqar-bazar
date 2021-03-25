@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class Manager {
@@ -18,8 +19,15 @@ class Manager {
 
   static Future<String> getAuthToken() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    String authToken = pref.getString('token') ?? null;
+    String authToken = pref.getString('token') ?? '';
     return authToken;
+  }
+
+  static Future<bool> logout(BuildContext context) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('token', '');
+    Provider.of<ModelsProvider>(context, listen: false).setToken('');
+    return true;
   }
 
   static Future<bool> checkInternet(BuildContext context) async {
@@ -78,5 +86,46 @@ class Manager {
         textColor: Colors.red,
         backgroundColor: color,
         fontSize: 16.0);
+  }
+
+  static void alertDialog(String title, String content, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actionsPadding: EdgeInsets.only(right: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          title: Text(title,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).primaryColor)),
+          content: Text(content,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).accentColor)),
+          actions: <Widget>[
+            Container(
+                height: 50,
+                width: 280,
+                child: Row(children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Close"),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor)),
+                    ),
+                  )),
+                ]))
+          ],
+        );
+      },
+    );
   }
 }

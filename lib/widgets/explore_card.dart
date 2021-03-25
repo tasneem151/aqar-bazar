@@ -1,10 +1,13 @@
 import 'package:aqar_bazar/Models/property_type.dart';
 import 'package:flutter/material.dart';
+import 'package:aqar_bazar/screens/search_result.dart';
+import 'package:aqar_bazar/Models/search_request_model.dart';
 
 class ExploreCard extends StatefulWidget {
   final PropertyType typeProperty;
+  final bool buy;
 
-  const ExploreCard({Key key, this.typeProperty}) : super(key: key);
+  const ExploreCard({Key key, this.typeProperty, this.buy}) : super(key: key);
   @override
   _ExploreCardState createState() => _ExploreCardState();
 }
@@ -16,77 +19,72 @@ class _ExploreCardState extends State<ExploreCard> {
   } */
 
   String baseUrl = "http://new.aqarbazar.com";
+  SearchRequestModel searchByCategory = SearchRequestModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    searchByCategory.catId = widget.typeProperty.id;
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return Container(
-      width: width / 3.5,
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: width / 4,
-                height: width / 4,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[500],
-                      offset: Offset(2.0, 2.0), //(x,y)
-                      blurRadius: 6.0,
-                    )
-                  ],
-                ),
+    return InkWell(
+      onTap: () {
+        widget.buy
+            ? searchByCategory.selectedItem = "purchase"
+            : searchByCategory.selectedItem = "rent";
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return SearchResult(
+            buy: widget.buy,
+            searchParams: searchByCategory,
+          );
+        }));
+      },
+      child: Container(
+        width: width / 3.5,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: widget.typeProperty.image == "no_image"
-                      ? Image(
-                          image: AssetImage('assets/icons/no-image.png'),
-                          fit: BoxFit.scaleDown,
-                        )
-                      : Image(
-                          image:
-                              NetworkImage(baseUrl + widget.typeProperty.image),
-                          fit: BoxFit.contain,
-                        ),
+                  width: width / 4,
+                  height: width / 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[500],
+                        offset: Offset(2.0, 2.0), //(x,y)
+                        blurRadius: 6.0,
+                      )
+                    ],
+                  ),
+                  child: Container(
+                    child: widget.typeProperty.image == "no_image"
+                        ? Image(
+                            image: AssetImage('assets/icons/no-image.png'),
+                            fit: BoxFit.scaleDown,
+                          )
+                        : Image(
+                            image: NetworkImage(
+                                baseUrl + widget.typeProperty.image),
+                            fit: BoxFit.contain,
+                          ),
+                  ),
                 ),
               ),
             ),
-          ),
-          /* _isChecked
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      width: width / 4,
-                      height: width / 4,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Center(
-                        child: Container(
-                          width: width / 6,
-                          height: width / 6,
-                          child: Image(
-                            image: AssetImage('assets/icons/check-mark.png'),
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(), */
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(widget.typeProperty.title)),
-        ],
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(widget.typeProperty.title)),
+          ],
+        ),
       ),
     );
   }

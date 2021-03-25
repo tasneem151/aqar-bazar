@@ -32,7 +32,7 @@ class Featured {
   dynamic compoundId;
   int categoryId;
   int active;
-  MainImageUrl mainImageUrl;
+  String mainImageUrl;
   int approved;
   int rent;
   int purchase;
@@ -58,7 +58,7 @@ class Featured {
         compoundId: json["compound_id"],
         categoryId: json["category_id"],
         active: json["active"],
-        mainImageUrl: mainImageUrlValues.map[json["main_image_url"]],
+        mainImageUrl: json["main_image_url"],
         approved: json["approved"],
         rent: json["rent"],
         purchase: json["purchase"],
@@ -88,7 +88,7 @@ class Featured {
         "compound_id": compoundId,
         "category_id": categoryId,
         "active": active,
-        "main_image_url": mainImageUrlValues.reverse[mainImageUrl],
+        "main_image_url": mainImageUrl,
         "approved": approved,
         "rent": rent,
         "purchase": purchase,
@@ -111,15 +111,11 @@ class Featured {
       };
 }
 
-enum MainImageUrl { NO_IMAGE }
-
-final mainImageUrlValues = EnumValues({"no_image": MainImageUrl.NO_IMAGE});
-
 /* enum PayCycle { MONTH }
 
 final payCycleValues = EnumValues({"month": PayCycle.MONTH}); */
 
-class EnumValues<T> {
+/* class EnumValues<T> {
   Map<String, T> map;
   Map<T, String> reverseMap;
 
@@ -131,4 +127,4 @@ class EnumValues<T> {
     }
     return reverseMap;
   }
-}
+} */

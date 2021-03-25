@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:aqar_bazar/screens/wishlist.dart';
+import 'package:aqar_bazar/Manager/manager.dart';
+import 'package:aqar_bazar/screens/sign_in.dart';
 
 class SideDrawer extends StatelessWidget {
   @override
@@ -104,6 +106,14 @@ class SideDrawer extends StatelessWidget {
               color: kCustomBlueGrey,
             ),
             ListTile(
+              onTap: () {
+                Manager.logout(context).then((value) => {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return SignIn();
+                      }))
+                    });
+              },
               title: Text(
                 'Log Out',
                 style: TextStyle(color: kCustomBlueGrey),

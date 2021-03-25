@@ -23,3 +23,4 @@ const kGradient = LinearGradient(
 );
 
 const kCustomBlueGrey = Color(0xff455A64);
+String baseUrl = "http://new.aqarbazar.com";

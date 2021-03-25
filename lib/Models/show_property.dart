@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 import 'package:aqar_bazar/Models/comment.dart';
+import 'images.dart';
 
 ShowProperty showPropertyFromJson(String str) =>
     ShowProperty.fromJson(json.decode(str));
@@ -33,6 +34,7 @@ class ShowProperty {
     this.lat,
     this.lng,
     this.location,
+    this.isFavorite,
     this.title,
     this.description,
     this.props,
@@ -62,10 +64,11 @@ class ShowProperty {
   dynamic lat;
   dynamic lng;
   dynamic location;
+  bool isFavorite;
   String title;
   String description;
   Map<String, int> props;
-  List<dynamic> images;
+  List<PropertyImage> images;
   dynamic agent;
   List<Comment> comments;
 
@@ -91,11 +94,13 @@ class ShowProperty {
         lat: json["lat"],
         lng: json["lng"],
         location: json["location"],
+        isFavorite: json["is_favorite"],
         title: json["title"],
         description: json["description"],
         props:
             Map.from(json["props"]).map((k, v) => MapEntry<String, int>(k, v)),
-        images: List<dynamic>.from(json["images"].map((x) => x)),
+        images: List<PropertyImage>.from(
+            json["images"].map((x) => PropertyImage.fromJson(x))),
         agent: json["agent"],
         comments: List<Comment>.from(
             json["comments"].map((x) => Comment.fromJson(x))),
@@ -123,10 +128,11 @@ class ShowProperty {
         "lat": lat,
         "lng": lng,
         "location": location,
+        "is_favorite": isFavorite,
         "title": title,
         "description": description,
         "props": Map.from(props).map((k, v) => MapEntry<String, dynamic>(k, v)),
-        "images": List<dynamic>.from(images.map((x) => x)),
+        "images": List<dynamic>.from(images.map((x) => x.toJson())),
         "agent": agent,
         "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
       };

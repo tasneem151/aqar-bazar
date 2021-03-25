@@ -32,15 +32,16 @@ class _WishlistState extends State<Wishlist> {
     });
   }
 
-  void onDelete(int id) {
+  void onDelete(int id, int indx, bool buy) {
     setState(() {
-      loading = true;
+      //loading = true;
+      buy ? buyWishlist.removeAt(indx) : rentWishlist.removeAt(indx);
     });
     Services.removeFromWishlist(id, context).then((value) => {
-          if (value == 200)
+          /* if (value == 200)
             setState(() {
               _updateUI();
-            }),
+            }), */
         });
   }
 
@@ -162,9 +163,14 @@ class _WishlistState extends State<Wishlist> {
                                               ? buyWishlist[index].property
                                               : rentWishlist[index].property,
                                           onDelete: () {
-                                            onDelete(isBuySelected
-                                                ? buyWishlist[index].id
-                                                : rentWishlist[index].id);
+                                            onDelete(
+                                                isBuySelected
+                                                    ? buyWishlist[index]
+                                                        .propertyId
+                                                    : rentWishlist[index]
+                                                        .propertyId,
+                                                index,
+                                                isBuySelected);
                                           },
                                         ),
                                       );
