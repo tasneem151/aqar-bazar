@@ -4,7 +4,6 @@ import 'package:aqar_bazar/Models/profile_info.dart';
 import 'package:aqar_bazar/Models/property_type.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/screens/profile.dart';
-import 'package:aqar_bazar/screens/rent_details.dart';
 import 'package:aqar_bazar/widgets/feature_card.dart';
 import 'package:aqar_bazar/widgets/buy_rent_switch.dart';
 import 'package:aqar_bazar/widgets/explore_card.dart';

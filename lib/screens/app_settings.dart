@@ -150,7 +150,7 @@ class AppSettings extends StatelessWidget {
               indent: 30,
               endIndent: 30,
             ),
-            SizedBox(
+            /*  SizedBox(
               height: 30,
             ),
             Row(
@@ -225,7 +225,7 @@ class AppSettings extends StatelessWidget {
                   )),
                 ),
               ],
-            ),
+            ), */
           ],
         ),
       ),

@@ -108,7 +108,7 @@ class AppSettingsCard extends StatelessWidget {
               ],
             ),
           ),
-          Divider(
+          /*  Divider(
             indent: 20,
             endIndent: 20,
             color: Theme.of(context).accentColor,
@@ -137,7 +137,7 @@ class AppSettingsCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          ), */
         ],
       ),
     );

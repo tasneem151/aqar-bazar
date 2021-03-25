@@ -1,3 +1,5 @@
+import 'package:aqar_bazar/Models/book_list.dart';
+import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/widgets/buy_rent_switch.dart';
 import 'package:aqar_bazar/widgets/booked_item.dart';
 import 'package:flutter/material.dart';
@@ -8,70 +10,101 @@ class MyBookings extends StatefulWidget {
 }
 
 class _MyBookingsState extends State<MyBookings> {
-  bool isBuySelected = true;
+  List<BookedItemData> bookList = [];
+  bool loading;
 
-  bool isRentSelected = false;
-
-  void onBuySwitchCallback() {
+  void cancel(int id) {
+    Services.cancelBooking(id.toString(), context).then((value) => {
+          setState(() {
+            _updateUI();
+          }),
+        });
     setState(() {
-      isBuySelected = true;
-      isRentSelected = false;
+      loading = true;
     });
   }
 
-  void onRentSwitchCallback() {
-    setState(() {
-      isBuySelected = false;
-      isRentSelected = true;
-    });
+  void _updateUI() {
+    Services.getBookList(context).then((value) => {
+          if (mounted)
+            {
+              setState(() {
+                bookList = value;
+                loading = false;
+              })
+            }
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loading = true;
+    _updateUI();
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return SafeArea(
         child: Scaffold(
+      appBar: PreferredSize(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 17, 10, 0),
+          color: Color(0xfff6f6f6),
+          width: width,
+          height: height / 17,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "My Bookings",
+                style: TextStyle(color: Colors.grey, fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+        preferredSize: Size.fromHeight(height / 20),
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        padding: const EdgeInsets.only(top: 20),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             //mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  "My Bookings",
-                  style: TextStyle(color: Colors.grey, fontSize: 20),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: BuyRentSwitch(
-                  isRentSelected: isRentSelected,
-                  isBuySelected: isBuySelected,
-                  onBuySwitch: onBuySwitchCallback,
-                  onRentSwitch: onRentSwitchCallback,
-                  shadow: BoxShadow(
-                    color: Colors.grey[300],
-                    offset: Offset(2.0, 2.0), //(x,y)
-                    blurRadius: 10.0,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Center(
-                child: Text('No bookings yet!'),
-              ),
-              /* Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3.8,
-                color: Colors.white,
-                child: BookedItem(),
-              ), */
+              loading
+                  ? Center(
+                      child: LinearProgressIndicator(),
+                    )
+                  : Container(),
+              !loading && bookList.length == 0
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                        top: height / 3,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "No Bookings Yet.",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return BookedItem(
+                          onCancel: () {
+                            cancel(bookList[index].id);
+                          },
+                          item: bookList[index],
+                        );
+                      },
+                      itemCount: bookList.length,
+                    ),
             ],
           ),
         ),

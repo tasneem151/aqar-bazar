@@ -1,4 +1,5 @@
 import 'package:aqar_bazar/Manager/manager.dart';
+import 'package:aqar_bazar/Models/book_list.dart';
 import 'package:aqar_bazar/Models/for_purchase.dart';
 import 'package:aqar_bazar/Models/for_rent.dart';
 import 'package:aqar_bazar/Models/profile_info.dart';
@@ -133,12 +134,11 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            //Manager.toastMessage('Item Added Succesfuly', Colors.white);
             return 200;
           }
         case 422:
           {
-            //Manager.toastMessage('Invalid', Colors.white);
+            Manager.toastMessage('Invalid', Colors.white);
             return 422;
           }
         default:
@@ -194,6 +194,73 @@ class Services {
     }
   }
 
+  static Future<int> cancelBooking(String id, BuildContext context) async {
+    if (!Provider.of<ModelsProvider>(context, listen: false).internetAccess) {
+      Manager.noConnectionAlert(context);
+      return null;
+    }
+    try {
+      String token = Provider.of<ModelsProvider>(context, listen: false).token;
+      await Manager.getAuthToken().then((val) => {token = val});
+
+      var response = await http.post(
+        baseUrl + "client/cancelBooking",
+        headers: {
+          'Authorization': 'Bearer ' + token,
+        },
+        body: {
+          "booking_id": id,
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          {
+            return 200;
+          }
+        case 422:
+          {
+            Manager.toastMessage('Invalid', Colors.white);
+            return 422;
+          }
+        default:
+          {
+            Manager.toastMessage('Something Went Wrong', Colors.white);
+            return 500;
+          }
+      }
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
+  static Future<List<BookedItemData>> getBookList(BuildContext context) async {
+    Manager.checkInternet(context);
+    if (!Provider.of<ModelsProvider>(context, listen: false).internetAccess) {
+      Manager.noConnectionAlert(context);
+      return null;
+    }
+    try {
+      String token = Provider.of<ModelsProvider>(context, listen: false).token;
+      await Manager.getAuthToken().then((val) => {token = val});
+
+      var response = await http.get(baseUrl + "client/bookings", headers: {
+        'Authorization': 'Bearer ' + token,
+      });
+      var items = bookListFromJson(response.body);
+
+      if (response.statusCode == 200) {
+        return items;
+      } else {
+        throw Exception('Error' + response.statusCode.toString());
+      }
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   static Future<List<WishlistModel>> getWishlist(BuildContext context) async {
     Manager.checkInternet(context);
     if (!Provider.of<ModelsProvider>(context, listen: false).internetAccess) {
@@ -220,25 +287,6 @@ class Services {
       return [];
     }
   }
-
-  /*  static Future<SearchResponse> nextSearchPage(
-      BuildContext context, String url) async {
-    try {
-      var response = await http.get(url);
-      var items = searchResponseFromJson(response.body);
-
-      if (response.statusCode == 200) {
-        //print(items.data.length);
-        return items;
-      } else {
-        throw Exception('Error' + response.statusCode.toString());
-      }
-
-    } catch (e) {
-      print(e);
-      return SearchResponse();
-    }
-  } */
 
   static Future<SearchResponse> getSearchResponse(
     BuildContext context,

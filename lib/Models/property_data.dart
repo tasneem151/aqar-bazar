@@ -32,7 +32,7 @@ class PropertyData {
   dynamic compoundId;
   int categoryId;
   int active;
-  MainImageUrl mainImageUrl;
+  String mainImageUrl;
   int approved;
   int rent;
   int purchase;
@@ -58,7 +58,8 @@ class PropertyData {
         compoundId: json["compound_id"],
         categoryId: json["category_id"],
         active: json["active"],
-        mainImageUrl: mainImageUrlValues.map[json["main_image_url"]],
+        mainImageUrl: json["main_image_url"],
+        //mainImageUrl: mainImageUrlValues.map[json["main_image_url"]],
         approved: json["approved"],
         rent: json["rent"],
         purchase: json["purchase"],
@@ -88,7 +89,8 @@ class PropertyData {
         "compound_id": compoundId,
         "category_id": categoryId,
         "active": active,
-        "main_image_url": mainImageUrlValues.reverse[mainImageUrl],
+        "main_image_url": mainImageUrl,
+        //"main_image_url": mainImageUrlValues.reverse[mainImageUrl],
         "approved": approved,
         "rent": rent,
         "purchase": purchase,
@@ -111,9 +113,9 @@ class PropertyData {
       };
 }
 
-enum MainImageUrl { NO_IMAGE }
+/* enum MainImageUrl { NO_IMAGE }
 
-final mainImageUrlValues = EnumValues({"no_image": MainImageUrl.NO_IMAGE});
+final mainImageUrlValues = EnumValues({"no_image": MainImageUrl.NO_IMAGE}); */
 
 class Link {
   Link({
