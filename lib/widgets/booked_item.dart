@@ -1,6 +1,8 @@
 import 'package:aqar_bazar/Models/book_list.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/widgets/feature_card.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class BookedItem extends StatelessWidget {
   final BookedItemData item;
@@ -10,21 +12,21 @@ class BookedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      padding: EdgeInsets.symmetric(vertical: SizeConfig.safeBlockVertical * 2),
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 3.8,
+        height: SizeConfig.safeBlockVertical * 26.5,
         color: Colors.white,
         child: Stack(
           overflow: Overflow.visible,
           children: [
             Positioned(
-              left: 10,
-              top: -20,
+              left: SizeConfig.safeBlockHorizontal * 2.5,
+              top: -SizeConfig.safeBlockVertical * 2.5,
               child: FeatureCard(
                 property: item.property,
-                width: MediaQuery.of(context).size.width / 2.2,
+                width: SizeConfig.safeBlockHorizontal * 47,
                 shadow: BoxShadow(
                   color: Colors.grey[200],
                   offset: Offset(2.0, 2.0), //(x,y)
@@ -33,36 +35,46 @@ class BookedItem extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 30,
-              right: 45,
+              top: SizeConfig.safeBlockVertical * 2,
+              right: SizeConfig.safeBlockHorizontal * 3,
+              left: SizeConfig.safeBlockHorizontal * 55,
+              bottom: SizeConfig.safeBlockVertical * 2,
               child: Column(
                 children: [
                   Text(
-                    'Price',
-                    style: TextStyle(fontSize: 18),
+                    Applocalizations.of(context).translate('Price'),
+                    style:
+                        TextStyle(fontSize: SizeConfig.safeBlockHorizontal * 4),
                   ),
                   Text(
                     item.property.rentPrice,
                     style: TextStyle(
-                        fontSize: 18, color: Theme.of(context).accentColor),
+                        fontSize: SizeConfig.safeBlockHorizontal * 4,
+                        color: Theme.of(context).accentColor),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: SizeConfig.safeBlockVertical * 1.5,
                   ),
-                  Text('Status', style: TextStyle(fontSize: 18)),
+                  Text(Applocalizations.of(context).translate('Status'),
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 4)),
                   Text(
                     item.status,
                     style: TextStyle(
-                        fontSize: 18, color: Theme.of(context).accentColor),
+                        fontSize: SizeConfig.safeBlockHorizontal * 4,
+                        color: Theme.of(context).accentColor),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: SizeConfig.safeBlockVertical * 1.5,
                   ),
-                  Text('Square Space', style: TextStyle(fontSize: 18)),
+                  Text(Applocalizations.of(context).translate('Square Space'),
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 4)),
                   Text(
                     item.property.area.toString(),
                     style: TextStyle(
-                        fontSize: 18, color: Theme.of(context).accentColor),
+                        fontSize: SizeConfig.safeBlockHorizontal * 4,
+                        color: Theme.of(context).accentColor),
                   ),
                 ],
               ),

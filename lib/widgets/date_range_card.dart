@@ -2,6 +2,7 @@ import 'package:aqar_bazar/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/Provider/date_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:aqar_bazar/size_config.dart';
 
 class DateRangeCard extends StatefulWidget {
   @override
@@ -12,11 +13,10 @@ class _DateRangeCardState extends State<DateRangeCard> {
   DateTimeRange picked;
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    SizeConfig().init(context);
+
     return Container(
-      width: width / 1.1,
-      height: height / 4.5,
+      width: SizeConfig.safeBlockHorizontal * 90,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: [kBoxShadow],
@@ -24,15 +24,22 @@ class _DateRangeCardState extends State<DateRangeCard> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Start Date'),
-                Container(
-                  width: width / 4.5,
-                  height: height / 30,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 5,
+                    vertical: SizeConfig.safeBlockHorizontal * 5),
+                child: Text('Start Date'),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 5,
+                    vertical: SizeConfig.safeBlockHorizontal * 5),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 25,
+                  height: SizeConfig.safeBlockVertical * 4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
@@ -74,18 +81,25 @@ class _DateRangeCardState extends State<DateRangeCard> {
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('End Date'),
-                Container(
-                  width: width / 4.5,
-                  height: height / 30,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 5,
+                    vertical: SizeConfig.safeBlockHorizontal * 5),
+                child: Text('End Date'),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 5,
+                    vertical: SizeConfig.safeBlockHorizontal * 5),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 25,
+                  height: SizeConfig.safeBlockVertical * 4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
@@ -127,11 +141,11 @@ class _DateRangeCardState extends State<DateRangeCard> {
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           SizedBox(
-            height: 10,
+            height: SizeConfig.safeBlockVertical * 1.5,
           ),
           Center(
             child: InkWell(
@@ -158,17 +172,22 @@ class _DateRangeCardState extends State<DateRangeCard> {
                       })
                     });
               },
-              child: Container(
-                width: width / 4,
-                height: height / 20,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: kGradient,
-                ),
-                child: Center(
-                  child: Text(
-                    "Pick A Date",
-                    style: TextStyle(color: Colors.white),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 5,
+                    vertical: SizeConfig.safeBlockHorizontal * 5),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 35,
+                  height: SizeConfig.safeBlockVertical * 5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: kGradient,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Pick A Date",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),

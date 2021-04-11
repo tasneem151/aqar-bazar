@@ -1,5 +1,4 @@
 import 'package:aqar_bazar/Provider/date_provider.dart';
-import 'package:aqar_bazar/widgets/date_card.dart';
 import 'package:aqar_bazar/widgets/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,14 +6,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/widgets/date_range_card.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/Models/show_property.dart';
 
 class Booking extends StatefulWidget {
-  final String propId;
+  final ShowProperty prop;
   final String payCycle;
   final String rentPrice;
 
-  const Booking({Key key, this.propId, this.payCycle, this.rentPrice})
-      : super(key: key);
+  const Booking({this.prop, this.payCycle, this.rentPrice});
 
   @override
   _BookingState createState() => _BookingState();
@@ -105,8 +105,8 @@ class _BookingState extends State<Booking> {
             }),
           });
     } else if (_pageController.page == 1) {
-      Services.bookProperty(widget.propId, startDate, endDate, widget.payCycle,
-              widget.rentPrice, context)
+      Services.bookProperty(widget.prop.id.toString(), startDate, endDate,
+              widget.payCycle, widget.rentPrice, context)
           .then((value) => {
                 if (value == 200)
                   {
@@ -139,6 +139,7 @@ class _BookingState extends State<Booking> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     startDate = Provider.of<DateProvider>(context).getStartDate();
     endDate = Provider.of<DateProvider>(context).getEndDate();
     ccNumber = Provider.of<DateProvider>(context).getCCNumber();
@@ -151,40 +152,40 @@ class _BookingState extends State<Booking> {
         body: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle.light,
           child: Container(
-            //height: MediaQuery.of(context).size.height,
             color: Theme.of(context).scaffoldBackgroundColor,
-            padding: EdgeInsets.symmetric(
-              vertical: 20,
-            ),
             child: SingleChildScrollView(
               child: Column(
-                //mainAxisSize: MainAxisSize.max,
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.only(
+                          left: SizeConfig.safeBlockHorizontal * 2.5,
+                          right: SizeConfig.safeBlockHorizontal * 2.5,
+                          top: SizeConfig.safeBlockVertical * 2),
                       child: Text(
                         'Renting Details For',
-                        style: TextStyle(fontSize: 22),
+                        style: TextStyle(
+                            fontSize: SizeConfig.safeBlockHorizontal * 5.7),
                       ),
                     ),
                   ),
                   Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.safeBlockHorizontal * 2.5),
                       child: Text(
-                        'property name',
-                        style: TextStyle(fontSize: 22),
+                        widget.prop.title,
+                        style: TextStyle(
+                            fontSize: SizeConfig.safeBlockHorizontal * 5.7),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal),
                     child: Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
+                      height: SizeConfig.safeBlockVertical * 12,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: _buildPageIndicator(),
@@ -192,8 +193,7 @@ class _BookingState extends State<Booking> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height / 1.8,
-                    width: MediaQuery.of(context).size.width,
+                    height: SizeConfig.safeBlockVertical * 60,
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: PageView(
                       physics: NeverScrollableScrollPhysics(),
@@ -204,81 +204,80 @@ class _BookingState extends State<Booking> {
                         });
                       },
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Payment",
-                                style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 25),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Center(
-                                child: PaymentCard(),
-                              ),
-                            ],
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              "Payment",
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize:
+                                      SizeConfig.safeBlockHorizontal * 6.5),
+                            ),
+                            SizedBox(
+                              height: SizeConfig.safeBlockVertical * 1.5,
+                            ),
+                            Center(
+                              child: PaymentCard(),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Pick A Date",
-                                style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 25),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Center(
-                                child: DateRangeCard(),
-                              ),
-                            ],
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              "Pick A Date",
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize:
+                                      SizeConfig.safeBlockHorizontal * 6.5),
+                            ),
+                            SizedBox(
+                              height: SizeConfig.safeBlockVertical * 1.5,
+                            ),
+                            Center(
+                              child: DateRangeCard(),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 150,
-                                width: 150,
+                        Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      SizeConfig.safeBlockHorizontal * 5,
+                                  vertical: SizeConfig.safeBlockVertical * 7),
+                              child: Container(
+                                //color: Colors.red,
+                                height: SizeConfig.safeBlockVertical * 20,
+                                width: SizeConfig.safeBlockHorizontal * 45,
                                 child: Image(
                                     image: AssetImage(
                                         'assets/icons/All done.png')),
                               ),
-                              SizedBox(
-                                height: 50,
-                              ),
-                              Text(
-                                "All Done",
-                                style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 35),
-                              ),
-                              Text(
-                                'Enjoy Your Stay!',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 20),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              "All Done",
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: SizeConfig.safeBlockHorizontal * 9),
+                            ),
+                            Text(
+                              'Enjoy Your Stay!',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: SizeConfig.safeBlockHorizontal * 5),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: SizeConfig.safeBlockVertical * 4,
                   ),
                   _currentPage != _numPages - 1
                       ? Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(
+                              SizeConfig.safeBlockHorizontal * 1.5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -287,9 +286,8 @@ class _BookingState extends State<Booking> {
                                   _currentPage != 0 ? previousStep() : cancel();
                                 },
                                 child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 21,
-                                  width: MediaQuery.of(context).size.width / 3,
+                                  height: SizeConfig.safeBlockVertical * 5,
+                                  width: SizeConfig.safeBlockHorizontal * 33,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                     color: Theme.of(context).primaryColor,
@@ -299,37 +297,33 @@ class _BookingState extends State<Booking> {
                                       _currentPage == 0 ? 'Cancel' : 'Previous',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18.0,
+                                        fontSize:
+                                            SizeConfig.safeBlockHorizontal *
+                                                4.5,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: 20,
+                                width: SizeConfig.safeBlockHorizontal * 5,
                               ),
                               loading
                                   ? Container(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              21,
+                                      height: SizeConfig.safeBlockVertical * 5,
                                       width:
-                                          MediaQuery.of(context).size.width / 3,
+                                          SizeConfig.safeBlockHorizontal * 33,
                                       child: Center(
                                           child: CircularProgressIndicator()))
                                   : InkWell(
                                       onTap: () {
-                                        _currentPage != _numPages - 1
-                                            ? nextStep()
-                                            : backToHome();
+                                        nextStep();
                                       },
                                       child: Container(
                                         height:
-                                            MediaQuery.of(context).size.height /
-                                                21,
+                                            SizeConfig.safeBlockVertical * 5,
                                         width:
-                                            MediaQuery.of(context).size.width /
-                                                3,
+                                            SizeConfig.safeBlockHorizontal * 33,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(30),
@@ -337,12 +331,12 @@ class _BookingState extends State<Booking> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            _currentPage != _numPages - 1
-                                                ? 'Next'
-                                                : 'Back to Home',
+                                            'Next',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 18.0,
+                                              fontSize: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4.5,
                                             ),
                                           ),
                                         ),
@@ -356,8 +350,8 @@ class _BookingState extends State<Booking> {
                             backToHome();
                           },
                           child: Container(
-                            height: MediaQuery.of(context).size.height / 18,
-                            width: MediaQuery.of(context).size.width / 2,
+                            height: SizeConfig.safeBlockVertical * 6,
+                            width: SizeConfig.safeBlockHorizontal * 50,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: Theme.of(context).primaryColor,
@@ -370,13 +364,14 @@ class _BookingState extends State<Booking> {
                                   color: Colors.white,
                                 ),
                                 SizedBox(
-                                  width: 5,
+                                  width: SizeConfig.safeBlockHorizontal,
                                 ),
                                 Text(
                                   'Back to Home',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18.0,
+                                    fontSize:
+                                        SizeConfig.safeBlockHorizontal * 4.5,
                                   ),
                                 ),
                               ],

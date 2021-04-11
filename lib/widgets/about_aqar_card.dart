@@ -4,18 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:aqar_bazar/constants.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class AboutAqarCard extends StatelessWidget {
-  final double width;
-  final double height;
-
-  const AboutAqarCard({Key key, this.width, this.height}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Container(
-      width: width - 30,
-      height: height / 3.7,
+      width: SizeConfig.safeBlockHorizontal * 90,
+      height: SizeConfig.safeBlockVertical * 30,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: Colors.white,
@@ -24,7 +22,7 @@ class AboutAqarCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            height: height / 12,
+            height: SizeConfig.safeBlockVertical * 9,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
@@ -40,86 +38,105 @@ class AboutAqarCard extends StatelessWidget {
                 stops: [0.1, 1.0],
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image(image: AssetImage('assets/icons/Logo short white.png')),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "About Aqar",
-                    maxLines: 2,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20, left: 5, right: 5),
-            child: GestureDetector(
-              onTap: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutUs();
-              })),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/icons/information.svg'),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text('About Us'),
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Theme.of(context).accentColor,
-            thickness: 0.8,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 5, left: 5, right: 5),
-            child: GestureDetector(
-              onTap: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ContactUs();
-              })),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/icons/contact-us.svg'),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text('Contact US'),
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Theme.of(context).accentColor,
-            thickness: 0.8,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 5, left: 5, right: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset('assets/icons/terms-and-conditions.svg'),
+                Image(image: AssetImage('assets/icons/Logo short white.png')),
                 SizedBox(
-                  width: 5,
+                  width: 10,
                 ),
-                Text('Terms and Conditions'),
+                Text(
+                  Applocalizations.of(context).translate("About Aqar"),
+                  maxLines: 2,
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
+          ),
+          GestureDetector(
+            onTap: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return AboutUs();
+            })),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      SizeConfig.safeBlockHorizontal * 1.5,
+                      SizeConfig.safeBlockVertical * 3,
+                      SizeConfig.safeBlockHorizontal * 2.5,
+                      0),
+                  child: SvgPicture.asset('assets/icons/information.svg'),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.safeBlockVertical * 3,
+                  ),
+                  child:
+                      Text(Applocalizations.of(context).translate('About Us')),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            indent: SizeConfig.safeBlockHorizontal * 5,
+            endIndent: SizeConfig.safeBlockHorizontal * 5,
+            color: Theme.of(context).accentColor,
+            thickness: 0.8,
+          ),
+          GestureDetector(
+            onTap: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ContactUs();
+            })),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      SizeConfig.safeBlockHorizontal * 1.5,
+                      SizeConfig.safeBlockVertical,
+                      SizeConfig.safeBlockHorizontal * 2.5,
+                      0),
+                  child: SvgPicture.asset('assets/icons/contact-us.svg'),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.safeBlockVertical,
+                  ),
+                  child: Text(
+                      Applocalizations.of(context).translate('Contact Us')),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            indent: SizeConfig.safeBlockHorizontal * 5,
+            endIndent: SizeConfig.safeBlockHorizontal * 5,
+            color: Theme.of(context).accentColor,
+            thickness: 0.8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    SizeConfig.safeBlockHorizontal * 1.5,
+                    SizeConfig.safeBlockVertical,
+                    SizeConfig.safeBlockHorizontal * 2.5,
+                    0),
+                child:
+                    SvgPicture.asset('assets/icons/terms-and-conditions.svg'),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: SizeConfig.safeBlockVertical,
+                ),
+                child: Text(Applocalizations.of(context)
+                    .translate('Terms and Conditions')),
+              ),
+            ],
           ),
         ],
       ),

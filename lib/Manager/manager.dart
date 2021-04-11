@@ -8,7 +8,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class Manager {
   static Future<void> setAuthToken(String authToken, context) async {
@@ -22,6 +23,27 @@ class Manager {
     String authToken = pref.getString('token') ?? '';
     return authToken;
   }
+
+  /* static Future<void> setLang(String lang, context) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('lang', lang);
+    Provider.of<ModelsProvider>(context, listen: false).setLocale(lang);
+  }
+
+  static Future<String> getLang() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String lang = pref.getString('lang') ?? 'en';
+    return lang;
+  } */
+
+  /* static Future<void> setUserInfo(ProfileInfo user, context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('first name', user.firstName);
+    //Provider.of<ModelsProvider>(context, listen: false).setUserInfo(newUser)
+    prefs.setString('last name', user.lastName);
+    prefs.setString('email', user.email);
+    prefs.setString('phone', user.phone);
+  } */
 
   static Future<bool> logout(BuildContext context) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
@@ -89,6 +111,7 @@ class Manager {
   }
 
   static void alertDialog(String title, String content, BuildContext context) {
+    SizeConfig().init(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -105,17 +128,18 @@ class Manager {
               style: TextStyle(color: Theme.of(context).accentColor)),
           actions: <Widget>[
             Container(
-                height: 50,
-                width: 280,
+                height: SizeConfig.safeBlockVertical * 6,
+                width: SizeConfig.safeBlockHorizontal * 75,
                 child: Row(children: <Widget>[
                   Expanded(
                       child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: FlatButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text("Close"),
+                      child:
+                          Text(Applocalizations.of(context).translate("Close")),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(

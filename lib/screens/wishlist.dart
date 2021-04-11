@@ -4,6 +4,8 @@ import 'package:aqar_bazar/widgets/search_result_card.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/Models/wishlist_model.dart';
 import 'package:flutter/material.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class Wishlist extends StatefulWidget {
   @override
@@ -33,16 +35,69 @@ class _WishlistState extends State<Wishlist> {
   }
 
   void onDelete(int id, int indx, bool buy) {
-    setState(() {
-      //loading = true;
-      buy ? buyWishlist.removeAt(indx) : rentWishlist.removeAt(indx);
-    });
-    Services.removeFromWishlist(id, context).then((value) => {
-          /* if (value == 200)
-            setState(() {
-              _updateUI();
-            }), */
-        });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actionsPadding: EdgeInsets.only(right: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          title: Text(
+              Applocalizations.of(context).translate("Remove From Wishlist"),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).primaryColor)),
+          content: Text(
+              Applocalizations.of(context).translate(
+                  "Are You Sure You Want to Remove this Item From Your Wishlist?"),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).accentColor)),
+          actions: <Widget>[
+            Container(
+                height: SizeConfig.safeBlockVertical * 6,
+                width: SizeConfig.safeBlockHorizontal * 75,
+                child: Row(children: <Widget>[
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          buy
+                              ? buyWishlist.removeAt(indx)
+                              : rentWishlist.removeAt(indx);
+                        });
+                        Services.removeFromWishlist(id, context)
+                            .then((value) => {});
+                        Navigator.of(context).pop();
+                      },
+                      child:
+                          Text(Applocalizations.of(context).translate("Yes")),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor)),
+                    ),
+                  )),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(Applocalizations.of(context).translate("No")),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(
+                              color: Theme.of(context).primaryColor)),
+                    ),
+                  )),
+                ]))
+          ],
+        );
+      },
+    );
   }
 
   void _updateUI() {
@@ -69,29 +124,32 @@ class _WishlistState extends State<Wishlist> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _updateUI();
   }
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
           child: Container(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
             color: Color(0xfff6f6f6),
-            width: width,
-            height: height / 8,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Wishlist",
-                  style: TextStyle(color: Colors.grey, fontSize: 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal * 3,
+                    vertical: SizeConfig.safeBlockVertical * 2,
+                  ),
+                  child: Text(
+                    Applocalizations.of(context).translate("Wishlist"),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: SizeConfig.safeBlockHorizontal * 5.2),
+                  ),
                 ),
                 Center(
                   child: BuyRentSwitch(
@@ -104,26 +162,31 @@ class _WishlistState extends State<Wishlist> {
               ],
             ),
           ),
-          preferredSize: Size.fromHeight(height / 7.8),
+          preferredSize: Size.fromHeight(SizeConfig.safeBlockVertical * 19),
         ),
         body: loading
             ? Center(child: CircularProgressIndicator())
             : Padding(
-                padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.safeBlockHorizontal),
                 child: isBuySelected && buyWishlist.length == 0
                     ? Center(
-                        heightFactor: 25,
+                        heightFactor: SizeConfig.safeBlockVertical * 3.5,
                         child: Text(
-                          "You Haven't Added Any Items Yet",
-                          style: TextStyle(fontSize: 20),
+                          Applocalizations.of(context)
+                              .translate("You Haven't Added Any Items Yet"),
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 5),
                         ),
                       )
                     : isRentSelected && rentWishlist.length == 0
                         ? Center(
-                            heightFactor: 25,
+                            heightFactor: SizeConfig.safeBlockVertical * 3.5,
                             child: Text(
-                              "You Haven't Added Any Items Yet",
-                              style: TextStyle(fontSize: 20),
+                              Applocalizations.of(context)
+                                  .translate("You Haven't Added Any Items Yet"),
+                              style: TextStyle(
+                                  fontSize: SizeConfig.safeBlockHorizontal * 5),
                             ),
                           )
                         : SingleChildScrollView(
@@ -137,8 +200,12 @@ class _WishlistState extends State<Wishlist> {
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    2.5,
+                                            mainAxisSpacing:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    2.5,
                                             childAspectRatio: 2 / 3),
                                     itemBuilder: (BuildContext context, index) {
                                       return InkWell(

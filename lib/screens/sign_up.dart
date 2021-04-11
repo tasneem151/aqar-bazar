@@ -6,7 +6,8 @@ import 'package:aqar_bazar/widgets/sign_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart' as validator;
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:aqar_bazar/Manager/manager.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void initState() {
-    Manager.getAuthToken().then((value) => {
+    /* Manager.getAuthToken().then((value) => {
           auth = value,
           print(auth.isNotEmpty),
           print(auth != null),
@@ -37,7 +38,7 @@ class _SignUpState extends State<SignUp> {
           setState(() {
             checking = false;
           }),
-        });
+        }); */
 
     super.initState();
     loading = false;
@@ -45,9 +46,9 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    //PhoneNumber initNumber = PhoneNumber(isoCode: 'SY');
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
+    print(SizeConfig.safeBlockHorizontal);
+    print(SizeConfig.safeBlockVertical);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -63,24 +64,21 @@ class _SignUpState extends State<SignUp> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 50.0),
-                          child: Center(
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              child: Image(
-                                image: AssetImage('assets/icons/Logo.png'),
-                                fit: BoxFit.contain,
-                              ),
+                        Center(
+                          child: Container(
+                            width: SizeConfig.safeBlockHorizontal * 25,
+                            height: SizeConfig.safeBlockVertical * 17,
+                            child: Image(
+                              image: AssetImage('assets/icons/Logo.png'),
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Container(
-                          width: width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.vertical(
-                                top: Radius.elliptical(width, 270)),
+                                top: Radius.elliptical(
+                                    SizeConfig.screenWidth, 270)),
                             gradient: LinearGradient(
                               colors: [
                                 Color(0xff4e89c7),
@@ -99,8 +97,9 @@ class _SignUpState extends State<SignUp> {
                             ],
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 40),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.safeBlockHorizontal * 8,
+                                vertical: SizeConfig.safeBlockVertical * 5),
                             child: Column(
                               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,31 +107,38 @@ class _SignUpState extends State<SignUp> {
                                 Align(
                                   alignment: Alignment.topCenter,
                                   child: Text(
-                                    'Sign up',
+                                    Applocalizations.of(context)
+                                        .translate("Sign Up"),
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 30,
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 8,
                                     ),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 30,
+                                  height: SizeConfig.safeBlockVertical * 4,
                                 ),
                                 Text(
-                                  'Fisrt Name',
+                                  Applocalizations.of(context)
+                                      .translate("First Name"),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: SizeConfig.safeBlockVertical,
                                 ),
                                 SignTextField(
-                                  hint: 'First Name',
+                                  hint: Applocalizations.of(context)
+                                      .translate("Enter Your First Name"),
                                   inShadow: Color(0xff21d8a2),
                                   outShadow: Color(0xff4e6ec7),
                                   validator: (String value) {
                                     if (value.isEmpty) {
-                                      return 'Enter your first name';
+                                      return Applocalizations.of(context)
+                                          .translate("Empty Field");
                                     }
                                     return null;
                                   },
@@ -142,23 +148,28 @@ class _SignUpState extends State<SignUp> {
                                   },
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: SizeConfig.safeBlockVertical * 3,
                                 ),
                                 Text(
-                                  'Last Name',
+                                  Applocalizations.of(context)
+                                      .translate('Last Name'),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: SizeConfig.safeBlockVertical,
                                 ),
                                 SignTextField(
-                                  hint: 'Last Name',
+                                  hint: Applocalizations.of(context)
+                                      .translate('Enter Your Last Name'),
                                   inShadow: Color(0xff21d8a2),
                                   outShadow: Color(0xff4e6ec7),
                                   validator: (String value) {
                                     if (value.isEmpty) {
-                                      return 'Enter your last name';
+                                      return Applocalizations.of(context)
+                                          .translate('Empty Field');
                                     }
                                     return null;
                                   },
@@ -168,24 +179,32 @@ class _SignUpState extends State<SignUp> {
                                   },
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: SizeConfig.safeBlockVertical * 3,
                                 ),
                                 Text(
-                                  'Email',
+                                  Applocalizations.of(context)
+                                      .translate('Email'),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: SizeConfig.safeBlockVertical,
                                 ),
                                 SignTextField(
                                   isEmail: true,
-                                  hint: 'Enter a valid Email',
+                                  hint: Applocalizations.of(context)
+                                      .translate('Enter a valid Email'),
                                   inShadow: Color(0xff21d8a2),
                                   outShadow: Color(0xff4e7ac7),
                                   validator: (String value) {
-                                    if (!validator.isEmail(value)) {
-                                      return 'Please enter a valid email';
+                                    if (value.isEmpty) {
+                                      return Applocalizations.of(context)
+                                          .translate('Empty Field');
+                                    } else if (!validator.isEmail(value)) {
+                                      return Applocalizations.of(context)
+                                          .translate('Invalid');
                                     }
                                     return null;
                                   },
@@ -195,25 +214,34 @@ class _SignUpState extends State<SignUp> {
                                   },
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: SizeConfig.safeBlockVertical * 3,
                                 ),
                                 Text(
-                                  'Password',
+                                  Applocalizations.of(context)
+                                      .translate('Password'),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: SizeConfig.safeBlockVertical,
                                 ),
                                 SignTextField(
                                   isPassword: true,
-                                  hint: '8 characters or more',
+                                  hint: Applocalizations.of(context)
+                                      .translate('8 characters or more'),
                                   inShadow: Color(0xff21d8a2),
                                   outShadow: Color(0xff4e89c7),
                                   validator: (String value) {
-                                    if (value.length < 8) {
-                                      return 'Password should be minimum 8 characters';
+                                    if (value.isEmpty) {
+                                      return Applocalizations.of(context)
+                                          .translate('Empty Field');
+                                    } else if (value.length < 8) {
+                                      return Applocalizations.of(context)
+                                          .translate('Short Password');
                                     }
+
                                     _formKey.currentState.save();
                                     return null;
                                   },
@@ -223,73 +251,67 @@ class _SignUpState extends State<SignUp> {
                                   },
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: SizeConfig.safeBlockVertical * 3,
                                 ),
                                 Text(
-                                  'Confirm Password',
+                                  Applocalizations.of(context)
+                                      .translate('Confirm Password'),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: SizeConfig.safeBlockVertical,
                                 ),
                                 SignTextField(
                                   isPassword: true,
-                                  hint: 'Repeat Password',
+                                  hint: Applocalizations.of(context)
+                                      .translate('Repeat Password'),
                                   inShadow: Color(0xff21d8a2),
                                   outShadow: Color(0xff4e89c7),
                                   validator: (String value) {
-                                    if (value.length < 8) {
-                                      return 'Password should be minimum 8 characters';
-                                    } else if (model.password != null &&
+                                    if (model.password != null &&
                                         value != model.password) {
                                       print(value);
                                       print(model.password);
-                                      return 'Password not matched';
+                                      return Applocalizations.of(context)
+                                          .translate('Password not matched');
                                     }
                                     return null;
                                   },
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: SizeConfig.safeBlockVertical * 3,
                                 ),
                                 Text(
-                                  'Phone Number',
+                                  Applocalizations.of(context)
+                                      .translate('Phone Number'),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: SizeConfig.safeBlockVertical,
                                 ),
-                                /* SignTextField(
-                            hint: '+90 |',
-                            inShadow: Color(0xff21d8a2),
-                            outShadow: Color(0xff4e89c7),
-                            validator: (String value) {
-                              if (!validator.isNumeric(value)) {
-                                return 'Please enter a valid Number';
-                              }
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              model.phone = value;
-                              print(model.phone);
-                            },
-                          ), */
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      width: MediaQuery.of(context).size.width /
-                                          5.7,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              15.4,
+                                      padding: EdgeInsets.only(
+                                          left: SizeConfig.safeBlockHorizontal *
+                                              2,
+                                          right:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  2),
+                                      width:
+                                          SizeConfig.safeBlockHorizontal * 18,
+                                      height: SizeConfig.safeBlockVertical * 7,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(
+                                            SizeConfig.safeBlockHorizontal * 5),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Color(0xff4e89c7)
@@ -317,45 +339,27 @@ class _SignUpState extends State<SignUp> {
                                         alignLeft: true,
                                         showFlag: false,
                                       ),
-                                      /* child: InternationalPhoneNumberInput(
-                                    //initialValue: initNumber,
-                                    hintStyle: TextStyle(
-                                      color: Colors.white.withOpacity(0.5),
-                                    ),
-                                    selectorTextStyle: TextStyle(
-                                      color: Colors.white.withOpacity(0.5),
-                                    ),
-                                    selectorConfig: SelectorConfig(
-                                      showFlags: false,
-                                      selectorType: PhoneInputSelectorType.DIALOG,
-                                    ),
-                                    textStyle: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                    inputBorder: InputBorder.none,
-                                    /* validator: (String value) {
-                                      if (!validator.isNumeric(value)) {
-                                        return 'Please enter a valid Number';
-                                      }
-                                      return null;
-                                    }, */
-                                    onInputChanged: (value) => {
-                                          model.phone = value.phoneNumber,
-                                          print(value.phoneNumber)
-                                        }), */
                                     ),
                                     SignTextField(
-                                      width: MediaQuery.of(context).size.width /
-                                          1.6,
-                                      hint: "Enter Your Phone Number",
+                                      width:
+                                          SizeConfig.safeBlockHorizontal * 63,
+                                      hint: Applocalizations.of(context)
+                                          .translate("Enter Your Phone Number"),
                                       inShadow:
                                           Color(0xff21d8a2).withOpacity(0.2),
                                       outShadow:
                                           Color(0xff4e89c7).withOpacity(0.2),
                                       validator: (String value) {
-                                        if (!validator.isNumeric(value)) {
-                                          return 'Invalid Phone Number';
+                                        if (value.isEmpty) {
+                                          return Applocalizations.of(context)
+                                              .translate('Empty Field');
+                                        } else if (!validator
+                                            .isNumeric(value)) {
+                                          return Applocalizations.of(context)
+                                              .translate(
+                                                  'Invalid Phone Number');
                                         }
+
                                         _formKey.currentState.save();
                                         return null;
                                       },
@@ -367,7 +371,7 @@ class _SignUpState extends State<SignUp> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 30,
+                                  height: SizeConfig.safeBlockVertical * 4,
                                 ),
                                 loading
                                     ? Center(
@@ -409,8 +413,11 @@ class _SignUpState extends State<SignUp> {
                                           }
                                         },
                                         child: Container(
-                                          width: width / 1.2,
-                                          height: height / 21,
+                                          width:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  85,
+                                          height:
+                                              SizeConfig.safeBlockVertical * 5,
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(20),
@@ -426,9 +433,12 @@ class _SignUpState extends State<SignUp> {
                                               ]),
                                           child: Center(
                                             child: Text(
-                                              'Sign Up',
+                                              Applocalizations.of(context)
+                                                  .translate('Sign Up'),
                                               style: TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: SizeConfig
+                                                          .safeBlockHorizontal *
+                                                      5,
                                                   color: Theme.of(context)
                                                       .accentColor),
                                             ),
@@ -436,7 +446,7 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                       ),
                                 SizedBox(
-                                  height: 30,
+                                  height: SizeConfig.safeBlockVertical * 4,
                                 ),
                                 InkWell(
                                   onTap: () =>
@@ -445,32 +455,42 @@ class _SignUpState extends State<SignUp> {
                                     return SignIn();
                                   })),
                                   child: Container(
-                                    width: width / 1.2,
-                                    height: height / 21,
+                                    width: SizeConfig.safeBlockHorizontal * 85,
+                                    height: SizeConfig.safeBlockVertical * 5,
                                     decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
                                       border: Border.all(
-                                          color: Colors.white, width: 2),
+                                          color: Colors.white,
+                                          width:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  0.5),
                                     ),
                                     child: Center(
                                       child: Text(
-                                        'Sign In',
+                                        Applocalizations.of(context)
+                                            .translate('Sign In'),
                                         style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
+                                            fontSize:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    5,
+                                            color: Colors.white),
                                       ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 30,
+                                  height: SizeConfig.safeBlockVertical * 4,
                                 ),
                                 Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Text(
-                                    'Powered By #Hashtag',
+                                    Applocalizations.of(context)
+                                        .translate('Powered By #Hashtag'),
                                     style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
+                                        fontSize:
+                                            SizeConfig.safeBlockHorizontal * 5,
+                                        color: Colors.white),
                                   ),
                                 ),
                               ],

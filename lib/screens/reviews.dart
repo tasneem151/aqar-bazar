@@ -1,3 +1,4 @@
+import 'package:aqar_bazar/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,11 +6,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:aqar_bazar/Models/comment.dart';
 import 'package:aqar_bazar/Models/show_property.dart';
 import 'package:aqar_bazar/networking/services.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class Reviews extends StatefulWidget {
   final ShowProperty prop;
 
-  const Reviews({Key key, this.prop}) : super(key: key);
+  const Reviews({this.prop});
   @override
   _ReviewsState createState() => _ReviewsState();
 }
@@ -41,20 +43,17 @@ class _ReviewsState extends State<Reviews> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
       appBar: PreferredSize(
         child: Container(
           padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 30,
+            left: SizeConfig.safeBlockHorizontal * 5,
+            right: SizeConfig.safeBlockHorizontal * 5,
+            top: SizeConfig.safeBlockVertical * 3,
           ),
           color: Color(0xfff6f6f6),
-          width: width,
-          height: height / 9,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,18 +62,20 @@ class _ReviewsState extends State<Reviews> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Reviews For',
-                    style: TextStyle(fontSize: 22),
+                    Applocalizations.of(context).translate('Reviews For'),
+                    style: TextStyle(
+                        fontSize: SizeConfig.safeBlockHorizontal * 5.5),
                   ),
                   Text(
                     widget.prop.title,
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(
+                        fontSize: SizeConfig.safeBlockHorizontal * 5.5),
                   ),
                 ],
               ),
               Container(
-                width: 50,
-                height: 40,
+                width: SizeConfig.safeBlockHorizontal * 13,
+                height: SizeConfig.safeBlockVertical * 5,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
@@ -103,10 +104,10 @@ class _ReviewsState extends State<Reviews> {
             ],
           ),
         ),
-        preferredSize: Size.fromHeight(height / 9),
+        preferredSize: Size.fromHeight(SizeConfig.safeBlockVertical * 12),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+        padding: EdgeInsets.only(bottom: SizeConfig.safeBlockVertical * 1.3),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,13 +124,13 @@ class _ReviewsState extends State<Reviews> {
                     !loading && commentsList.length == 0
                         ? Padding(
                             padding: EdgeInsets.only(
-                              top: height / 3,
+                              top: SizeConfig.safeBlockVertical * 37,
                             ),
-                            child: Center(
-                              child: Text(
-                                "No Comments Yet.",
-                                style: TextStyle(fontSize: 20),
-                              ),
+                            child: Text(
+                              Applocalizations.of(context)
+                                  .translate("No Comments Yet"),
+                              style: TextStyle(
+                                  fontSize: SizeConfig.safeBlockHorizontal * 5),
                             ),
                           )
                         : ListView.builder(
@@ -149,15 +150,17 @@ class _ReviewsState extends State<Reviews> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                top: 3,
+              padding: EdgeInsets.only(
+                top: SizeConfig.safeBlockHorizontal,
+                left: SizeConfig.safeBlockHorizontal * 5,
+                right: SizeConfig.safeBlockHorizontal * 5,
               ),
               child: Row(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: width / 1.3,
-                    height: height / 20,
+                    width: SizeConfig.safeBlockHorizontal * 77,
+                    height: SizeConfig.safeBlockVertical * 5.3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
@@ -176,15 +179,17 @@ class _ReviewsState extends State<Reviews> {
                       },
                       style: TextStyle(color: Theme.of(context).primaryColor),
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(top: 15),
+                        contentPadding: EdgeInsets.only(
+                            top: SizeConfig.safeBlockVertical * 2.5),
                         prefixIcon: SvgPicture.asset(
                           'assets/icons/testimonial.svg',
                           fit: BoxFit.scaleDown,
                         ),
-                        hintText: 'Leave a comment',
+                        hintText: Applocalizations.of(context)
+                            .translate('Leave a comment'),
                         hintStyle: TextStyle(
                           color: Colors.grey[400],
-                          fontSize: 15,
+                          fontSize: SizeConfig.safeBlockHorizontal * 4,
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -193,9 +198,9 @@ class _ReviewsState extends State<Reviews> {
                     ),
                   ),
                   SizedBox(
-                    width: 5,
+                    width: SizeConfig.safeBlockHorizontal * 1.5,
                   ),
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       if (comment != null) {
                         Services.writeComment(
@@ -212,8 +217,8 @@ class _ReviewsState extends State<Reviews> {
                       }
                     },
                     child: Container(
-                      height: 45,
-                      width: 45,
+                      height: SizeConfig.safeBlockHorizontal * 11.5,
+                      width: SizeConfig.safeBlockHorizontal * 11.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         color: Theme.of(context).accentColor,
@@ -226,7 +231,10 @@ class _ReviewsState extends State<Reviews> {
                         ],
                       ),
                       child: Padding(
-                          padding: EdgeInsets.only(left: 10, top: 10),
+                          padding: EdgeInsets.only(
+                              left: SizeConfig.safeBlockHorizontal * 2.5,
+                              right: SizeConfig.safeBlockHorizontal * 3.5,
+                              top: SizeConfig.safeBlockVertical * 1.2),
                           child: FaIcon(
                             FontAwesomeIcons.telegramPlane,
                             color: Colors.white,
@@ -246,31 +254,36 @@ class _ReviewsState extends State<Reviews> {
 class CommentCard extends StatelessWidget {
   final Comment comment;
 
-  const CommentCard({Key key, this.comment}) : super(key: key);
+  const CommentCard({this.comment});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(
+          vertical: SizeConfig.safeBlockVertical * 1.2,
+          horizontal: SizeConfig.safeBlockHorizontal * 5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            radius: 30,
+            radius: SizeConfig.safeBlockHorizontal * 7.5,
             backgroundColor: Color(0xff21d8a2),
             child: Text(
               comment.client.firstName == null
                   ? ""
                   : comment.client.firstName[0].toUpperCase() +
                       comment.client.lastName[0].toUpperCase(),
-              style: TextStyle(color: Colors.white, fontSize: 30),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: SizeConfig.safeBlockHorizontal * 7.5),
             ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: SizeConfig.safeBlockHorizontal * 2.5),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            width: MediaQuery.of(context).size.width / 1.5,
-            //height: MediaQuery.of(context).size.height / 5,
+            padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.safeBlockVertical * 2,
+                horizontal: SizeConfig.safeBlockHorizontal * 2.5),
+            width: SizeConfig.safeBlockHorizontal * 67,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.white,
@@ -286,7 +299,8 @@ class CommentCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                  padding:
+                      EdgeInsets.only(bottom: SizeConfig.safeBlockVertical),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -296,7 +310,8 @@ class CommentCard extends StatelessWidget {
                             " " +
                             comment.client.lastName[0].toUpperCase() +
                             comment.client.lastName.substring(1),
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                            fontSize: SizeConfig.safeBlockHorizontal * 5),
                       ),
                       Text(
                         comment.createdAt.day.toString() +
@@ -304,7 +319,9 @@ class CommentCard extends StatelessWidget {
                             comment.createdAt.month.toString() +
                             "-" +
                             comment.createdAt.year.toString(),
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: SizeConfig.safeBlockHorizontal * 3),
                       ),
                     ],
                   ),

@@ -3,7 +3,6 @@ import 'package:aqar_bazar/Models/for_rent.dart';
 import 'package:aqar_bazar/Models/profile_info.dart';
 import 'package:aqar_bazar/Models/property_type.dart';
 import 'package:aqar_bazar/networking/services.dart';
-import 'package:aqar_bazar/screens/profile.dart';
 import 'package:aqar_bazar/widgets/feature_card.dart';
 import 'package:aqar_bazar/widgets/buy_rent_switch.dart';
 import 'package:aqar_bazar/widgets/explore_card.dart';
@@ -14,9 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/screens/buy_details.dart';
 import 'package:aqar_bazar/screens/search.dart';
-import 'package:aqar_bazar/Manager/manager.dart';
-import 'package:provider/provider.dart';
-import 'package:aqar_bazar/Provider/modelsProvider.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
+import 'notifications_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -123,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -130,21 +130,22 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         drawer: SideDrawer(),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(height / 9),
+          preferredSize: Size.fromHeight(SizeConfig.safeBlockVertical * 30),
           child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 5,
-            ),
             color: Color(0xfff6f6f6),
             width: width,
-            height: height / 9,
+            height: SizeConfig.safeBlockVertical * 13,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Builder(
-                  builder: (context) => IconButton(
-                    icon: SvgPicture.asset('assets/icons/Layout-Arrange.svg'),
-                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.safeBlockHorizontal * 1.5),
+                    child: IconButton(
+                      icon: SvgPicture.asset('assets/icons/Layout-Arrange.svg'),
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
                   ),
                 ),
                 BuyRentSwitch(
@@ -153,23 +154,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   onBuySwitch: onBuySwitchCallback,
                   onRentSwitch: onRentSwitchCallback,
                 ),
-                InkWell(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return Profile(
-                      user: user,
-                    );
-                  })),
-                  child: Container(
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Color(0xff21d8a2),
-                      child: Text(
-                        user == null
-                            ? ""
-                            : user.firstName[0].toUpperCase() +
-                                user.lastName[0].toUpperCase(),
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.safeBlockHorizontal * 3),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: SizeConfig.safeBlockVertical * 6,
+                      width: SizeConfig.safeBlockVertical * 6,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Color(0xff21d8a2),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/bell-large.svg',
+                        fit: BoxFit.scaleDown,
                       ),
                     ),
                   ),
@@ -205,13 +211,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Text('Find your location &'),
+                            child: Text(Applocalizations.of(context)
+                                .translate('Find Your Next Home')),
                           ),
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Text(
-                              'Explore',
+                              Applocalizations.of(context).translate('Explore'),
                               style: TextStyle(
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
@@ -236,25 +243,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(22),
                                   color: Color(0xffD8D8D8),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Where you want to go?',
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(
+                                          SizeConfig.safeBlockHorizontal * 2),
+                                      child: Text(
+                                        Applocalizations.of(context)
+                                            .translate('Search'),
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  4,
                                           color: Color(0xff707070),
                                         ),
                                       ),
-                                      Icon(
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(
+                                          SizeConfig.safeBlockHorizontal * 3),
+                                      child: Icon(
                                         CupertinoIcons.search,
                                         color: Color(0xff707070),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -280,7 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: EdgeInsets.only(
                                 top: 25, bottom: 10, left: 20, right: 20),
                             child: Text(
-                              'Featured Properties',
+                              Applocalizations.of(context)
+                                  .translate('Featured Properties'),
                               style: TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 20),
                             ),
@@ -302,7 +318,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: EdgeInsets.only(
                                 top: 25, bottom: 10, left: 20, right: 20),
                             child: Text(
-                              'Latest Properties',
+                              Applocalizations.of(context)
+                                  .translate('Latest Properties'),
                               style: TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 20),
                             ),

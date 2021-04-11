@@ -3,6 +3,8 @@ import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -17,15 +19,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loading = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -38,7 +38,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: Column(
                 children: [
                   Container(
-                    height: height / 5,
+                    height: SizeConfig.safeBlockVertical * 20,
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       boxShadow: [
@@ -50,45 +50,61 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       ],
                     ),
                     child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/icons/lock-large.svg'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Account Information",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ],
-                        ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right: SizeConfig.safeBlockHorizontal * 2,
+                                left: SizeConfig.safeBlockHorizontal * 5),
+                            child:
+                                SvgPicture.asset('assets/icons/lock-large.svg'),
+                          ),
+                          Text(
+                            Applocalizations.of(context)
+                                .translate("Account Information"),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: SizeConfig.safeBlockHorizontal * 5.5),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 50, left: 30, right: 30),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset('assets/icons/key.svg'),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Enter Old Password',
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: SizeConfig.safeBlockHorizontal * 8,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.safeBlockVertical * 6,
+                            bottom: SizeConfig.safeBlockVertical * 1.5),
+                        child: SvgPicture.asset('assets/icons/key.svg'),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.safeBlockHorizontal * 2,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.safeBlockVertical * 6,
+                            bottom: SizeConfig.safeBlockVertical * 1.5),
+                        child: Text(
+                          Applocalizations.of(context)
+                              .translate('Old Password'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8,
+                        bottom: SizeConfig.safeBlockVertical * 2),
                     child: CustomTextField(
-                      hint: "Old Password",
+                      hint: Applocalizations.of(context)
+                          .translate("Enter Old Password"),
                       isPassword: true,
                       /* validator: (String value) {
                         if (value.length < 8) {
@@ -102,31 +118,44 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 30),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset('assets/icons/key-colored-small.svg'),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Enter New Password',
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: SizeConfig.safeBlockHorizontal * 8,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeConfig.safeBlockVertical * 1.5),
+                        child: SvgPicture.asset(
+                            'assets/icons/key-colored-small.svg'),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.safeBlockHorizontal * 2,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: SizeConfig.safeBlockVertical * 1.5),
+                        child: Text(
+                          Applocalizations.of(context)
+                              .translate('New Password'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: CustomTextField(
-                      hint: "New Password",
+                      hint: Applocalizations.of(context)
+                          .translate("Enter New Password"),
                       isPassword: true,
                       validator: (String value) {
                         if (value.length < 8) {
-                          return 'Password should be minimum 8 characters';
+                          return Applocalizations.of(context)
+                              .translate('Short Password');
                         }
                         _formKey.currentState.save();
                         return null;
@@ -138,13 +167,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: 30,
+                      top: SizeConfig.safeBlockVertical * 4,
                     ),
                     child: loading
                         ? CircularProgressIndicator()
                         : Container(
-                            width: width / 1.5,
-                            height: height / 17,
+                            width: SizeConfig.safeBlockHorizontal * 60,
+                            height: SizeConfig.safeBlockVertical * 6,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               gradient: LinearGradient(
@@ -183,7 +212,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 }
                               },
                               child: Text(
-                                'Submit Changes',
+                                Applocalizations.of(context)
+                                    .translate('Submit Changes'),
                                 style: TextStyle(color: Colors.white),
                               ),
                             )),

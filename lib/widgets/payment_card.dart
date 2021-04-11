@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aqar_bazar/Provider/date_provider.dart';
-
+import 'package:aqar_bazar/size_config.dart';
 import '../constants.dart';
 
 class PaymentCard extends StatefulWidget {
@@ -13,94 +13,113 @@ class _PaymentCardState extends State<PaymentCard> {
   String ccNumber, cvc, month, year;
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     ccNumber = Provider.of<DateProvider>(context).getCCNumber();
     cvc = Provider.of<DateProvider>(context).getCVCNumber();
     month = Provider.of<DateProvider>(context).getMonth();
     year = Provider.of<DateProvider>(context).getYear();
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+
     return Container(
-      height: height / 2.3,
-      width: width / 1.1,
-      padding: EdgeInsets.all(20),
+      width: SizeConfig.safeBlockHorizontal * 90,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius:
+              BorderRadius.circular(SizeConfig.safeBlockHorizontal * 5),
           boxShadow: [kBoxShadow],
           color: Colors.white),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Card Number',
-            style: TextStyle(color: Theme.of(context).primaryColor),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.safeBlockHorizontal * 5,
+                vertical: SizeConfig.safeBlockHorizontal * 5),
+            child: Text(
+              'Card Number',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
-          SizedBox(
-            height: 10,
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.safeBlockHorizontal * 5),
+            child: TxtField(
+              initial: ccNumber == null ? "" : ccNumber,
+              hint: 'Enter Your Credit Card Number',
+              height: SizeConfig.safeBlockVertical * 6.3,
+              onChanged: (value) {
+                Provider.of<DateProvider>(context, listen: false)
+                    .setCCNumber(value);
+              },
+            ),
           ),
-          TxtField(
-            initial: ccNumber == null ? "" : ccNumber,
-            hint: 'Enter Your Credit Card Number',
-            width: width / 1.2,
-            height: height / 16,
-            onChanged: (value) {
-              Provider.of<DateProvider>(context, listen: false)
-                  .setCCNumber(value);
-            },
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.safeBlockHorizontal * 5,
+                vertical: SizeConfig.safeBlockHorizontal * 5),
+            child: Text(
+              'CVC',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
-          SizedBox(height: 40),
-          Text(
-            'CVC',
-            style: TextStyle(color: Theme.of(context).primaryColor),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.safeBlockHorizontal * 5,
+            ),
+            child: TxtField(
+              initial: cvc == null ? "" : cvc,
+              obsecure: true,
+              hint: '* * 3',
+              height: SizeConfig.safeBlockVertical * 6.3,
+              onChanged: (value) {
+                Provider.of<DateProvider>(context, listen: false)
+                    .setCVCNumber(value);
+              },
+            ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          TxtField(
-            initial: cvc == null ? "" : cvc,
-            obsecure: true,
-            hint: '* * 3',
-            width: width / 1.2,
-            height: height / 16,
-            onChanged: (value) {
-              Provider.of<DateProvider>(context, listen: false)
-                  .setCVCNumber(value);
-            },
-          ),
-          SizedBox(height: 40),
-          Text(
-            'Valid Until',
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-          SizedBox(
-            height: 10,
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.safeBlockHorizontal * 5,
+                vertical: SizeConfig.safeBlockHorizontal * 5),
+            child: Text(
+              'Valid Until',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TxtField(
-                initial: month == null ? "" : month,
-                hint: 'month e.g.: 01',
-                width: width / 3,
-                height: height / 16,
-                onChanged: (value) {
-                  Provider.of<DateProvider>(context, listen: false)
-                      .setMonth(value);
-                },
+              Padding(
+                padding: EdgeInsets.only(
+                  left: SizeConfig.safeBlockHorizontal * 5,
+                  right: SizeConfig.safeBlockHorizontal * 5,
+                  bottom: SizeConfig.safeBlockHorizontal * 5,
+                ),
+                child: TxtField(
+                  initial: month == null ? "" : month,
+                  hint: 'month e.g.: 01',
+                  width: SizeConfig.safeBlockHorizontal * 35,
+                  onChanged: (value) {
+                    Provider.of<DateProvider>(context, listen: false)
+                        .setMonth(value);
+                  },
+                ),
               ),
-              SizedBox(
-                width: 50,
+              Padding(
+                padding: EdgeInsets.only(
+                  left: SizeConfig.safeBlockHorizontal * 5,
+                  right: SizeConfig.safeBlockHorizontal * 5,
+                  bottom: SizeConfig.safeBlockHorizontal * 5,
+                ),
+                child: TxtField(
+                  initial: year == null ? "" : year,
+                  hint: 'year e.g.: 2021',
+                  width: SizeConfig.safeBlockHorizontal * 35,
+                  onChanged: (value) {
+                    Provider.of<DateProvider>(context, listen: false)
+                        .setYear(value);
+                  },
+                ),
               ),
-              TxtField(
-                initial: year == null ? "" : year,
-                hint: 'year e.g.: 2021',
-                width: width / 3,
-                height: height / 16,
-                onChanged: (value) {
-                  Provider.of<DateProvider>(context, listen: false)
-                      .setYear(value);
-                },
-              ),
-              SizedBox(height: 40),
+              SizedBox(height: SizeConfig.safeBlockVertical * 5),
             ],
           ),
         ],

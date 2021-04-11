@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/constants.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class BuyRentSwitch extends StatelessWidget {
   final bool isRentSelected;
@@ -19,12 +21,11 @@ class BuyRentSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
     return Container(
-      padding: EdgeInsets.all(10),
-      width: width / 2,
-      height: height / 13,
+      padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 2.5),
+      width: SizeConfig.safeBlockHorizontal * 50,
+      height: SizeConfig.safeBlockVertical * 9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
         color: Color(0xffD8D8D8),
@@ -36,26 +37,33 @@ class BuyRentSwitch extends StatelessWidget {
           InkWell(
             onTap: onBuySwitch,
             child: Container(
-              width: width / 4.5,
+              width: SizeConfig.safeBlockHorizontal * 22,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: isBuySelected ? Colors.blue : Colors.transparent),
               child: Padding(
-                padding: const EdgeInsets.only(left: 2),
+                padding: EdgeInsets.only(left: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     isBuySelected
-                        ? SvgPicture.asset('assets/icons/buy.svg')
+                        ? Container(
+                            height: SizeConfig.safeBlockHorizontal * 6.5,
+                            width: SizeConfig.safeBlockHorizontal * 6.5,
+                            child: SvgPicture.asset('assets/icons/buy.svg'))
                         : Container(),
                     Text(
-                      'Buy',
+                      Applocalizations.of(context).translate('Buy'),
                       style: TextStyle(
-                          fontSize: isBuySelected ? 25 : 20,
+                          fontSize: SizeConfig.safeBlockHorizontal * 5,
+                          fontWeight: isBuySelected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                           color: isBuySelected ? Colors.white : Colors.black),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(
-                      height: height / 13,
+                      height: SizeConfig.safeBlockVertical * 7,
                     )
                   ],
                 ),
@@ -65,7 +73,7 @@ class BuyRentSwitch extends StatelessWidget {
           InkWell(
             onTap: onRentSwitch,
             child: Container(
-              width: width / 4.5,
+              width: SizeConfig.safeBlockHorizontal * 22,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: isRentSelected ? Colors.blue : Colors.transparent,
@@ -74,16 +82,26 @@ class BuyRentSwitch extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   isRentSelected
-                      ? SvgPicture.asset(
-                          'assets/icons/house30.svg',
+                      ? Container(
+                          height: SizeConfig.safeBlockHorizontal * 6.5,
+                          width: SizeConfig.safeBlockHorizontal * 6.5,
+                          child: SvgPicture.asset(
+                            'assets/icons/house30.svg',
+                          ),
                         )
                       : Container(),
-                  Text('Rent',
-                      style: TextStyle(
-                          fontSize: isRentSelected ? 25 : 20,
-                          color: isRentSelected ? Colors.white : Colors.black)),
+                  Text(
+                    Applocalizations.of(context).translate('Rent'),
+                    style: TextStyle(
+                        fontSize: SizeConfig.safeBlockHorizontal * 5,
+                        fontWeight: isRentSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                        color: isRentSelected ? Colors.white : Colors.black),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   SizedBox(
-                    height: height / 13,
+                    height: SizeConfig.safeBlockVertical * 7,
                   )
                 ],
               ),

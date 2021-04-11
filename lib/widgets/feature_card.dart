@@ -1,34 +1,33 @@
 import 'package:aqar_bazar/Models/featured.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/constants.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class FeatureCard extends StatelessWidget {
   final double width;
   final BoxShadow shadow;
   final Featured property;
 
-  const FeatureCard({Key key, this.width, this.shadow, this.property})
-      : super(key: key);
+  const FeatureCard({this.width, this.shadow, this.property});
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 2),
       child: Container(
+          height: SizeConfig.safeBlockVertical * 29,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Container(
                   width: width,
-                  //MediaQuery.of(context).size.width / 2.4,
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: EdgeInsets.all(2.0),
                     child: Stack(
                       children: [
                         Container(
-                          //width: MediaQuery.of(context).size.width / 1.5,
-                          height:
-                              (MediaQuery.of(context).size.height / 3.5) - 40,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
                               image: DecorationImage(
@@ -41,8 +40,8 @@ class FeatureCard extends StatelessWidget {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            width: MediaQuery.of(context).size.width / 4.5,
-                            height: MediaQuery.of(context).size.height / 25,
+                            width: SizeConfig.safeBlockHorizontal * 22,
+                            height: SizeConfig.safeBlockVertical * 4.5,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
@@ -64,10 +63,19 @@ class FeatureCard extends StatelessWidget {
                 height: 2,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Text(
-                  property.title,
-                  style: TextStyle(fontSize: 18),
+                padding: EdgeInsets.only(
+                    left: SizeConfig.safeBlockHorizontal * 2.5,
+                    right: SizeConfig.safeBlockHorizontal * 2.5),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 40,
+                  child: AutoSizeText(
+                    property.title,
+                    style: TextStyle(
+                        fontSize: SizeConfig.safeBlockHorizontal * 4.7,
+                        fontWeight: FontWeight.w600),
+                    minFontSize: 12,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
               /* Padding(
@@ -81,12 +89,10 @@ class FeatureCard extends StatelessWidget {
                 ),
               ), */
               SizedBox(
-                height: 30,
+                height: SizeConfig.safeBlockVertical * 3,
               )
             ],
           ),
-          //width: MediaQuery.of(context).size.width / 1.5,
-          height: MediaQuery.of(context).size.height / 3.5,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),

@@ -99,6 +99,7 @@ class Services {
       //Manager.noConnectionAlert(context);
       return null;
     }
+    //Locale loc = Provider.of<ModelsProvider>(context, listen: true).getLocale();
     try {
       var response = await http.get(baseUrl + "category/index");
       var items = propertyTypeFromJson(response.body);
@@ -174,7 +175,6 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            Manager.toastMessage('Item Added Succesfuly', Colors.white);
             return 200;
           }
         case 422:
@@ -443,7 +443,6 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            getUserInfo(context);
             Manager.toastMessage('Updated Succesfuly', Colors.white);
             return 200;
           }

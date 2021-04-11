@@ -21,4 +21,17 @@ class ModelsProvider extends ChangeNotifier {
     user = newUser;
     notifyListeners();
   }
+
+  ProfileInfo getUserInfo() {
+    return user;
+  }
+
+  /* void setLocale(String lang) {
+    langCode = lang;
+    notifyListeners();
+  }
+
+  String getLocale() {
+    return langCode;
+  } */
 }

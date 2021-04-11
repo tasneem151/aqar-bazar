@@ -1,4 +1,3 @@
-import 'package:aqar_bazar/Models/featured.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/screens/agent_info.dart';
 import 'package:aqar_bazar/screens/booking.dart';
@@ -12,9 +11,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/Models/show_property.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:aqar_bazar/screens/map_sheet.dart';
-import 'package:aqar_bazar/Models/images.dart';
 import 'package:provider/provider.dart';
 import 'package:aqar_bazar/Provider/date_provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class BuyDetails extends StatefulWidget {
   final int id;
@@ -29,11 +30,6 @@ class _BuyDetailsState extends State<BuyDetails> {
   bool isFav;
   ShowProperty propDetails;
   bool isLoading;
-  String gates;
-  String security;
-  String cctv;
-  String view;
-  String cleaning;
   bool noWifi;
 
 /*   double latitude = 37.759392;
@@ -67,21 +63,6 @@ class _BuyDetailsState extends State<BuyDetails> {
                     print(value),
                     propDetails = value,
                     isFav = propDetails.isFavorite,
-                    propDetails != null && propDetails.props['gates'] == 1
-                        ? gates = "Gates: Gates are available. \n"
-                        : gates = "Gates: No Gates are available. \n",
-                    propDetails != null && propDetails.props['security'] == 1
-                        ? security = "Security: Security is available. \n"
-                        : security = "Security: No Security is available. \n",
-                    propDetails != null && propDetails.props['cctv'] == 1
-                        ? cctv = "CCTV: CCTV is available. \n"
-                        : cctv = "CCTV: No CCTV is available. \n",
-                    propDetails != null && propDetails.props['view'] == 1
-                        ? view = "View: View is available. \n"
-                        : view = "View: No View is available. \n",
-                    propDetails != null && propDetails.props['cleaning'] == 1
-                        ? cleaning = "Cleaning: Cleaning is available. \n"
-                        : cleaning = "Cleaning: No Cleaning is available. \n",
                     propDetails == null ? noWifi = true : isLoading = false
                   }),
             },
@@ -96,6 +77,7 @@ class _BuyDetailsState extends State<BuyDetails> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return SafeArea(
       child: Scaffold(
           body: noWifi
@@ -123,7 +105,8 @@ class _BuyDetailsState extends State<BuyDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(15.0),
+                                padding: EdgeInsets.all(
+                                    SizeConfig.safeBlockVertical * 2),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
@@ -135,9 +118,7 @@ class _BuyDetailsState extends State<BuyDetails> {
                                       ),
                                     ],
                                   ),
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height / 2,
+                                  height: SizeConfig.safeBlockVertical * 50,
                                   child: Stack(
                                     children: [
                                       GestureDetector(
@@ -160,18 +141,33 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                   fit: BoxFit.fill)),
                                         ),
                                       ),
-                                      Align(
-                                        alignment: Alignment.topRight,
+                                      Positioned(
+                                        right: SizeConfig.safeBlockHorizontal *
+                                            6.5,
+                                        top: SizeConfig.safeBlockVertical * 3,
                                         child: Container(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Text(
-                                            propDetails.images.length == 0
-                                                ? "1 / 1"
-                                                : "1 / ${propDetails.images.length}",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 17.0,
-                                              decoration: null,
+                                          height: SizeConfig.safeBlockVertical *
+                                              3.8,
+                                          width:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  15,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              propDetails.images.length == 0
+                                                  ? "1 / 1"
+                                                  : "1 / ${propDetails.images.length}",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                /* fontSize: SizeConfig
+                                                        .safeBlockHorizontal *
+                                                    4.3, */
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -179,26 +175,31 @@ class _BuyDetailsState extends State<BuyDetails> {
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Center(
-                                              child: Text(
-                                                widget.buy
-                                                    ? 'Available for Purchase'
-                                                    : 'Available for Rental',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .accentColor,
-                                                    fontSize: 12),
-                                              ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              widget.buy
+                                                  ? Applocalizations.of(context)
+                                                      .translate(
+                                                          'Available for Purchase')
+                                                  : Applocalizations.of(context)
+                                                      .translate(
+                                                          'Available for Rental'),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .accentColor,
+                                                  fontSize: SizeConfig
+                                                          .safeBlockHorizontal *
+                                                      3.5),
+                                              maxLines: 2,
+                                              minFontSize: 8,
                                             ),
                                           ),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              4,
-                                          height: 60,
+                                          width:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  28,
+                                          height: SizeConfig.safeBlockVertical *
+                                              7.4,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: BorderRadius.only(
@@ -212,11 +213,12 @@ class _BuyDetailsState extends State<BuyDetails> {
                                         alignment: Alignment.bottomRight,
                                         child: InkWell(
                                           child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                4,
-                                            height: 60,
+                                            width:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    25,
+                                            height:
+                                                SizeConfig.safeBlockVertical *
+                                                    7.4,
                                             child: Center(
                                               child: isFav == null
                                                   ? Container()
@@ -256,22 +258,32 @@ class _BuyDetailsState extends State<BuyDetails> {
                               // SizedBox(
                               //   height: 20,
                               // ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 10.0),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    3),
+                                        child: Text(
                                           propDetails.title,
                                           style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  5,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        InkWell(
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    5),
+                                        child: InkWell(
                                           onTap: () => Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
@@ -280,8 +292,12 @@ class _BuyDetailsState extends State<BuyDetails> {
                                             );
                                           })),
                                           child: Container(
-                                              width: 30,
-                                              height: 30,
+                                              width: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  8,
+                                              height: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  8,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
@@ -300,58 +316,67 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                 fit: BoxFit.scaleDown,
                                               )),
                                         ),
-                                      ],
-                                    ),
-                                    /* Row(
-                                      children: [
-                                        Icon(
-                                          Icons.location_pin,
-                                          color: Theme.of(context).primaryColor,
+                                      ),
+                                    ],
+                                  ),
+                                  /* Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_pin,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      Text(
+                                        propDetails.location == null
+                                            ? "Couldn't find location"
+                                            : propDetails.location,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Color(0xff707070),
                                         ),
-                                        Text(
-                                          propDetails.location == null
-                                              ? "Couldn't find location"
-                                              : propDetails.location,
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            color: Color(0xff707070),
-                                          ),
-                                        ),
-                                      ],
-                                    ) */
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  ) */
+                                ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        SizeConfig.safeBlockHorizontal * 3,
+                                    vertical:
+                                        SizeConfig.safeBlockVertical * 1.5),
                                 child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.grey.withOpacity(0.3)),
+                                  height: SizeConfig.safeBlockVertical * 20,
+                                  padding: EdgeInsets.only(
+                                      top: SizeConfig.safeBlockHorizontal * 2,
+                                      left: SizeConfig.safeBlockHorizontal * 2,
+                                      right:
+                                          SizeConfig.safeBlockHorizontal * 2),
+                                  width: SizeConfig.screenWidth,
                                   child: SingleChildScrollView(
-                                    child: Text(
-                                        gates +
-                                            security +
-                                            cctv +
-                                            view +
-                                            cleaning +
-                                            propDetails.description,
+                                    child: Text(propDetails.description,
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  4.5,
                                           color: Color(0xff707070),
                                         )),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            SizeConfig.safeBlockHorizontal * 3),
+                                    child: Container(
                                       height:
-                                          MediaQuery.of(context).size.height /
-                                              20,
+                                          SizeConfig.safeBlockVertical * 5.3,
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -360,7 +385,8 @@ class _BuyDetailsState extends State<BuyDetails> {
                                               color: Colors.black
                                                   .withOpacity(0.2))),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: EdgeInsets.all(
+                                            SizeConfig.safeBlockHorizontal * 2),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
@@ -373,14 +399,19 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                       .accentColor),
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              width: SizeConfig
+                                                  .safeBlockHorizontal,
                                             ),
                                             Icon(
                                               FontAwesomeIcons.bed,
-                                              size: 18,
+                                              size: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4.5,
                                             ),
                                             SizedBox(
-                                              width: 15,
+                                              width: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  6,
                                             ),
                                             Text(
                                               propDetails.props['parking']
@@ -390,14 +421,19 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                       .accentColor),
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              width: SizeConfig
+                                                  .safeBlockHorizontal,
                                             ),
                                             Icon(
                                               FontAwesomeIcons.car,
-                                              size: 18,
+                                              size: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4.5,
                                             ),
                                             SizedBox(
-                                              width: 15,
+                                              width: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  6,
                                             ),
                                             Text(
                                               propDetails.props['bath_rooms']
@@ -407,14 +443,19 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                       .accentColor),
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              width: SizeConfig
+                                                  .safeBlockHorizontal,
                                             ),
                                             Icon(
                                               FontAwesomeIcons.shower,
-                                              size: 17,
+                                              size: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4.5,
                                             ),
                                             SizedBox(
-                                              width: 15,
+                                              width: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4,
                                             ),
                                             Text(
                                               propDetails.area.toString() +
@@ -424,17 +465,359 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                       .accentColor),
                                             ),
                                             SizedBox(
-                                              width: 5,
+                                              width: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  2,
                                             ),
                                             Icon(
                                               FontAwesomeIcons.rulerCombined,
-                                              size: 17,
-                                            )
+                                              size: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4.5,
+                                            ),
+                                            SizedBox(
+                                              width: SizeConfig
+                                                      .safeBlockHorizontal *
+                                                  4,
+                                            ),
+                                            InkWell(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                onTap: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        actionsPadding:
+                                                            EdgeInsets.only(
+                                                                right: 8),
+                                                        contentPadding:
+                                                            EdgeInsets.fromLTRB(
+                                                                24.0,
+                                                                15.0,
+                                                                24.0,
+                                                                0.0),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      25.0),
+                                                        ),
+                                                        title: Text(
+                                                            Applocalizations
+                                                                    .of(context)
+                                                                .translate(
+                                                                    "More Details"),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor)),
+                                                        content: Container(
+                                                          height: SizeConfig
+                                                                  .safeBlockVertical *
+                                                              20,
+                                                          child: Column(
+                                                            children: [
+                                                              Container(
+                                                                height: SizeConfig
+                                                                        .safeBlockVertical *
+                                                                    5.3,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .black
+                                                                            .withOpacity(0.2))),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(
+                                                                      SizeConfig
+                                                                              .safeBlockHorizontal *
+                                                                          2),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceAround,
+                                                                    children: [
+                                                                      Text(
+                                                                        propDetails
+                                                                            .props['rooms']
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .bed,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: SizeConfig
+                                                                            .safeBlockHorizontal,
+                                                                      ),
+                                                                      Text(
+                                                                        propDetails
+                                                                            .props['parking']
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .car,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: SizeConfig
+                                                                            .safeBlockHorizontal,
+                                                                      ),
+                                                                      Text(
+                                                                        propDetails
+                                                                            .props['bath_rooms']
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .shower,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Container(
+                                                                height: SizeConfig
+                                                                        .safeBlockVertical *
+                                                                    5.3,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .black
+                                                                            .withOpacity(0.2))),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(
+                                                                      SizeConfig
+                                                                              .safeBlockHorizontal *
+                                                                          2),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceAround,
+                                                                    children: [
+                                                                      Text(
+                                                                        propDetails.area.toString() +
+                                                                            "m\u{00B2}",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .rulerCombined,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: SizeConfig
+                                                                            .safeBlockHorizontal,
+                                                                      ),
+                                                                      Text(
+                                                                        propDetails.props['gates'] ==
+                                                                                1
+                                                                            ? "Yes"
+                                                                            : "N/A",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .dungeon,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: SizeConfig
+                                                                            .safeBlockHorizontal,
+                                                                      ),
+                                                                      Text(
+                                                                        propDetails.props['security'] ==
+                                                                                1
+                                                                            ? "Yes"
+                                                                            : "N/A",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .shieldAlt,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Container(
+                                                                height: SizeConfig
+                                                                        .safeBlockVertical *
+                                                                    5.3,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .black
+                                                                            .withOpacity(0.2))),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(
+                                                                      SizeConfig
+                                                                              .safeBlockHorizontal *
+                                                                          2),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceAround,
+                                                                    children: [
+                                                                      Text(
+                                                                        propDetails.props['cleaning'] ==
+                                                                                1
+                                                                            ? "Yes"
+                                                                            : "N/A",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .broom,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: SizeConfig
+                                                                            .safeBlockHorizontal,
+                                                                      ),
+                                                                      Text(
+                                                                        propDetails.props['cctv'] ==
+                                                                                1
+                                                                            ? "Yes"
+                                                                            : "N/A",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .video,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: SizeConfig
+                                                                            .safeBlockHorizontal,
+                                                                      ),
+                                                                      Text(
+                                                                        propDetails.props['view'] ==
+                                                                                1
+                                                                            ? "Yes"
+                                                                            : "N/A",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).accentColor),
+                                                                      ),
+                                                                      Icon(
+                                                                        FontAwesomeIcons
+                                                                            .streetView,
+                                                                        size: SizeConfig.safeBlockHorizontal *
+                                                                            4.5,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          Container(
+                                                              height: SizeConfig
+                                                                      .safeBlockVertical *
+                                                                  6,
+                                                              width: SizeConfig
+                                                                      .safeBlockHorizontal *
+                                                                  75,
+                                                              child: Row(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Expanded(
+                                                                        child:
+                                                                            Padding(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          FlatButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: Text(
+                                                                            Applocalizations.of(context).translate("Close")),
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(18.0),
+                                                                            side: BorderSide(color: Theme.of(context).primaryColor)),
+                                                                      ),
+                                                                    )),
+                                                                  ]))
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: Icon(Icons.more_horiz))
                                           ],
                                         ),
                                       ),
                                     ),
-                                    InkWell(
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            SizeConfig.safeBlockHorizontal * 2),
+                                    child: InkWell(
                                       onTap: () {
                                         MapsSheet.show(
                                           context: context,
@@ -452,32 +835,12 @@ class _BuyDetailsState extends State<BuyDetails> {
                                       },
                                       child: Container(
                                         height:
-                                            MediaQuery.of(context).size.height /
-                                                20,
+                                            SizeConfig.safeBlockVertical * 5,
                                         width:
-                                            MediaQuery.of(context).size.width /
-                                                3.3,
-                                        child: Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Icon(
-                                                  Icons.location_on,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(
-                                                  "See in Map",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            ),
-                                          ),
+                                            SizeConfig.safeBlockHorizontal * 15,
+                                        child: Icon(
+                                          Icons.location_on,
+                                          color: Colors.white,
                                         ),
                                         decoration: BoxDecoration(
                                           borderRadius:
@@ -494,9 +857,9 @@ class _BuyDetailsState extends State<BuyDetails> {
                                           boxShadow: [kButtonShadow],
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ],
                           ),
@@ -511,52 +874,71 @@ class _BuyDetailsState extends State<BuyDetails> {
                                   : ChangeNotifierProvider<DateProvider>(
                                       create: (_) => DateProvider(),
                                       child: Booking(
-                                        propId: propDetails.id.toString(),
+                                        prop: propDetails,
                                         payCycle: propDetails.payCycle,
                                         rentPrice: propDetails.rentPrice,
                                       ),
                                     );
                             })),
                             child: Container(
-                              width: MediaQuery.of(context).size.width / 2.5,
-                              height: 60,
+                              width: SizeConfig.safeBlockHorizontal * 42,
+                              height: SizeConfig.safeBlockVertical * 7.4,
                               decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(50))),
                               child: Center(
-                                  child: Text(
-                                widget.buy ? 'Contact Agent' : 'Book',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
-                              )),
+                                child: AutoSizeText(
+                                  widget.buy
+                                      ? Applocalizations.of(context)
+                                          .translate('Contact Agent')
+                                      : Applocalizations.of(context)
+                                          .translate('Book'),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: widget.buy
+                                          ? SizeConfig.safeBlockHorizontal * 4
+                                          : SizeConfig.safeBlockHorizontal * 5,
+                                      fontWeight: FontWeight.bold),
+                                  minFontSize: 12,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Container(
-                            width: MediaQuery.of(context).size.width / 1.7,
-                            height: 60,
+                            width: SizeConfig.safeBlockHorizontal * 60,
+                            height: SizeConfig.safeBlockVertical * 7.4,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  propDetails.purchasePrice + ' LE',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  widget.buy ? "" : "/" + propDetails.payCycle,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left:
+                                          SizeConfig.safeBlockHorizontal * 2.5,
+                                      right:
+                                          SizeConfig.safeBlockHorizontal * 2),
+                                  width: SizeConfig.safeBlockHorizontal * 60,
+                                  child: Center(
+                                    child: AutoSizeText(
+                                      widget.buy
+                                          ? propDetails.purchasePrice + ' LE'
+                                          : propDetails.rentPrice +
+                                              " LE" +
+                                              " / " +
+                                              propDetails.payCycle,
+                                      style: TextStyle(
+                                          fontSize:
+                                              SizeConfig.safeBlockHorizontal *
+                                                  5.5,
+                                          fontWeight: FontWeight.w500),
+                                      minFontSize: 18,
+                                      maxLines: 2,
+                                      //overflow: TextOverflow.clip,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

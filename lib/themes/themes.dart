@@ -9,6 +9,7 @@ class Themes {
       iconTheme: IconThemeData(
         color: Color(0xff21d8a2),
       ),
+      fontFamily: 'Montserrat',
     );
   }
 }

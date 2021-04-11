@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 import 'contact_us.dart';
 
 class AboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -13,29 +15,32 @@ class AboutUs extends StatelessWidget {
           children: [
             Center(
                 child: Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(
+                  top: SizeConfig.safeBlockVertical * 5,
+                  bottom: SizeConfig.safeBlockVertical * 4.5),
               child:
                   Image(image: AssetImage('assets/icons/logo-short-large.png')),
             )),
-            SizedBox(
-              height: 30,
-            ),
             Text(
-              'About AQAR BAZAR',
+              Applocalizations.of(context).translate('About AQAR BAZAR'),
               style: TextStyle(
-                fontSize: 18,
+                fontSize: SizeConfig.safeBlockHorizontal * 5,
                 color: Color(0xff015ca7),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Image(image: AssetImage('assets/temp/about2.png')),
-            SizedBox(
-              height: 20,
+            Padding(
+              padding: EdgeInsets.only(
+                  top: SizeConfig.safeBlockVertical * 2,
+                  bottom: SizeConfig.safeBlockVertical * 2),
+              child: Image(image: AssetImage('assets/temp/about2.png')),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(
+                SizeConfig.safeBlockHorizontal * 2,
+                SizeConfig.safeBlockHorizontal * 2,
+                SizeConfig.safeBlockHorizontal * 2,
+                SizeConfig.safeBlockHorizontal * 12,
+              ),
               child: Container(
                 child: Text(
                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, sapien in mollis tristique, diam ex tristique metus, ut hendrerit ante quam sit amet erat. Fusce aliquet eros vitae quam sodales luctus. Nunc venenatis nunc ac neque interdum vulputate. Etiam eget convallis lacus. Ut viverra nisi ac tortor ultrices ultrices. Aenean aliquet elementum vestibulum. In luctus tempus justo, euismod gravida ante vehicula a. Donec vitae volutpat sapien. Etiam vitae tellus quis magna placerat maximus vel sit amet orci.',
@@ -45,82 +50,78 @@ class AboutUs extends StatelessWidget {
                 ),
               ),
             ),
+            Text(
+              Applocalizations.of(context).translate('What Do We Do?'),
+              style: TextStyle(
+                fontSize: 18,
+                color: Color(0xff015ca7),
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal * 3,
+                      right: SizeConfig.safeBlockHorizontal * 2),
+                  child: Image(image: AssetImage('assets/temp/about1.png')),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.all(SizeConfig.safeBlockHorizontal * 2),
+                      child: Container(
+                        width: SizeConfig.safeBlockHorizontal * 50,
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, sapien in mollis tristique, diam ex tristique metus, ut hendrerit ante quam sit amet erat. Fusce aliquet eros vitae quam sodales luctus. Nunc venenatis nunc ac neque interdum vulputate. Etiam eget convallis lacus. Ut viverra nisi ac tortor ultrices ultrices. Aenean aliquet elementum vestibulum. In luctus tempus justo, euismod gravida ante vehicula a. Donec vitae volutpat sapien. Etiam vitae tellus quis magna placerat maximus vel sit amet orci.',
+                          overflow: TextOverflow.clip,
+                          maxLines: 15,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.all(SizeConfig.safeBlockHorizontal * 3),
+                      child: Container(
+                        width: SizeConfig.safeBlockHorizontal * 50,
+                        child: Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, sapien in mollis tristique, diam ex tristique metus, ut hendrerit ante quam sit amet erat. Fusce aliquet eros vitae quam sodales luctus. Nunc venenatis nunc ac neque interdum vulputate. Etiam eget convallis lacus. Ut viverra nisi ac tortor ultrices ultrices. Aenean aliquet elementum vestibulum. In luctus tempus justo, euismod gravida ante vehicula a. Donec vitae volutpat sapien. Etiam vitae tellus quis magna placerat maximus vel sit amet orci.',
+                          overflow: TextOverflow.clip,
+                          maxLines: 15,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: SizeConfig.safeBlockHorizontal * 3),
+                  child: Image(image: AssetImage('assets/temp/about3.png')),
+                ),
+              ],
+            ),
             SizedBox(
-              height: 30,
+              height: SizeConfig.safeBlockVertical * 5,
             ),
             Text(
-              'What We Do?',
+              Applocalizations.of(context).translate('Do You Have A Question?'),
               style: TextStyle(
                 fontSize: 18,
                 color: Color(0xff015ca7),
               ),
             ),
             SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Image(image: AssetImage('assets/temp/about1.png')),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 1.9,
-                          child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, sapien in mollis tristique, diam ex tristique metus, ut hendrerit ante quam sit amet erat. Fusce aliquet eros vitae quam sodales luctus. Nunc venenatis nunc ac neque interdum vulputate. Etiam eget convallis lacus. Ut viverra nisi ac tortor ultrices ultrices. Aenean aliquet elementum vestibulum. In luctus tempus justo, euismod gravida ante vehicula a. Donec vitae volutpat sapien. Etiam vitae tellus quis magna placerat maximus vel sit amet orci.',
-                            overflow: TextOverflow.clip,
-                            maxLines: 15,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 1.9,
-                          child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, sapien in mollis tristique, diam ex tristique metus, ut hendrerit ante quam sit amet erat. Fusce aliquet eros vitae quam sodales luctus. Nunc venenatis nunc ac neque interdum vulputate. Etiam eget convallis lacus. Ut viverra nisi ac tortor ultrices ultrices. Aenean aliquet elementum vestibulum. In luctus tempus justo, euismod gravida ante vehicula a. Donec vitae volutpat sapien. Etiam vitae tellus quis magna placerat maximus vel sit amet orci.',
-                            overflow: TextOverflow.clip,
-                            maxLines: 15,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Image(image: AssetImage('assets/temp/about3.png')),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-              'Do You Have A Question?',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xff015ca7),
-              ),
-            ),
-            SizedBox(
-              height: 20,
+              height: SizeConfig.safeBlockVertical * 3,
             ),
             InkWell(
               onTap: () =>
@@ -128,12 +129,12 @@ class AboutUs extends StatelessWidget {
                 return ContactUs();
               })),
               child: Container(
-                height: MediaQuery.of(context).size.height / 20,
-                width: MediaQuery.of(context).size.width / 2.2,
+                height: SizeConfig.safeBlockVertical * 6,
+                width: SizeConfig.safeBlockHorizontal * 45,
                 child: Center(
                   child: Text(
-                    "Contact Us",
-                    style: TextStyle(color: Colors.white),
+                    Applocalizations.of(context).translate("Contact Us"),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -151,7 +152,7 @@ class AboutUs extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: SizeConfig.safeBlockVertical * 6,
             ),
           ],
         ),

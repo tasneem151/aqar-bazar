@@ -1,3 +1,4 @@
+import 'package:aqar_bazar/Manager/manager.dart';
 import 'package:aqar_bazar/Models/profile_info.dart';
 import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/screens/password_screen.dart';
@@ -7,13 +8,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aqar_bazar/widgets/custom_textfield.dart';
 import 'package:aqar_bazar/constants.dart';
 import 'package:validators/validators.dart' as validator;
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:country_code_picker/country_code_picker.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:provider/provider.dart';
+import 'package:aqar_bazar/Provider/modelsProvider.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class AccountInfo extends StatefulWidget {
-  final ProfileInfo accountInfo;
-
-  const AccountInfo({Key key, this.accountInfo}) : super(key: key);
   @override
   _AccountInfoState createState() => _AccountInfoState();
 }
@@ -21,19 +21,20 @@ class AccountInfo extends StatefulWidget {
 class _AccountInfoState extends State<AccountInfo> {
   final _formKey = GlobalKey<FormState>();
   bool loading;
+  String lang;
   //TextEditingController myController = TextEditingController();
   @override
   void initState() {
     super.initState();
     loading = false;
-    //print(model.name + 'jguiguig');
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
+    ProfileInfo user =
+        Provider.of<ModelsProvider>(context, listen: true).getUserInfo();
+    //Manager.getLang().then((value) => {lang = value});
+    SizeConfig().init(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -46,7 +47,7 @@ class _AccountInfoState extends State<AccountInfo> {
               child: Column(
                 children: [
                   Container(
-                    height: height / 5,
+                    height: SizeConfig.safeBlockVertical * 21,
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       boxShadow: [
@@ -57,28 +58,27 @@ class _AccountInfoState extends State<AccountInfo> {
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/icons/account50.svg'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Account Information",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ],
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: SizeConfig.safeBlockHorizontal * 5,
+                              right: SizeConfig.safeBlockHorizontal * 5),
+                          child: SvgPicture.asset('assets/icons/account50.svg'),
                         ),
-                      ),
+                        Text(
+                          Applocalizations.of(context)
+                              .translate("Account Information"),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 50, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 7,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: Row(
                       children: [
                         SvgPicture.asset('assets/icons/change-name.svg'),
@@ -86,7 +86,8 @@ class _AccountInfoState extends State<AccountInfo> {
                           width: 5,
                         ),
                         Text(
-                          'Change First Name',
+                          Applocalizations.of(context)
+                              .translate('Change First Name'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         )
@@ -94,26 +95,29 @@ class _AccountInfoState extends State<AccountInfo> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: CustomTextField(
-                      validator: (String value) {
+                      /* validator: (String value) {
                         if (value.isEmpty) {
                           return 'Enter your first name';
                         }
                         return null;
-                      },
+                      }, */
                       onSaved: (String value) {
-                        widget.accountInfo.firstName = value;
+                        user.firstName = value;
                       },
-                      initValue: widget.accountInfo == null
-                          ? ""
-                          : widget.accountInfo.firstName,
+                      initValue: user == null ? "" : user.firstName,
                     ),
                   ),
                   ////////////////////////////////////////////////
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: Row(
                       children: [
                         SvgPicture.asset('assets/icons/change-name.svg'),
@@ -121,7 +125,8 @@ class _AccountInfoState extends State<AccountInfo> {
                           width: 5,
                         ),
                         Text(
-                          'Change Last Name',
+                          Applocalizations.of(context)
+                              .translate('Change Last Name'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         )
@@ -129,26 +134,29 @@ class _AccountInfoState extends State<AccountInfo> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: CustomTextField(
-                      validator: (String value) {
+                      /* validator: (String value) {
                         if (value.isEmpty) {
                           return 'Enter your Last name';
                         }
                         return null;
-                      },
+                      }, */
                       onSaved: (String value) {
-                        widget.accountInfo.lastName = value;
+                        user.lastName = value;
                       },
-                      initValue: widget.accountInfo == null
-                          ? ""
-                          : widget.accountInfo.lastName,
+                      initValue: user == null ? "" : user.lastName,
                     ),
                   ),
                   ////////////////////////////////
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: Row(
                       children: [
                         SvgPicture.asset('assets/icons/change-email.svg'),
@@ -156,7 +164,8 @@ class _AccountInfoState extends State<AccountInfo> {
                           width: 5,
                         ),
                         Text(
-                          'Change Email',
+                          Applocalizations.of(context)
+                              .translate('Change Email'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         )
@@ -164,24 +173,30 @@ class _AccountInfoState extends State<AccountInfo> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: CustomTextField(
                       validator: (String value) {
                         if (!validator.isEmail(value)) {
-                          return 'Please enter a valid email';
+                          return Applocalizations.of(context)
+                              .translate('Enter a valid Email');
                         }
                         return null;
                       },
                       onSaved: (String value) {
-                        widget.accountInfo.email = value;
+                        user.email = value;
                       },
                       isEmail: true,
-                      initValue: widget.accountInfo.email,
+                      initValue: user.email,
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: Row(
                       children: [
                         SvgPicture.asset('assets/icons/change-phone.svg'),
@@ -189,7 +204,8 @@ class _AccountInfoState extends State<AccountInfo> {
                           width: 5,
                         ),
                         Text(
-                          'Change Phone Number',
+                          Applocalizations.of(context)
+                              .translate('Change Phone Number'),
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         )
@@ -197,43 +213,49 @@ class _AccountInfoState extends State<AccountInfo> {
                     ),
                   ),
                   /* Padding(
-                    padding: EdgeInsets.only(top: 10, left: 40),
-                    child: Container(
-                      //padding: EdgeInsets.only(left: 10, right: 10),
-                      width: MediaQuery.of(context).size.width / 7.2,
-                      //height: MediaQuery.of(context).size.height / 15.4,
-                      child: CountryCodePicker(
-                        onChanged: (value) {
-                          countryCode = value.dialCode;
-                        },
-                        initialSelection: '+90',
-                        favorite: ['+966', '+90'],
-                        showCountryOnly: false,
-                        showOnlyCountryWhenClosed: false,
-                        alignLeft: true,
-                        showFlag: false,
-                      ),
-                    ),
-                  ), */
+            padding: EdgeInsets.only(top: 10, left: 40),
+            child: Container(
+              //padding: EdgeInsets.only(left: 10, right: 10),
+              width: MediaQuery.of(context).size.width / 7.2,
+              //height: MediaQuery.of(context).size.height / 15.4,
+              child: CountryCodePicker(
+                onChanged: (value) {
+                  countryCode = value.dialCode;
+                },
+                initialSelection: '+90',
+                favorite: ['+966', '+90'],
+                showCountryOnly: false,
+                showOnlyCountryWhenClosed: false,
+                alignLeft: true,
+                showFlag: false,
+              ),
+            ),
+          ), */
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: CustomTextField(
-                      initValue: widget.accountInfo.phone,
+                      initValue: user.phone,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Enter a valid Phone Number';
+                          return Applocalizations.of(context)
+                              .translate('Invalid');
                         }
                         _formKey.currentState.save();
                         return null;
                       },
                       onSaved: (value) {
-                        widget.accountInfo.phone = value;
+                        user.phone = value;
                       },
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockVertical * 1.5,
+                        left: SizeConfig.safeBlockHorizontal * 8,
+                        right: SizeConfig.safeBlockHorizontal * 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -245,7 +267,8 @@ class _AccountInfoState extends State<AccountInfo> {
                               width: 5,
                             ),
                             Text(
-                              'Change Password',
+                              Applocalizations.of(context)
+                                  .translate('Change Password'),
                               style: TextStyle(
                                   color: Theme.of(context).primaryColor),
                             )
@@ -259,8 +282,8 @@ class _AccountInfoState extends State<AccountInfo> {
                             }));
                           },
                           child: Container(
-                            width: width / 7,
-                            height: height / 17,
+                            width: SizeConfig.safeBlockHorizontal * 15,
+                            height: SizeConfig.safeBlockVertical * 6,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               gradient: LinearGradient(
@@ -287,66 +310,114 @@ class _AccountInfoState extends State<AccountInfo> {
                     ),
                   ),
                   /* Padding(
-                    padding: EdgeInsets.only(top: 10, left: 30, right: 30),
-                    child: CustomTextField(
-                      hint: "Enter New Password",
-                      isPassword: true,
-                      validator: (String value) {
-                        if (value.length < 8) {
-                          return 'Password should be minimum 8 characters';
-                        }
-                        _formKey.currentState.save();
-                        return null;
-                      },
-                      onSaved: (String value) {},
-                    ),
-                  ), */
+            padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+            child: CustomTextField(
+              hint: "Enter New Password",
+              isPassword: true,
+              validator: (String value) {
+                if (value.length < 8) {
+                  return 'Password should be minimum 8 characters';
+                }
+                _formKey.currentState.save();
+                return null;
+              },
+              onSaved: (String value) {},
+            ),
+          ), */
                   Padding(
                     padding: EdgeInsets.only(
-                      top: 30,
+                      top: SizeConfig.safeBlockHorizontal * 8,
+                      bottom: SizeConfig.safeBlockHorizontal * 8,
                     ),
                     child: loading
                         ? CircularProgressIndicator()
-                        : Container(
-                            width: width / 1.5,
-                            height: height / 17,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(0xff21d8a2),
-                                  Color(0xff4e89c7),
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                stops: [0.1, 1.0],
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        SizeConfig.safeBlockHorizontal * 5),
+                                child: Container(
+                                  width: SizeConfig.safeBlockHorizontal * 35,
+                                  height: SizeConfig.safeBlockVertical * 6,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xff21d8a2),
+                                        Color(0xff4e89c7),
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      stops: [0.1, 1.0],
+                                    ),
+                                    boxShadow: [kButtonShadow],
+                                  ),
+                                  child: FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text(
+                                      Applocalizations.of(context)
+                                          .translate('Cancel'),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              boxShadow: [kButtonShadow],
-                            ),
-                            child: FlatButton(
-                              onPressed: () {
-                                if (_formKey.currentState.validate()) {
-                                  _formKey.currentState.save();
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  Services.updateUserInfo(
-                                          widget.accountInfo.firstName,
-                                          widget.accountInfo.lastName,
-                                          widget.accountInfo.email,
-                                          widget.accountInfo.phone,
-                                          context)
-                                      .then((value) => {
-                                            if (value == 200)
-                                              Navigator.pop(context, true),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        SizeConfig.safeBlockHorizontal * 5),
+                                child: Container(
+                                    width: SizeConfig.safeBlockHorizontal * 35,
+                                    height: SizeConfig.safeBlockVertical * 6,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xff21d8a2),
+                                          Color(0xff4e89c7),
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: [0.1, 1.0],
+                                      ),
+                                      boxShadow: [kButtonShadow],
+                                    ),
+                                    child: FlatButton(
+                                      padding: EdgeInsets.all(0),
+                                      onPressed: () {
+                                        if (_formKey.currentState.validate()) {
+                                          _formKey.currentState.save();
+                                          setState(() {
+                                            loading = true;
                                           });
-                                }
-                              },
-                              child: Text(
-                                'Submit Changes',
-                                style: TextStyle(color: Colors.white),
+                                          Services.updateUserInfo(
+                                                  user.firstName,
+                                                  user.lastName,
+                                                  user.email,
+                                                  user.phone,
+                                                  context)
+                                              .then((value) => {
+                                                    if (value == 200)
+                                                      Navigator.pop(
+                                                          context, true),
+                                                  });
+                                        }
+                                      },
+                                      child: Text(
+                                        Applocalizations.of(context)
+                                            .translate('Submit'),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )),
                               ),
-                            )),
+                            ],
+                          ),
                   ),
                 ],
               ),

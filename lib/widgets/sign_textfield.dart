@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:aqar_bazar/size_config.dart';
 
 class SignTextField extends StatelessWidget {
   final double width;
@@ -23,8 +24,9 @@ class SignTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Container(
-      width: width == null ? MediaQuery.of(context).size.width / 1.2 : width,
+      width: width == null ? SizeConfig.safeBlockHorizontal * 85 : width,
       //height: MediaQuery.of(context).size.height / 19,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -39,7 +41,11 @@ class SignTextField extends StatelessWidget {
           )
         ],
       ),
-      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+      padding: EdgeInsets.only(
+          left: SizeConfig.safeBlockHorizontal * 2,
+          right: SizeConfig.safeBlockHorizontal * 2,
+          top: SizeConfig.safeBlockVertical * 1.3,
+          bottom: SizeConfig.safeBlockVertical * 1.3),
       child: TextFormField(
         style: TextStyle(
           color: Colors.white,
@@ -47,10 +53,10 @@ class SignTextField extends StatelessWidget {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: EdgeInsets.only(
-            left: 10,
-            right: 10,
-            bottom: 10,
-            top: 10,
+            left: SizeConfig.safeBlockHorizontal * 2,
+            right: SizeConfig.safeBlockHorizontal * 2,
+            bottom: SizeConfig.safeBlockVertical * 1.3,
+            top: SizeConfig.safeBlockVertical * 1.3,
           ),
           errorStyle: TextStyle(
             height: 0.1,

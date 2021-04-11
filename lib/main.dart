@@ -1,38 +1,77 @@
 import 'package:aqar_bazar/Manager/manager.dart';
-import 'package:aqar_bazar/screens/home_screen.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 import 'package:aqar_bazar/screens/sign_up.dart';
 import 'package:aqar_bazar/themes/themes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:country_code_picker/country_localizations.dart';
 import 'Provider/modelsProvider.dart';
+import 'package:flutter/services.dart';
+import 'localization/app_language.dart';
+import 'package:aqar_bazar/screens/home_screen.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  AppLanguage appLanguage = AppLanguage();
+  WidgetsFlutterBinding.ensureInitialized();
+  await appLanguage.fetchLocale();
+  Manager.getAuthToken().then((value) => {
+        runApp(MyApp(
+          appLanguage: appLanguage,
+          auth: value,
+        )),
+      });
 }
 
 class MyApp extends StatelessWidget {
+  final AppLanguage appLanguage;
+  final String auth;
+  const MyApp({Key key, this.appLanguage, this.auth}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ModelsProvider>(
-          create: (_) => ModelsProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        localizationsDelegates: [
-          CountryLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
+        providers: [
+          ChangeNotifierProvider<ModelsProvider>(
+            create: (_) => ModelsProvider(),
+          ),
+          ChangeNotifierProvider<AppLanguage>(
+            create: (_) => appLanguage,
+          )
         ],
-        supportedLocales: [
-          const Locale('en', 'US'),
-        ],
-        debugShowCheckedModeBanner: false,
-        theme: Themes.themeData(context),
-        home: SignUp(),
-      ),
-    );
+        child: Consumer<AppLanguage>(
+          builder: (context, model, child) {
+            return MaterialApp(
+              locale: model.appLocal,
+              localizationsDelegates: [
+                Applocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                DefaultCupertinoLocalizations.delegate
+              ],
+              supportedLocales: [
+                Locale('en', 'US'),
+                Locale('ar', ''),
+              ],
+              /* localeResolutionCallback: (locale, locales) {
+          if (locale.languageCode == 'ar') {
+            Manager.setLang('ar', context);
+            return Locale('ar', 'AR');
+          } else if (locale.languageCode == 'en') {
+            Manager.setLang('en', context);
+            return Locale('en', 'EN');
+          }
+        }, */
+              debugShowCheckedModeBanner: false,
+              theme: Themes.themeData(context),
+              home: auth.isEmpty ? SignUp() : HomeScreen(),
+            );
+          },
+        ));
   }
 }

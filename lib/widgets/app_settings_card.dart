@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:aqar_bazar/constants.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class AppSettingsCard extends StatelessWidget {
-  const AppSettingsCard({
-    @required this.width,
-    @required this.height,
-  });
-
-  final double width;
-  final double height;
-
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Container(
-      width: width / 2 - 20,
-      height: height / 3,
+      width: SizeConfig.safeBlockHorizontal * 45,
+      height: SizeConfig.safeBlockVertical * 35,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: Colors.white,
@@ -24,7 +19,7 @@ class AppSettingsCard extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: height / 12,
+            height: SizeConfig.safeBlockVertical * 9,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
@@ -32,81 +27,100 @@ class AppSettingsCard extends StatelessWidget {
               ),
               color: Theme.of(context).accentColor,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/icons/setting.svg'),
-                  SizedBox(
-                    width: 10,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal,
+                      right: SizeConfig.safeBlockHorizontal),
+                  child: SvgPicture.asset('assets/icons/setting.svg'),
+                ),
+                Container(
+                  width: SizeConfig.safeBlockHorizontal * 30,
+                  child: Text(
+                    Applocalizations.of(context).translate("App Settings"),
+                    maxLines: 2,
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(color: Colors.white),
                   ),
-                  Container(
-                    width: width / 2 - 100,
+                ),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        SizeConfig.safeBlockHorizontal * 2.5,
+                        SizeConfig.safeBlockHorizontal * 4,
+                        SizeConfig.safeBlockHorizontal * 1.5,
+                        0),
+                    child: SvgPicture.asset('assets/icons/translate.svg'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockHorizontal * 4),
                     child: Text(
-                      "App Settings",
-                      maxLines: 2,
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(color: Colors.white),
-                    ),
+                        Applocalizations.of(context).translate('Language')),
                   ),
                 ],
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20, left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SvgPicture.asset('assets/icons/translate.svg'),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text('Language'),
-                  ],
-                ),
-                Container(
-                  width: 50,
+              Padding(
+                padding:
+                    EdgeInsets.only(top: SizeConfig.safeBlockHorizontal * 4),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 10,
                   child: Text(
                     'EN',
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Divider(
-            indent: 20,
-            endIndent: 20,
+            indent: SizeConfig.safeBlockHorizontal * 5,
+            endIndent: SizeConfig.safeBlockHorizontal * 5,
             color: Theme.of(context).accentColor,
             thickness: 0.8,
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 5, left: 5, right: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SvgPicture.asset('assets/icons/money.svg'),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text('Currency'),
-                  ],
-                ),
-                Container(
-                  width: 50,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        SizeConfig.safeBlockHorizontal * 2.5,
+                        SizeConfig.safeBlockHorizontal * 1.5,
+                        SizeConfig.safeBlockHorizontal * 1.5,
+                        0),
+                    child: SvgPicture.asset('assets/icons/money.svg'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.safeBlockHorizontal * 1.5),
+                    child: Text(
+                        Applocalizations.of(context).translate('Currency')),
+                  ),
+                ],
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.only(top: SizeConfig.safeBlockHorizontal * 4),
+                child: Container(
+                  width: SizeConfig.safeBlockHorizontal * 10,
                   child: Text(
                     'LE',
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           /*  Divider(
             indent: 20,

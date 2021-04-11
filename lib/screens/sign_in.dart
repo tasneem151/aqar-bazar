@@ -5,6 +5,8 @@ import 'package:aqar_bazar/widgets/sign_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart' as validator;
 import 'package:aqar_bazar/networking/services.dart';
+import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -19,15 +21,13 @@ class _SignInState extends State<SignIn> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loading = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -39,25 +39,21 @@ class _SignInState extends State<SignIn> {
               key: _formKey,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0),
-                    child: Center(
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        child: Image(
-                          image: AssetImage('assets/icons/Logo.png'),
-                          fit: BoxFit.contain,
-                        ),
+                  Center(
+                    child: Container(
+                      width: SizeConfig.safeBlockHorizontal * 25,
+                      height: SizeConfig.safeBlockVertical * 17,
+                      child: Image(
+                        image: AssetImage('assets/icons/Logo.png'),
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
                   Container(
-                    width: width,
-                    height: height,
+                    height: SizeConfig.screenHeight,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.vertical(
-                          top: Radius.elliptical(width, 270)),
+                          top: Radius.elliptical(SizeConfig.screenWidth, 270)),
                       gradient: LinearGradient(
                         colors: [
                           Color(0xff4e89c7),
@@ -76,38 +72,46 @@ class _SignInState extends State<SignIn> {
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 40),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.safeBlockHorizontal * 8,
+                          vertical: SizeConfig.safeBlockVertical * 5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
                             child: Text(
-                              'Sign In',
+                              Applocalizations.of(context).translate('Sign In'),
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 30,
+                                fontSize: SizeConfig.safeBlockHorizontal * 8,
                               ),
                             ),
                           ),
                           SizedBox(
-                            height: 115,
+                            height: SizeConfig.safeBlockVertical * 12,
                           ),
                           Text(
-                            'Email',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            Applocalizations.of(context).translate('Email'),
+                            style: TextStyle(
+                                fontSize: SizeConfig.safeBlockHorizontal * 5,
+                                color: Colors.white),
                           ),
                           SizedBox(
-                            height: 5,
+                            height: SizeConfig.safeBlockVertical,
                           ),
                           SignTextField(
-                            hint: 'Enter Your Email',
+                            hint: Applocalizations.of(context)
+                                .translate('Enter Your Email'),
                             inShadow: Color(0xff21d8a2),
                             outShadow: Color(0xff4e7ac7),
                             isEmail: true,
                             validator: (String value) {
-                              if (!validator.isEmail(value)) {
-                                return 'Please enter a valid email';
+                              if (value.isEmpty) {
+                                return Applocalizations.of(context)
+                                    .translate('Empty Field');
+                              } else if (!validator.isEmail(value)) {
+                                return Applocalizations.of(context)
+                                    .translate('Invalid');
                               }
                               return null;
                             },
@@ -116,23 +120,30 @@ class _SignInState extends State<SignIn> {
                             },
                           ),
                           SizedBox(
-                            height: 20,
+                            height: SizeConfig.safeBlockVertical * 3,
                           ),
                           Text(
-                            'Password',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            Applocalizations.of(context).translate('Password'),
+                            style: TextStyle(
+                                fontSize: SizeConfig.safeBlockHorizontal * 5,
+                                color: Colors.white),
                           ),
                           SizedBox(
-                            height: 5,
+                            height: SizeConfig.safeBlockVertical,
                           ),
                           SignTextField(
-                            hint: 'Enter Your Password',
+                            hint: Applocalizations.of(context)
+                                .translate('Enter Your Password'),
                             inShadow: Color(0xff21d8a2),
                             outShadow: Color(0xff4e89c7),
                             isPassword: true,
                             validator: (String value) {
-                              if (value.length < 8) {
-                                return 'Incorrect Password';
+                              if (value.isEmpty) {
+                                return Applocalizations.of(context)
+                                    .translate('Empty Field');
+                              } else if (value.length < 8) {
+                                return Applocalizations.of(context)
+                                    .translate('Incorrect Password');
                               }
                               _formKey.currentState.save();
                               return null;
@@ -142,7 +153,7 @@ class _SignInState extends State<SignIn> {
                             },
                           ),
                           SizedBox(
-                            height: 30,
+                            height: SizeConfig.blockSizeVertical * 4,
                           ),
                           loading
                               ? Center(
@@ -150,12 +161,6 @@ class _SignInState extends State<SignIn> {
                                 )
                               : InkWell(
                                   onTap: () {
-                                    /* Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => HomeScreen(),
-                                      ),
-                                    ); */
                                     if (_formKey.currentState.validate()) {
                                       _formKey.currentState.save();
 
@@ -182,8 +187,8 @@ class _SignInState extends State<SignIn> {
                                     }
                                   },
                                   child: Container(
-                                    width: width / 1.2,
-                                    height: height / 21,
+                                    width: SizeConfig.safeBlockHorizontal * 85,
+                                    height: SizeConfig.safeBlockVertical * 5,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                         color: Theme.of(context)
@@ -197,9 +202,12 @@ class _SignInState extends State<SignIn> {
                                         ]),
                                     child: Center(
                                       child: Text(
-                                        'Sign In',
+                                        Applocalizations.of(context)
+                                            .translate('Sign In'),
                                         style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize:
+                                                SizeConfig.safeBlockHorizontal *
+                                                    5,
                                             color:
                                                 Theme.of(context).accentColor),
                                       ),
@@ -207,7 +215,7 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 ),
                           SizedBox(
-                            height: 30,
+                            height: SizeConfig.safeBlockVertical * 4,
                           ),
                           InkWell(
                             onTap: () => Navigator.pushReplacement(context,
@@ -215,31 +223,38 @@ class _SignInState extends State<SignIn> {
                               return SignUp();
                             })),
                             child: Container(
-                              width: width / 1.2,
-                              height: height / 21,
+                              width: SizeConfig.safeBlockHorizontal * 85,
+                              height: SizeConfig.safeBlockVertical * 5,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(30)),
-                                border:
-                                    Border.all(color: Colors.white, width: 2),
+                                border: Border.all(
+                                    color: Colors.white,
+                                    width:
+                                        SizeConfig.safeBlockHorizontal * 0.5),
                               ),
                               child: Center(
                                 child: Text(
-                                  'Sign Up',
+                                  Applocalizations.of(context)
+                                      .translate('Sign Up'),
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize:
+                                          SizeConfig.safeBlockHorizontal * 5,
+                                      color: Colors.white),
                                 ),
                               ),
                             ),
                           ),
                           SizedBox(
-                            height: 30,
+                            height: SizeConfig.safeBlockVertical * 4,
                           ),
                           Center(
                             child: Text(
-                              'Powered By #Hashtag',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                              Applocalizations.of(context)
+                                  .translate('Powered By #Hashtag'),
+                              style: TextStyle(
+                                  fontSize: SizeConfig.safeBlockHorizontal * 5,
+                                  color: Colors.white),
                             ),
                           ),
                         ],
