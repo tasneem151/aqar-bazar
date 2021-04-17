@@ -10,14 +10,16 @@ import 'package:aqar_bazar/Provider/modelsProvider.dart';
 import 'package:aqar_bazar/Models/get_comments.dart';
 import 'package:aqar_bazar/Models/wishlist_model.dart';
 import 'package:aqar_bazar/Models/book_response.dart';
+import 'package:aqar_bazar/localization/app_language.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:aqar_bazar/Models/comment.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class Services {
-  static const String baseUrl = "http://new.aqarbazar.com/api/";
+  static const String baseUrl = "https://new.aqarbazar.com/api/";
 
   static Future<ForPurchase> getForPurchase(BuildContext context) async {
     Manager.checkInternet(context);
@@ -94,14 +96,16 @@ class Services {
 
   static Future<List<PropertyType>> getPropertyType(
       BuildContext context) async {
+    String loc = Provider.of<AppLanguage>(context, listen: false).getlang();
     Manager.checkInternet(context);
     if (!Provider.of<ModelsProvider>(context, listen: false).internetAccess) {
       //Manager.noConnectionAlert(context);
       return null;
     }
-    //Locale loc = Provider.of<ModelsProvider>(context, listen: true).getLocale();
+
     try {
-      var response = await http.get(baseUrl + "category/index");
+      var response =
+          await http.get(baseUrl + "category/index", headers: {"locale": loc});
       var items = propertyTypeFromJson(response.body);
 
       if (response.statusCode == 200) {
@@ -139,12 +143,16 @@ class Services {
           }
         case 422:
           {
-            Manager.toastMessage('Invalid', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Invalid'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -179,12 +187,16 @@ class Services {
           }
         case 422:
           {
-            Manager.toastMessage('Invalid', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Invalid'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -220,12 +232,16 @@ class Services {
           }
         case 422:
           {
-            Manager.toastMessage('Invalid', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Invalid'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -361,17 +377,24 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            Manager.toastMessage('Password Updated Succesfuly', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context)
+                    .translate('Password Updated Successfully'),
+                Colors.white);
             return 200;
           }
         case 422:
           {
-            Manager.toastMessage('Invalid Input', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Invalid'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -406,12 +429,17 @@ class Services {
           }
         case 422:
           {
-            Manager.toastMessage('Old Password is Incorrect', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context)
+                    .translate('Old Password is Incorrect'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -443,17 +471,24 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            Manager.toastMessage('Updated Succesfuly', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Updated Successfully'),
+                Colors.white);
             return 200;
           }
         case 422:
           {
-            Manager.toastMessage('Email or Phone Already Taken', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context)
+                    .translate('Email or Phone Already Taken'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -485,17 +520,21 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            //Manager.toastMessage('Updated Succesfuly', Colors.white);
+            //Manager.toastMessage('Updated Successfully', Colors.white);
             return 200;
           }
         case 422:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -559,12 +598,17 @@ class Services {
           }
         case 422:
           {
-            Manager.toastMessage('Email or Phone Already Taken', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context)
+                    .translate('Email or Phone Already Taken'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -601,12 +645,17 @@ class Services {
           }
         case 422:
           {
-            Manager.toastMessage('Wrong Email or Password', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context)
+                    .translate('Wrong Email or Password'),
+                Colors.white);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -638,18 +687,24 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            //Manager.toastMessage('Updated Succesfuly', Colors.white);
+            //Manager.toastMessage('Updated Successfully', Colors.white);
             return 200;
           }
         case 422:
           {
-            Manager.alertDialog("Invalid Credit Card Info",
-                "Please check your Credit Card Information.", context);
+            Manager.alertDialog(
+                Applocalizations.of(context)
+                    .translate("Invalid Credit Card Info"),
+                Applocalizations.of(context)
+                    .translate("Please check your Credit Card Information"),
+                context);
             return 422;
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }
@@ -689,14 +744,17 @@ class Services {
       switch (response.statusCode) {
         case 200:
           {
-            //Manager.toastMessage('Updated Succesfuly', Colors.white);
+            //Manager.toastMessage('Updated Successfully', Colors.white);
             return 200;
           }
         case 422:
           {
             result.errors == null
                 ? Manager.alertDialog(
-                    "Invalid Date Range", result.message, context)
+                    Applocalizations.of(context)
+                        .translate("Invalid Date Range"),
+                    result.message,
+                    context)
                 : Manager.alertDialog(
                     result.message,
                     result.errors.from.first ??= result.errors.to.first,
@@ -705,7 +763,9 @@ class Services {
           }
         default:
           {
-            Manager.toastMessage('Something Went Wrong', Colors.white);
+            Manager.toastMessage(
+                Applocalizations.of(context).translate('Something Went Wrong'),
+                Colors.white);
             return 500;
           }
       }

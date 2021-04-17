@@ -135,7 +135,7 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                           "no_image"
                                                       ? AssetImage(
                                                           'assets/temp/prop1.png')
-                                                      : NetworkImage(baseUrl +
+                                                      : NetworkImage(kBaseUrl +
                                                           propDetails
                                                               .mainImageUrl),
                                                   fit: BoxFit.fill)),
@@ -836,8 +836,7 @@ class _BuyDetailsState extends State<BuyDetails> {
                                       child: Container(
                                         height:
                                             SizeConfig.safeBlockVertical * 5,
-                                        width:
-                                            SizeConfig.safeBlockHorizontal * 15,
+                                        width: 40,
                                         child: Icon(
                                           Icons.location_on,
                                           color: Colors.white,
@@ -888,19 +887,26 @@ class _BuyDetailsState extends State<BuyDetails> {
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(50))),
                               child: Center(
-                                child: AutoSizeText(
-                                  widget.buy
-                                      ? Applocalizations.of(context)
-                                          .translate('Contact Agent')
-                                      : Applocalizations.of(context)
-                                          .translate('Book'),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: widget.buy
-                                          ? SizeConfig.safeBlockHorizontal * 4
-                                          : SizeConfig.safeBlockHorizontal * 5,
-                                      fontWeight: FontWeight.bold),
-                                  minFontSize: 12,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: SizeConfig.safeBlockHorizontal * 3,
+                                      top: SizeConfig.safeBlockVertical),
+                                  child: AutoSizeText(
+                                    widget.buy
+                                        ? Applocalizations.of(context)
+                                            .translate('Contact Agent')
+                                        : Applocalizations.of(context)
+                                            .translate('Book'),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: widget.buy
+                                            ? SizeConfig.safeBlockHorizontal * 4
+                                            : SizeConfig.safeBlockHorizontal *
+                                                5,
+                                        fontWeight: FontWeight.bold),
+                                    minFontSize: 12,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                             ),

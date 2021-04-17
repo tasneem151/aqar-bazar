@@ -1,4 +1,5 @@
 import 'package:aqar_bazar/localization/app_language.dart';
+import 'package:aqar_bazar/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
@@ -72,6 +73,23 @@ class _AlertRadioState extends State<AlertRadio> {
                 ),
                 Text("العربية"),
               ],
+            ),
+            Row(
+              children: [
+                Radio(
+                  value: 'tr',
+                  groupValue: lang,
+                  onChanged: (value) {
+                    setState(() {
+                      lang = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  width: SizeConfig.safeBlockHorizontal * 2,
+                ),
+                Text("Türkçe"),
+              ],
             )
           ],
         ),
@@ -106,7 +124,10 @@ class _AlertRadioState extends State<AlertRadio> {
                   onPressed: () {
                     appLanguage.changeLanguage(Locale(lang));
                     //Manager.setLang(lang, context);
-                    Navigator.of(context).pop();
+                    Navigator.pushAndRemoveUntil(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HomeScreen();
+                    }), (Route<dynamic> route) => false);
                   },
                   child: Text(Applocalizations.of(context).translate("Submit")),
                   shape: RoundedRectangleBorder(

@@ -28,10 +28,14 @@ class AppLanguage extends ChangeNotifier {
       _appLocale = Locale("ar");
       await prefs.setString('language_code', 'ar');
       await prefs.setString('countryCode', '');
-    } else {
+    } else if (type == Locale("en")) {
       _appLocale = Locale("en");
       await prefs.setString('language_code', 'en');
       await prefs.setString('countryCode', 'US');
+    } else if (type == Locale("tr")) {
+      _appLocale = Locale("tr");
+      await prefs.setString('language_code', 'tr');
+      await prefs.setString('countryCode', 'TUR');
     }
     notifyListeners();
   }

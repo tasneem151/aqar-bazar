@@ -1,4 +1,4 @@
-package com.example.aqar_bazar
+package com.hashtag.aqar_bazar
 
 import io.flutter.embedding.android.FlutterActivity
 

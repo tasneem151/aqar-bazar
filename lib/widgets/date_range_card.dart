@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:aqar_bazar/Provider/date_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:aqar_bazar/size_config.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class DateRangeCard extends StatefulWidget {
   @override
@@ -31,7 +32,8 @@ class _DateRangeCardState extends State<DateRangeCard> {
                 padding: EdgeInsets.symmetric(
                     horizontal: SizeConfig.safeBlockHorizontal * 5,
                     vertical: SizeConfig.safeBlockHorizontal * 5),
-                child: Text('Start Date'),
+                child:
+                    Text(Applocalizations.of(context).translate('Start Date')),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -91,7 +93,7 @@ class _DateRangeCardState extends State<DateRangeCard> {
                 padding: EdgeInsets.symmetric(
                     horizontal: SizeConfig.safeBlockHorizontal * 5,
                     vertical: SizeConfig.safeBlockHorizontal * 5),
-                child: Text('End Date'),
+                child: Text(Applocalizations.of(context).translate('End Date')),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -185,7 +187,7 @@ class _DateRangeCardState extends State<DateRangeCard> {
                   ),
                   child: Center(
                     child: Text(
-                      "Pick A Date",
+                      Applocalizations.of(context).translate("Pick A Date"),
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

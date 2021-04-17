@@ -8,6 +8,7 @@ import 'package:aqar_bazar/networking/services.dart';
 import 'package:aqar_bazar/widgets/date_range_card.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/Models/show_property.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class Booking extends StatefulWidget {
   final ShowProperty prop;
@@ -164,7 +165,8 @@ class _BookingState extends State<Booking> {
                           right: SizeConfig.safeBlockHorizontal * 2.5,
                           top: SizeConfig.safeBlockVertical * 2),
                       child: Text(
-                        'Renting Details For',
+                        Applocalizations.of(context)
+                            .translate('Renting Details For'),
                         style: TextStyle(
                             fontSize: SizeConfig.safeBlockHorizontal * 5.7),
                       ),
@@ -207,7 +209,7 @@ class _BookingState extends State<Booking> {
                         Column(
                           children: [
                             Text(
-                              "Payment",
+                              Applocalizations.of(context).translate("Payment"),
                               style: TextStyle(
                                   color: Theme.of(context).accentColor,
                                   fontSize:
@@ -224,7 +226,8 @@ class _BookingState extends State<Booking> {
                         Column(
                           children: [
                             Text(
-                              "Pick A Date",
+                              Applocalizations.of(context)
+                                  .translate("Pick A Date"),
                               style: TextStyle(
                                   color: Theme.of(context).accentColor,
                                   fontSize:
@@ -255,13 +258,15 @@ class _BookingState extends State<Booking> {
                               ),
                             ),
                             Text(
-                              "All Done",
+                              Applocalizations.of(context)
+                                  .translate("All Done"),
                               style: TextStyle(
                                   color: Theme.of(context).accentColor,
                                   fontSize: SizeConfig.safeBlockHorizontal * 9),
                             ),
                             Text(
-                              'Enjoy Your Stay!',
+                              Applocalizations.of(context)
+                                  .translate('Enjoy Your Stay'),
                               style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: SizeConfig.safeBlockHorizontal * 5),
@@ -294,7 +299,11 @@ class _BookingState extends State<Booking> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      _currentPage == 0 ? 'Cancel' : 'Previous',
+                                      _currentPage == 0
+                                          ? Applocalizations.of(context)
+                                              .translate('Cancel')
+                                          : Applocalizations.of(context)
+                                              .translate('Previous'),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize:
@@ -331,7 +340,8 @@ class _BookingState extends State<Booking> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            'Next',
+                                            Applocalizations.of(context)
+                                                .translate('Next'),
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: SizeConfig
@@ -367,7 +377,8 @@ class _BookingState extends State<Booking> {
                                   width: SizeConfig.safeBlockHorizontal,
                                 ),
                                 Text(
-                                  'Back to Home',
+                                  Applocalizations.of(context)
+                                      .translate('Back to Home'),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize:

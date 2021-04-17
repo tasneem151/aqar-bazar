@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class MapsSheet {
   static show({
@@ -23,7 +24,7 @@ class MapsSheet {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "View Via",
+                  Applocalizations.of(context).translate("View Via"),
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),

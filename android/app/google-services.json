@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "881875634594",
+    "project_id": "aqar-4d67e",
+    "storage_bucket": "aqar-4d67e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881875634594:android:f167f579c480dcae41cafb",
+        "android_client_info": {
+          "package_name": "com.hashtag.aqar_bazar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881875634594-k1hgoiep10hdhpu6br2urksns5mp3ks8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh2G0g9xJA1tPrbAcfox3RFGFnpVEdWGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881875634594-k1hgoiep10hdhpu6br2urksns5mp3ks8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

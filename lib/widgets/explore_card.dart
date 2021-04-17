@@ -1,4 +1,5 @@
 import 'package:aqar_bazar/Models/property_type.dart';
+import 'package:aqar_bazar/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/screens/search_result.dart';
 import 'package:aqar_bazar/Models/search_request_model.dart';
@@ -18,7 +19,6 @@ class _ExploreCardState extends State<ExploreCard> {
     _isChecked = !_isChecked;
   } */
 
-  String baseUrl = "http://new.aqarbazar.com";
   SearchRequestModel searchByCategory = SearchRequestModel();
 
   @override
@@ -73,7 +73,7 @@ class _ExploreCardState extends State<ExploreCard> {
                           )
                         : Image(
                             image: NetworkImage(
-                                baseUrl + widget.typeProperty.image),
+                                kBaseUrl + widget.typeProperty.image),
                             fit: BoxFit.contain,
                           ),
                   ),

@@ -16,6 +16,8 @@ import 'package:aqar_bazar/screens/search.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
 import 'notifications_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:pusher_beams/pusher_beams.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,7 +27,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isBuySelected = true;
   bool isRentSelected = false;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
+  // Firestore _db = Firestore.instance;
   void onBuySwitchCallback() {
     setState(() {
       isBuySelected = true;
@@ -83,10 +87,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void updateUI() {
     isLoading = true;
     noWifi = false;
-    Services.getUserInfo(context).then((value) => {
+    Services.getUserInfo(context).then((value) async => {
           if (mounted)
             {
               setState(() => {user = value}),
+              print('App.Models.User.${user.id}'),
+              await PusherBeams.addDeviceInterest('App.Models.User.${user.id}'),
+
+              // _firebaseMessaging.subscribeToTopic('App.Models.User.${user.id}'),
             },
           Services.getPropertyType(context).then((value) => {
                 if (mounted)
@@ -118,6 +126,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     updateUI();
+
+    /* _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    ); */
   }
 
   @override
@@ -125,7 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
     SizeConfig().init(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
     return SafeArea(
       child: Scaffold(
         drawer: SideDrawer(),

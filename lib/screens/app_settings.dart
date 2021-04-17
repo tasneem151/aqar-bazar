@@ -60,10 +60,13 @@ class _AppSettingsState extends State<AppSettings> {
             GestureDetector(
               onTap: () {
                 showDialog(
-                    context: context,
-                    child: AlertRadio(
+                  context: context,
+                  builder: (context) {
+                    return AlertRadio(
                       language: lang,
-                    ));
+                    );
+                  },
+                );
                 setState(() {});
               },
               child: Row(
@@ -119,7 +122,7 @@ class _AppSettingsState extends State<AppSettings> {
                           )),
                       child: Center(
                         child: Text(
-                          'EN',
+                          lang.toUpperCase(),
                           style: TextStyle(color: Colors.black54),
                         ),
                       ),

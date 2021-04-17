@@ -135,6 +135,7 @@ class AboutUs extends StatelessWidget {
                   child: Text(
                     Applocalizations.of(context).translate("Contact Us"),
                     style: TextStyle(color: Colors.white, fontSize: 18),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 decoration: BoxDecoration(

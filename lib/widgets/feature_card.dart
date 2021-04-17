@@ -34,7 +34,7 @@ class FeatureCard extends StatelessWidget {
                                   image: property.mainImageUrl == "no_image"
                                       ? AssetImage('assets/temp/prop1.png')
                                       : NetworkImage(
-                                          baseUrl + property.mainImageUrl),
+                                          kBaseUrl + property.mainImageUrl),
                                   fit: BoxFit.fill)),
                         ),
                         Align(

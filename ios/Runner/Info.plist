@@ -18,6 +18,9 @@
 		<string>osmandmaps</string>
 		<string>dgis</string>
 		<string>qqmap</string>
+		<string>whatsapp</string>
+		<string>https</string>
+  		<string>http</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

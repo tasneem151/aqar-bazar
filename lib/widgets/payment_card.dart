@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:aqar_bazar/Provider/date_provider.dart';
 import 'package:aqar_bazar/size_config.dart';
 import '../constants.dart';
+import 'package:aqar_bazar/localization/app_localization.dart';
 
 class PaymentCard extends StatefulWidget {
   @override
@@ -34,7 +35,7 @@ class _PaymentCardState extends State<PaymentCard> {
                 horizontal: SizeConfig.safeBlockHorizontal * 5,
                 vertical: SizeConfig.safeBlockHorizontal * 5),
             child: Text(
-              'Card Number',
+              Applocalizations.of(context).translate('Card Number'),
               style: TextStyle(color: Theme.of(context).primaryColor),
             ),
           ),
@@ -43,7 +44,8 @@ class _PaymentCardState extends State<PaymentCard> {
                 horizontal: SizeConfig.safeBlockHorizontal * 5),
             child: TxtField(
               initial: ccNumber == null ? "" : ccNumber,
-              hint: 'Enter Your Credit Card Number',
+              hint: Applocalizations.of(context)
+                  .translate('Enter Your Credit Card Number'),
               height: SizeConfig.safeBlockVertical * 6.3,
               onChanged: (value) {
                 Provider.of<DateProvider>(context, listen: false)
@@ -80,7 +82,7 @@ class _PaymentCardState extends State<PaymentCard> {
                 horizontal: SizeConfig.safeBlockHorizontal * 5,
                 vertical: SizeConfig.safeBlockHorizontal * 5),
             child: Text(
-              'Valid Until',
+              Applocalizations.of(context).translate('Valid Until'),
               style: TextStyle(color: Theme.of(context).primaryColor),
             ),
           ),
@@ -95,7 +97,7 @@ class _PaymentCardState extends State<PaymentCard> {
                 ),
                 child: TxtField(
                   initial: month == null ? "" : month,
-                  hint: 'month e.g.: 01',
+                  hint: Applocalizations.of(context).translate('month'),
                   width: SizeConfig.safeBlockHorizontal * 35,
                   onChanged: (value) {
                     Provider.of<DateProvider>(context, listen: false)
@@ -111,7 +113,7 @@ class _PaymentCardState extends State<PaymentCard> {
                 ),
                 child: TxtField(
                   initial: year == null ? "" : year,
-                  hint: 'year e.g.: 2021',
+                  hint: Applocalizations.of(context).translate('year'),
                   width: SizeConfig.safeBlockHorizontal * 35,
                   onChanged: (value) {
                     Provider.of<DateProvider>(context, listen: false)

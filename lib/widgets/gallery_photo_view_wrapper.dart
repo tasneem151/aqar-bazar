@@ -84,7 +84,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
-    final String item = baseUrl + widget.galleryItems[index].image;
+    final String item = kBaseUrl + widget.galleryItems[index].image;
     return PhotoViewGalleryPageOptions(
       imageProvider: NetworkImage(item),
       initialScale: PhotoViewComputedScale.contained,
