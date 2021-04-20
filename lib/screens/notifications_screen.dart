@@ -1,8 +1,10 @@
+import 'package:aqar_bazar/Models/get_notifications.dart';
 import 'package:aqar_bazar/widgets/notification_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:aqar_bazar/networking/services.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -10,6 +12,27 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  bool loading;
+  bool isLoading = false;
+  GetNotifications notifications;
+  int page = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    loading = true;
+    Services.getNotifications(context).then((value) => {
+          if (mounted)
+            {
+              print(value),
+              notifications = value,
+              setState(() {
+                loading = false;
+              })
+            }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -50,20 +73,56 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Container(child: NotificationTile());
-                },
-                itemCount: 15,
-              )
-            ],
-          ),
-        ),
+        body: loading
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Expanded(
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (!isLoading &&
+                            scrollInfo.metrics.pixels ==
+                                scrollInfo.metrics.maxScrollExtent) {
+                          if (page < notifications.lastPage) {
+                            page++;
+                            setState(() {
+                              isLoading = true;
+                              Services.getNotifications(context)
+                                  .then((value) => {
+                                        if (mounted)
+                                          {
+                                            notifications.data
+                                                .addAll(value.data),
+                                            setState(() {
+                                              isLoading = false;
+                                            }),
+                                          }
+                                      });
+                            });
+                          }
+                        }
+                        return true;
+                      },
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Container(
+                              child: NotificationTile(
+                            notification: notifications.data[index],
+                          ));
+                        },
+                        itemCount: notifications.data.length,
+                      ),
+                    ),
+                  ),
+                  isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Container(),
+                ],
+              ),
       ),
     );
   }

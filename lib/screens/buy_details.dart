@@ -16,6 +16,7 @@ import 'package:aqar_bazar/Provider/date_provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
+import 'package:html/parser.dart';
 
 class BuyDetails extends StatefulWidget {
   final int id;
@@ -60,8 +61,8 @@ class _BuyDetailsState extends State<BuyDetails> {
           if (mounted)
             {
               setState(() => {
-                    print(value),
                     propDetails = value,
+                    //print(propDetails.id),
                     isFav = propDetails.isFavorite,
                     propDetails == null ? noWifi = true : isLoading = false
                   }),
@@ -356,7 +357,10 @@ class _BuyDetailsState extends State<BuyDetails> {
                                           SizeConfig.safeBlockHorizontal * 2),
                                   width: SizeConfig.screenWidth,
                                   child: SingleChildScrollView(
-                                    child: Text(propDetails.description,
+                                    child: Text(
+                                        parse(propDetails.description)
+                                            .documentElement
+                                            .text,
                                         style: TextStyle(
                                           fontSize:
                                               SizeConfig.safeBlockHorizontal *
@@ -818,21 +822,24 @@ class _BuyDetailsState extends State<BuyDetails> {
                                         horizontal:
                                             SizeConfig.safeBlockHorizontal * 2),
                                     child: InkWell(
-                                      onTap: () {
-                                        MapsSheet.show(
-                                          context: context,
-                                          onMapTap: (map) {
-                                            map.showMarker(
-                                              coords: Coords(
-                                                  double.parse(propDetails.lat),
-                                                  double.parse(
-                                                      propDetails.lng)),
-                                              title: propDetails.title,
-                                              zoom: 18,
-                                            );
-                                          },
-                                        );
-                                      },
+                                      onTap: propDetails.lat == null
+                                          ? () {}
+                                          : () {
+                                              MapsSheet.show(
+                                                context: context,
+                                                onMapTap: (map) {
+                                                  map.showMarker(
+                                                    coords: Coords(
+                                                        double.parse(
+                                                            propDetails.lat),
+                                                        double.parse(
+                                                            propDetails.lng)),
+                                                    title: propDetails.title,
+                                                    zoom: 18,
+                                                  );
+                                                },
+                                              );
+                                            },
                                       child: Container(
                                         height:
                                             SizeConfig.safeBlockVertical * 5,
@@ -869,7 +876,9 @@ class _BuyDetailsState extends State<BuyDetails> {
                             onTap: () => Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return widget.buy
-                                  ? AgentInfo()
+                                  ? AgentInfo(
+                                      id: propDetails.id.toString(),
+                                    )
                                   : ChangeNotifierProvider<DateProvider>(
                                       create: (_) => DateProvider(),
                                       child: Booking(
@@ -930,9 +939,9 @@ class _BuyDetailsState extends State<BuyDetails> {
                                   child: Center(
                                     child: AutoSizeText(
                                       widget.buy
-                                          ? propDetails.purchasePrice + ' LE'
+                                          ? propDetails.purchasePrice + ' TL'
                                           : propDetails.rentPrice +
-                                              " LE" +
+                                              " TL" +
                                               " / " +
                                               propDetails.payCycle,
                                       style: TextStyle(

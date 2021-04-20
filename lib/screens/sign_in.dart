@@ -109,14 +109,14 @@ class _SignInState extends State<SignIn> {
                               if (value.isEmpty) {
                                 return Applocalizations.of(context)
                                     .translate('Empty Field');
-                              } else if (!validator.isEmail(value)) {
+                              } else if (!validator.isEmail(value.trim())) {
                                 return Applocalizations.of(context)
                                     .translate('Invalid');
                               }
                               return null;
                             },
                             onSaved: (String value) {
-                              model.email = value;
+                              model.email = value.trim();
                             },
                           ),
                           SizedBox(

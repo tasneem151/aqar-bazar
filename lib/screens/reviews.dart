@@ -70,6 +70,7 @@ class _ReviewsState extends State<Reviews> {
                     widget.prop.title,
                     style: TextStyle(
                         fontSize: SizeConfig.safeBlockHorizontal * 5.5),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -104,7 +105,7 @@ class _ReviewsState extends State<Reviews> {
             ],
           ),
         ),
-        preferredSize: Size.fromHeight(SizeConfig.safeBlockVertical * 12),
+        preferredSize: Size.fromHeight(SizeConfig.safeBlockVertical * 13),
       ),
       body: Padding(
         padding: EdgeInsets.only(bottom: SizeConfig.safeBlockVertical * 1.3),

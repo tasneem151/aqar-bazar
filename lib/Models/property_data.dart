@@ -74,8 +74,9 @@ class PropertyData {
         lat: json["lat"],
         lng: json["lng"],
         location: json["location"],
-        title: json["title"],
-        description: json["description"],
+        title: json["title"] == null ? 'Unknown' : json["title"],
+        description:
+            json["description"] == null ? 'Unknown' : json["description"],
         props: json["props"] == null
             ? null
             : Map.from(json["props"])
@@ -105,8 +106,8 @@ class PropertyData {
         "lat": lat,
         "lng": lng,
         "location": location,
-        "title": title,
-        "description": description,
+        "title": title == null ? 'Unknown' : title,
+        "description": description == null ? 'Unknown' : description,
         "props": props == null
             ? null
             : Map.from(props).map((k, v) => MapEntry<String, dynamic>(k, v)),

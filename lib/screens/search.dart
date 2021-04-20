@@ -182,7 +182,7 @@ class _SearchState extends State<Search> {
                                   contentPadding: EdgeInsets.all(0),
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
-                                  suffixIcon: Text('LE',
+                                  suffixIcon: Text('TL',
                                       style: TextStyle(
                                         color: Color(0xff015ca7),
                                       )),
@@ -240,7 +240,7 @@ class _SearchState extends State<Search> {
                                   contentPadding: EdgeInsets.all(0),
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
-                                  suffixIcon: Text('LE',
+                                  suffixIcon: Text('TL',
                                       style: TextStyle(
                                         color: Color(0xff015ca7),
                                       )),

@@ -73,7 +73,7 @@ class Featured {
         lat: json["lat"],
         lng: json["lng"],
         location: json["location"],
-        title: json["title"],
+        title: json["title"] == null ? 'Unknown' : json["title"],
         description: json["description"],
         props: json["props"] == null
             ? null
@@ -103,7 +103,7 @@ class Featured {
         "lat": lat,
         "lng": lng,
         "location": location,
-        "title": title,
+        "title": title == null ? "Unknown" : title,
         "description": description,
         "props": props == null
             ? null

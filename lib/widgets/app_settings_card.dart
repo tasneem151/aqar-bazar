@@ -1,12 +1,15 @@
+import 'package:aqar_bazar/localization/app_language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:aqar_bazar/constants.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
+import 'package:provider/provider.dart';
 
 class AppSettingsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String lang = Provider.of<AppLanguage>(context, listen: true).getlang();
     SizeConfig().init(context);
     return Container(
       width: SizeConfig.safeBlockHorizontal * 45,
@@ -75,7 +78,7 @@ class AppSettingsCard extends StatelessWidget {
                 child: Container(
                   width: SizeConfig.safeBlockHorizontal * 10,
                   child: Text(
-                    'EN',
+                    lang.toUpperCase(),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -115,7 +118,7 @@ class AppSettingsCard extends StatelessWidget {
                 child: Container(
                   width: SizeConfig.safeBlockHorizontal * 10,
                   child: Text(
-                    'LE',
+                    'TL',
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

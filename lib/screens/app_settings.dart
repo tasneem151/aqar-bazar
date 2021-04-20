@@ -184,7 +184,7 @@ class _AppSettingsState extends State<AppSettings> {
                         )),
                     child: Center(
                         child: Text(
-                      'LE',
+                      'TL',
                       style: TextStyle(color: Colors.black54),
                     )),
                   ),

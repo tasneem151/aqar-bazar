@@ -47,8 +47,6 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    print(SizeConfig.safeBlockHorizontal);
-    print(SizeConfig.safeBlockVertical);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -197,8 +195,7 @@ class _SignUpState extends State<SignUp> {
                               return null;
                             },
                             onSaved: (String value) {
-                              model.email = value;
-                              print(model.email);
+                              model.email = value.trim();
                             },
                           ),
                           SizedBox(

@@ -71,8 +71,8 @@ class SearchResultCard extends StatelessWidget {
                         horizontal: SizeConfig.safeBlockHorizontal * 3),
                     child: Text(
                       buy
-                          ? propertyData.purchasePrice + " LE"
-                          : propertyData.rentPrice + " LE",
+                          ? propertyData.purchasePrice + " TL"
+                          : propertyData.rentPrice + " TL",
                       style: TextStyle(color: Theme.of(context).accentColor),
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,

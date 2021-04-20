@@ -1,7 +1,11 @@
+import 'package:aqar_bazar/Models/get_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/size_config.dart';
 
 class NotificationTile extends StatelessWidget {
+  final NotificationData notification;
+
+  const NotificationTile({this.notification});
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -21,14 +25,18 @@ class NotificationTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'property name',
+                  notification.title,
                   style: TextStyle(
                       color: Theme.of(context).accentColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  '12 - 4 - 2021',
+                  notification.createdAt.day.toString() +
+                      '-' +
+                      notification.createdAt.month.toString() +
+                      '-' +
+                      notification.createdAt.year.toString(),
                   style: TextStyle(color: Colors.grey),
                 ),
               ],
@@ -41,7 +49,7 @@ class NotificationTile extends StatelessWidget {
               top: SizeConfig.safeBlockVertical,
             ),
             child: Text(
-              "noti details",
+              notification.content,
               style: TextStyle(color: Colors.grey, fontSize: 16),
               overflow: TextOverflow.clip,
             ),

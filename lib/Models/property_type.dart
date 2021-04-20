@@ -30,7 +30,7 @@ class PropertyType {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         image: json["image"],
-        title: json["title"],
+        title: json["title"] == null ? 'Unknown' : json["title"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +38,6 @@ class PropertyType {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "image": image,
-        "title": title,
+        "title": title == null ? 'Unknown' : title,
       };
 }

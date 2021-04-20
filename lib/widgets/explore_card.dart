@@ -3,6 +3,7 @@ import 'package:aqar_bazar/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/screens/search_result.dart';
 import 'package:aqar_bazar/Models/search_request_model.dart';
+import 'package:aqar_bazar/size_config.dart';
 
 class ExploreCard extends StatefulWidget {
   final PropertyType typeProperty;
@@ -23,14 +24,13 @@ class _ExploreCardState extends State<ExploreCard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     searchByCategory.catId = widget.typeProperty.id;
   }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    SizeConfig().init(context);
     return InkWell(
       onTap: () {
         widget.buy
@@ -44,7 +44,7 @@ class _ExploreCardState extends State<ExploreCard> {
         }));
       },
       child: Container(
-        width: width / 3.5,
+        width: SizeConfig.safeBlockHorizontal * 29,
         child: Stack(
           children: [
             Align(
@@ -52,8 +52,8 @@ class _ExploreCardState extends State<ExploreCard> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  width: width / 4,
-                  height: width / 4,
+                  width: SizeConfig.safeBlockHorizontal * 25,
+                  height: SizeConfig.safeBlockHorizontal * 25,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -64,17 +64,15 @@ class _ExploreCardState extends State<ExploreCard> {
                         blurRadius: 6.0,
                       )
                     ],
-                  ),
-                  child: Container(
-                    child: widget.typeProperty.image == "no_image"
-                        ? Image(
+                    image: widget.typeProperty.image == "no_image"
+                        ? DecorationImage(
                             image: AssetImage('assets/icons/no-image.png'),
                             fit: BoxFit.scaleDown,
                           )
-                        : Image(
+                        : DecorationImage(
                             image: NetworkImage(
                                 kBaseUrl + widget.typeProperty.image),
-                            fit: BoxFit.contain,
+                            fit: BoxFit.fill,
                           ),
                   ),
                 ),

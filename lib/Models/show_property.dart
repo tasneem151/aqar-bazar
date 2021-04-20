@@ -95,8 +95,9 @@ class ShowProperty {
         lng: json["lng"],
         location: json["location"],
         isFavorite: json["is_favorite"],
-        title: json["title"],
-        description: json["description"],
+        title: json["title"] == null ? 'Unknown' : json["title"],
+        description:
+            json["description"] == null ? 'Unknown' : json["description"],
         props:
             Map.from(json["props"]).map((k, v) => MapEntry<String, int>(k, v)),
         images: List<PropertyImage>.from(
@@ -129,8 +130,8 @@ class ShowProperty {
         "lng": lng,
         "location": location,
         "is_favorite": isFavorite,
-        "title": title,
-        "description": description,
+        "title": title == null ? 'Unknown' : title,
+        "description": description == null ? 'Unknown' : description,
         "props": Map.from(props).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "images": List<dynamic>.from(images.map((x) => x.toJson())),
         "agent": agent,

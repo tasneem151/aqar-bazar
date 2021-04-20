@@ -16,7 +16,6 @@ import 'package:aqar_bazar/screens/search.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
 import 'notifications_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:pusher_beams/pusher_beams.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isBuySelected = true;
   bool isRentSelected = false;
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  //FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   // Firestore _db = Firestore.instance;
   void onBuySwitchCallback() {
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               print('App.Models.User.${user.id}'),
               await PusherBeams.addDeviceInterest('App.Models.User.${user.id}'),
 
-              // _firebaseMessaging.subscribeToTopic('App.Models.User.${user.id}'),
+              //_firebaseMessaging.subscribeToTopic('App.Models.User.${user.id}'),
             },
           Services.getPropertyType(context).then((value) => {
                 if (mounted)
@@ -126,10 +125,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     updateUI();
-
     /* _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+        final snackbar = SnackBar(
+          content: Text(message['notification']['title']),
+          action: SnackBarAction(
+            label: 'Go',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -186,14 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                     child: Container(
-                      height: SizeConfig.safeBlockVertical * 6,
-                      width: SizeConfig.safeBlockVertical * 6,
+                      height: SizeConfig.safeBlockVertical * 5,
+                      width: SizeConfig.safeBlockVertical * 5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         color: Color(0xff21d8a2),
                       ),
                       child: SvgPicture.asset(
-                        'assets/icons/bell-large.svg',
+                        'assets/icons/bell.svg',
                         fit: BoxFit.scaleDown,
                       ),
                     ),
