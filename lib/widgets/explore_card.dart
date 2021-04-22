@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:aqar_bazar/screens/search_result.dart';
 import 'package:aqar_bazar/Models/search_request_model.dart';
 import 'package:aqar_bazar/size_config.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ExploreCard extends StatefulWidget {
   final PropertyType typeProperty;
@@ -70,7 +71,7 @@ class _ExploreCardState extends State<ExploreCard> {
                             fit: BoxFit.scaleDown,
                           )
                         : DecorationImage(
-                            image: NetworkImage(
+                            image: CachedNetworkImageProvider(
                                 kBaseUrl + widget.typeProperty.image),
                             fit: BoxFit.fill,
                           ),

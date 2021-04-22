@@ -20,26 +20,9 @@ class _SignUpState extends State<SignUp> {
   SignFormModel model = SignFormModel();
   bool loading;
   String auth;
-  //bool checking = true;
 
   @override
   void initState() {
-    /* Manager.getAuthToken().then((value) => {
-          auth = value,
-          print(auth.isNotEmpty),
-          print(auth != null),
-          if (auth.isNotEmpty)
-            {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return HomeScreen();
-              }))
-            },
-          setState(() {
-            checking = false;
-          }),
-        }); */
-
     super.initState();
     loading = false;
   }
@@ -84,7 +67,7 @@ class _SignUpState extends State<SignUp> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey[500],
-                          offset: Offset(0.0, -1.0), //(x,y)
+                          offset: Offset(0.0, -1.0),
                           blurRadius: 6.0,
                         )
                       ],
@@ -94,7 +77,6 @@ class _SignUpState extends State<SignUp> {
                           horizontal: SizeConfig.safeBlockHorizontal * 8,
                           vertical: SizeConfig.safeBlockVertical * 5),
                       child: Column(
-                        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Align(
@@ -255,10 +237,8 @@ class _SignUpState extends State<SignUp> {
                             validator: (String value) {
                               if (model.password != null &&
                                   value != model.password) {
-                                print(value);
-                                print(model.password);
                                 return Applocalizations.of(context)
-                                    .translate('Password not matched');
+                                    .translate('Password Not Matched');
                               }
                               return null;
                             },

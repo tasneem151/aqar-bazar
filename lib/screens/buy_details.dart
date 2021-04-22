@@ -17,6 +17,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
 import 'package:html/parser.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BuyDetails extends StatefulWidget {
   final int id;
@@ -136,9 +137,10 @@ class _BuyDetailsState extends State<BuyDetails> {
                                                           "no_image"
                                                       ? AssetImage(
                                                           'assets/temp/prop1.png')
-                                                      : NetworkImage(kBaseUrl +
-                                                          propDetails
-                                                              .mainImageUrl),
+                                                      : CachedNetworkImageProvider(
+                                                          kBaseUrl +
+                                                              propDetails
+                                                                  .mainImageUrl),
                                                   fit: BoxFit.fill)),
                                         ),
                                       ),

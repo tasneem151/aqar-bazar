@@ -1,5 +1,4 @@
 import 'package:aqar_bazar/Manager/manager.dart';
-import 'package:aqar_bazar/constants.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
 import 'package:aqar_bazar/screens/sign_up.dart';
 import 'package:aqar_bazar/themes/themes.dart';
@@ -11,13 +10,12 @@ import 'Provider/modelsProvider.dart';
 import 'package:flutter/services.dart';
 import 'localization/app_language.dart';
 import 'package:aqar_bazar/screens/home_screen.dart';
-import 'package:pusher_beams/pusher_beams.dart';
 
 void main() async {
   AppLanguage appLanguage = AppLanguage();
   WidgetsFlutterBinding.ensureInitialized();
   await appLanguage.fetchLocale();
-  await PusherBeams.start(kInstanceId);
+  //await PusherBeams.start(kInstanceId);
   Manager.getAuthToken().then((value) => {
         runApp(MyApp(
           appLanguage: appLanguage,

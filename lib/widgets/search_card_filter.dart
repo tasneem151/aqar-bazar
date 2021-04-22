@@ -2,6 +2,7 @@ import 'package:aqar_bazar/Models/property_type.dart';
 import 'package:aqar_bazar/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aqar_bazar/size_config.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class SearchCardFilter extends StatefulWidget {
   final PropertyType typeProperty;
@@ -44,7 +45,7 @@ class _SearchCardFilterState extends State<SearchCardFilter> {
                             fit: BoxFit.scaleDown,
                           )
                         : DecorationImage(
-                            image: NetworkImage(
+                            image: CachedNetworkImageProvider(
                                 kBaseUrl + widget.typeProperty.image),
                             fit: BoxFit.fill,
                           ),

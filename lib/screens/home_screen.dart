@@ -16,7 +16,6 @@ import 'package:aqar_bazar/screens/search.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:aqar_bazar/localization/app_localization.dart';
 import 'notifications_screen.dart';
-import 'package:pusher_beams/pusher_beams.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -90,8 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (mounted)
             {
               setState(() => {user = value}),
-              print('App.Models.User.${user.id}'),
-              await PusherBeams.addDeviceInterest('App.Models.User.${user.id}'),
+              //await PusherBeams.addDeviceInterest('App.Models.User.${user.id}'),
 
               //_firebaseMessaging.subscribeToTopic('App.Models.User.${user.id}'),
             },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:aqar_bazar/constants.dart';
 import 'package:aqar_bazar/size_config.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class FeatureCard extends StatelessWidget {
   final double width;
@@ -33,8 +34,9 @@ class FeatureCard extends StatelessWidget {
                               image: DecorationImage(
                                   image: property.mainImageUrl == "no_image"
                                       ? AssetImage('assets/temp/prop1.png')
-                                      : NetworkImage(
-                                          kBaseUrl + property.mainImageUrl),
+                                      : CachedNetworkImageProvider(
+                                          kBaseUrl + property.mainImageUrl,
+                                        ),
                                   fit: BoxFit.fill)),
                         ),
                         Align(
