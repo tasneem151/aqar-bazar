@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:aqar_bazar/Provider/modelsProvider.dart';
-import 'package:aqar_bazar/Manager/manager.dart';
 
 class Applocalizations {
   final Locale locale;
