@@ -1,4 +1,5 @@
 import 'package:aqar_bazar/Provider/date_provider.dart';
+import 'package:aqar_bazar/localization/app_language.dart';
 import 'package:aqar_bazar/widgets/payment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +34,7 @@ class _BookingState extends State<Booking> {
   String month;
   String year;
   bool loading = false;
+  String lang;
 
   List<Widget> _buildPageIndicator() {
     List<Widget> list = [];
@@ -147,6 +149,7 @@ class _BookingState extends State<Booking> {
     cvc = Provider.of<DateProvider>(context).getCVCNumber();
     month = Provider.of<DateProvider>(context).getMonth();
     year = Provider.of<DateProvider>(context).getYear();
+    lang = Provider.of<AppLanguage>(context, listen: false).getlang();
 
     return SafeArea(
       child: Scaffold(
@@ -158,7 +161,8 @@ class _BookingState extends State<Booking> {
               child: Column(
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment:
+                        lang != 'ar' ? Alignment.topLeft : Alignment.topRight,
                     child: Padding(
                       padding: EdgeInsets.only(
                           left: SizeConfig.safeBlockHorizontal * 2.5,
@@ -173,7 +177,8 @@ class _BookingState extends State<Booking> {
                     ),
                   ),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment:
+                        lang != 'ar' ? Alignment.topLeft : Alignment.topRight,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: SizeConfig.safeBlockHorizontal * 2.5),

@@ -272,13 +272,17 @@ class _BuyDetailsState extends State<BuyDetails> {
                                             horizontal:
                                                 SizeConfig.safeBlockHorizontal *
                                                     3),
-                                        child: Text(
-                                          propDetails.title,
-                                          style: TextStyle(
-                                              fontSize: SizeConfig
-                                                      .safeBlockHorizontal *
-                                                  5,
-                                              fontWeight: FontWeight.bold),
+                                        child: Container(
+                                          width: 200,
+                                          child: Text(
+                                            propDetails.title,
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                                fontSize: SizeConfig
+                                                        .safeBlockHorizontal *
+                                                    5,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ),
                                       Padding(

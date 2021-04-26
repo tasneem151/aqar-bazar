@@ -12,7 +12,6 @@ import 'package:aqar_bazar/Models/get_comments.dart';
 import 'package:aqar_bazar/Models/wishlist_model.dart';
 import 'package:aqar_bazar/Models/book_response.dart';
 import 'package:aqar_bazar/localization/app_language.dart';
-import 'package:aqar_bazar/screens/agent_info.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +21,7 @@ import 'package:aqar_bazar/localization/app_localization.dart';
 import 'package:aqar_bazar/Models/agent_info.dart';
 
 class Services {
-  static const String baseUrl = "https://new.aqarbazar.com/api/";
+  static const String baseUrl = "https://aqarbazar.com/api/";
 
   static Future<ForPurchase> getForPurchase(BuildContext context) async {
     String loc = Provider.of<AppLanguage>(context, listen: false).getlang();
